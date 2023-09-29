@@ -1,0 +1,27 @@
+{
+  "room_id": "pick_coin",
+  "description": "You kneel down and examine the Old Coin on the cobblestone ground. The coin looks ancient, and its design is unfamiliar. It's heavy and cold to the touch. As you pocket the coin, you have a feeling it might be more significant than it appears.",
+  "npcs": [],
+  "items": [],
+  "actions": ["Return to Town Square"],
+  "exits": [
+    {
+      "exit_name": "Return to Town Square",
+      "leads_to": "town_square",
+      "conditions": []
+    }
+  ],
+  "events": [
+    {
+      "event_type": "add_item",
+      "item_id": "old_coin"
+    },
+    {
+      "event_type": "set_flag",
+      "flag_name": "picked_old_coin",
+      "value": true
+    }
+  ]
+}
+
+

@@ -1,0 +1,73 @@
+{
+  "room_id": "city_gates",
+  "description": "You stand before the towering city gates, symbols of protection and isolation. They're massive, constructed from old, darkened oak, reinforced with black iron. To your right, there's a smaller, less imposing passage that leads to the cemetery. The constant murmur of the town can be heard faintly behind you, while the allure of the forest beckons from beyond the gates.",
+  "npcs": ["guardman"],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "guardman",
+      "action_description": "Talk to  guardman"
+    }
+  ],
+  "npc_dialogues": [
+    {
+      "npc_name": "guardman",
+      "dialogues": [
+        {
+          "message": "Halt! The main gate is locked; the key's gone missing. You're not the first to ask, either. What's your business?",
+          "responses": [
+            {"text": "Why is the key missing?", "next_step": 1},
+            {"text": "Tell me about the forest.", "next_step": 3},
+            {"text": "I heard the cemetery's haunted.", "next_step": 2},
+            {"text": "Just passing by.", "next_step": -1}
+          ]
+        },
+        {
+          "message": "1# We're not sure. It was here one day and gone the next. Some suspect foul play, others reckon it might be linked to the rumors from the cemetery.",
+          "responses": [
+            {"text": "The cemetery rumors?", "next_step": 2},
+            {"text": "That sounds troublesome.", "next_step": -1}
+          ]
+        },
+        {
+          "message": "2# Aye, they say the cemetery's haunted. There's talk of eerie lights and ghostly whispers. Some even believe the missing key might be tied to whatever's stirring in there.",
+          "responses": [
+            {"text": "Sounds spooky. I'll investigate.", "next_step": -1},
+            {"text": "Ghosts? That's nonsense.", "next_step": -1}
+          ]
+        },
+        {
+          "message": "3# The forest to the north? It's an old, mystical place. Ancient ruins and long-forgotten treasures are said to lie hidden beneath its canopy. But be wary; many adventurers have entered and not all return.",
+          "responses": [
+            {"text": "Thanks for the warning.", "next_step": -1},
+            {"text": "Treasures, you say?", "next_step": 4}
+          ]
+        },
+        {
+          "message": "4# Legends speak of an age-old temple, now consumed by the forest, that holds a treasure beyond imagination. But it's guarded by creatures of the wild and ancient curses. Tread carefully.",
+          "responses": [
+            {"text": "I'll keep that in mind.", "next_step": -1},
+            {"text": "Sounds like a challenge!", "next_step": -1}
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Passage to the cemetery",
+      "leads_to": "haunted_cemetery",
+      "conditions": []
+    },
+    {
+      "exit_name": "Main gate to the forest",
+      "leads_to": "forest_north_side",
+      "conditions": ["city_gate_key"]
+    },
+    {
+      "exit_name": "Back to town square",
+      "leads_to": "town_square",
+      "conditions": []
+    }
+  ]
+}

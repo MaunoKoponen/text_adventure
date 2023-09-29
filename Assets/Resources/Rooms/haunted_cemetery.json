@@ -1,0 +1,21 @@
+{
+  "room_id": "haunted_cemetary",
+  "description": "You're in a haunted forest. Suddenly, a skeleton warrior appears!",
+  "npcs": [],
+  "items": [],
+  "actions": [],
+  "combat": {
+    "enemy_name": "Skeleton Warrior",
+    "enemy_health": 50,
+    "combat_actions": ["Attack", "Defend", "Use Item"]
+  },
+  "exits": [
+    {
+      "exit_name": "Go to town square",
+      "leads_to": "town_square",
+      "conditions": []
+    }
+  ],
+  "events": []
+}
+

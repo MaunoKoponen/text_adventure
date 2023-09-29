@@ -1,0 +1,54 @@
+{
+  "room_id": "muttons_horn_tavern",
+  "description": "You're in the Mutton's Horn tavern...",
+  "npcs": ["bartender"],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "bartender",
+      "action_description": "Talk to bartender"
+    }
+  ],
+  "npc_dialogues": [
+    {
+      "npc_name": "bartender",
+      "dialogues": [
+        {
+          "message": "Ah, welcome! What can I get you?",
+          "responses": [
+            {"text": "A drink.", "next_step": 3},
+            {"text": "Any rumors?", "next_step": 1},
+            {"text": "Nothing for now.", "next_step": -1}
+          ]
+        },
+        {
+          "message": "1# There's talk of a dragon to the east.",
+          "responses": [
+            {"text": "Tell me more.", "next_step": 2},
+            {"text": "Sounds dangerous.", "next_step": -1},
+            {"text": "I don't care.", "next_step": -1}
+          ]
+        },
+        {
+          "message": "2# The dragon is said to hoard treasures.",
+          "responses": [
+            {"text": "Good to know.", "next_step": -1}
+          ]
+        },
+        {
+          "message": "3# Here's your drink.",
+          "responses": [
+            {"text": "Thanks.", "next_step": -1}
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Exit to town square",
+      "leads_to": "town_square",
+      "conditions": []
+    }
+  ]
+}

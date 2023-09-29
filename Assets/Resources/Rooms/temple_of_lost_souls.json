@@ -1,0 +1,129 @@
+{
+  "room_id": "temple_of_lost_souls",
+  "description": "You find yourself standing in the enigmatic Temple of Lost Souls. The cold, gray stones that make up its walls seem to pulsate with an eerie glow. In t he center, a dimly lit altar surrounded by flickering candles casts long, dancing shadows. There is a temple maid  standing nearby.",
+  "npcs": [
+    "temple_maid"
+  ],
+  "npcitems": ["soul stone"],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "temple_maid",
+      "action_description": "Talk to temple maid"
+    }
+  ],
+  "npc_dialogues": [
+    {
+      "npc_name": "temple_maid",
+      "dialogues": [
+        {
+          "message": "Greetings, traveler. You stand in the Temple of Lost Souls. What brings you to this sacred place?",
+          "responses": [
+            {
+              "text": "What is this temple for?",
+              "next_step": 1
+            },
+            {
+              "text": "I'm just exploring.",
+              "next_step": -1
+            },
+            {
+              "text": "I felt drawn here.",
+              "next_step": 3
+            }
+          ]
+        },
+        {
+          "message": "1# This temple is a sanctuary for souls that have been detached from their bodies. They find solace and refuge here until they are ready to move on.",
+          "responses": [
+            {
+              "text": "How does a soul become detached?",
+              "next_step": 2
+            },
+            {
+              "text": "That sounds eerie.",
+              "next_step": -1
+            },
+            {
+              "text": "Can they be reconnected?",
+              "next_step": 4
+            }
+          ]
+        },
+        {
+          "message": "2# Many ways, traveler. Some by force, some by choice. Battles, sorcery, forbidden rituals... the realms of magic and might are fraught with peril.",
+          "responses": [
+            {
+              "text": "I'll be careful.",
+              "next_step": -1
+            },
+            {
+              "text": "Have you seen many lost souls?",
+              "next_step": 5
+            }
+          ]
+        },
+        {
+          "message": "3# The temple has a way of calling to those who need it. Listen to its whispers; perhaps there's a message for you.",
+          "responses": [
+            {
+              "text": "I'll heed your advice.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "4# Some say there are ancient rituals that can bind a soul back to its body. But such knowledge is dangerous and often comes with a price.",
+          "responses": [
+            {
+              "text": "A price I'm willing to pay.",
+              "next_step": -1
+            },
+            {
+              "text": "I'll keep that in mind.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "5# Yes, many. Some are peaceful, while others are tormented. But all find a moment of rest in this temple.",
+          "responses": [
+            {
+              "text": "I hope they find peace.",
+              "next_step": 6
+            }
+          ]
+        },
+        {
+          "message": "6# In your travels, this Soul Stone might aid you. Would you accept it?",
+          "responses": [
+            {
+              "text": "Yes, thank you.",
+              "next_step": 1007
+            },
+            {
+              "text": "No, I'm fine.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "7# Tou get the item",
+          "responses": [
+            {
+              "text": "ok bye.",
+              "next_step": -1
+            }
+          ]
+        }   
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Exit to the town  square",
+      "leads_to": "town_square",
+      "conditions": []
+    }
+  ]
+}

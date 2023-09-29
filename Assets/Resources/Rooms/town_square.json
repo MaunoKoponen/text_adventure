@@ -1,0 +1,33 @@
+{
+  "room_id": "town_square",
+  "description": "You are standing in Town Square of Throngulf. Its evening, and there is nobody out anymore. To one side, you can see the Mutton's Horn tavern. On the other side, there is a Temple of Fallen Souls. Road leads to north to city gates. In south , there is a fountain.",
+  "npcs": [],
+  "items": ["Mysterious Key"],
+  "actions": [],
+  "exits": [
+    {
+      "exit_name": "Enter the Temple of Fallen Souls",
+      "leads_to": "temple_of_lost_souls",
+      "conditions": []
+    },
+    {
+      "exit_name": "Enter the Mutton's Horn tavern",
+      "leads_to": "muttons_horn_tavern",
+      "conditions": []
+    },
+
+    {
+      "exit_name": "Examine the fountain",
+      "leads_to": "fountain",
+      "conditions": []
+    },
+    {
+      "exit_name": "Go to City gates",
+      "leads_to": "city_gates",
+      "conditions": []
+    }
+  ],
+  "events": ["pick_item","Mysterious key"]
+}
+
+  
