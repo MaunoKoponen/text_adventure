@@ -1,0 +1,22 @@
+{
+  "room_id": "forest_1",
+  "description": "in forest.",
+  "npcs": [],
+  "items": ["Acorn"],
+  "actions": [],
+  "exits": [
+    {
+      "exit_name": "Go north deeper into the woods",
+      "leads_to": "forest_2",
+      "conditions": []
+    },
+    {
+      "exit_name": "Go back to Throngulf past the gates",
+      "leads_to": "town_square",
+      "conditions": []
+    }
+  ],
+  "events": ["pick_item","Acorn"]
+}
+
+  

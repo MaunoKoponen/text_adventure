@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine.Events;
 
 public class RoomManager : MonoBehaviour
@@ -164,7 +165,7 @@ public class RoomManager : MonoBehaviour
     private void DisplayRoomInfo()
     {
         //roomDescriptionText.text = currentRoom.description;
-        roomDescriptionText.text = currentRoom.default_description + "\n\n" + string.Join("\n", combatLog);
+        roomDescriptionText.text = currentRoom.description + "\n\n" + string.Join("\n", combatLog);
 
         string imageName = currentRoom.room_id;
         if (imageName != currentImage)
@@ -176,7 +177,7 @@ public class RoomManager : MonoBehaviour
         
         narrator.PlayNarration(currentRoom.room_id);
         
-        Debug.Log(currentRoom.default_description);
+        Debug.Log(currentRoom.description);
         
         // Clear existing buttons
         foreach (Transform child in actionButtonContainer)
@@ -215,7 +216,22 @@ public class RoomManager : MonoBehaviour
             foreach (Room.Exit exit in currentRoom.exits)
             {
                 Debug.Log("exit action: ..." + exit.exit_name );
-                CreateActionButton(exit.exit_name, () => LoadRoomFromJson(exit.leads_to));
+                bool any = false;
+
+                if (exit.conditions.Length == 0)
+                    any = true;
+                
+                foreach (var condition in exit.conditions)
+                {
+                    foreach (var item in playerData.Inventory)
+                    {
+                        if (condition == item)
+                            any = true;
+                    }
+                }
+
+                if(any)
+                    CreateActionButton(exit.exit_name, () => LoadRoomFromJson(exit.leads_to));
             }
         }
 
@@ -366,7 +382,7 @@ public class RoomManager : MonoBehaviour
 public class Room
 {
     public string room_id;
-    public string default_description;
+    public string description;
     public string[] npcs;
     public List<string> items;
     public List<string> npcitems;

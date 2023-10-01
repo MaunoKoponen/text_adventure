@@ -1,6 +1,6 @@
 {
-  "room_id": "haunted_cemetary",
-  "description": "You're in a haunted forest. Suddenly, a skeleton warrior appears!",
+  "room_id": "haunted_cemetery",
+  "description": "You're in a haunted cemetery. Suddenly, a skeleton warrior appears!",
   "npcs": [],
   "items": [],
   "actions": [],
@@ -11,8 +11,8 @@
   },
   "exits": [
     {
-      "exit_name": "Go to town square",
-      "leads_to": "town_square",
+      "exit_name": "examine the body",
+      "leads_to": "haunted_cemetery_2",
       "conditions": []
     }
   ],

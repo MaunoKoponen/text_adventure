@@ -61,7 +61,7 @@
     },
     {
       "exit_name": "Main gate to the forest",
-      "leads_to": "forest_north_side",
+      "leads_to": "forest_1",
       "conditions": ["city_gate_key"]
     },
     {

@@ -108,10 +108,10 @@
           ]
         },
         {
-          "message": "7# Tou get the item",
+          "message": "7# Here, use it wisely",
           "responses": [
             {
-              "text": "ok bye.",
+              "text": "Thank you",
               "next_step": -1
             }
           ]

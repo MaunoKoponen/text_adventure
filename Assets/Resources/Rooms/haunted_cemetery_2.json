@@ -1,0 +1,16 @@
+{
+  "room_id": "haunted_cemetery_2",
+  "description": "You defeat the skeleton while searching its remains you find a heavy rusty key. Could it be the key to City gates?",
+  "npcs": [],
+  "items": ["city_gate_key"],
+  "actions": [],
+  "exits": [
+    {
+      "exit_name": "Return to City gates",
+      "leads_to": "city_gates",
+      "conditions": []
+    }
+  ],
+  "events": []
+}
+
