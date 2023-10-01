@@ -7,15 +7,20 @@
   "combat": {
     "enemy_name": "Skeleton Warrior",
     "enemy_health": 50,
-    "combat_actions": ["Attack", "Defend", "Use Item"]
+    "combat_actions": ["Attack", "Flee", "Use Item"]
   },
   "exits": [
     {
       "exit_name": "examine the body",
       "leads_to": "haunted_cemetery_2",
-      "conditions": []
-    }
-  ],
+      "conditions": ["win_battle"]
+    },
+  {
+    "exit_name": "Return to city gates",
+    "leads_to": "city_gates",
+    "conditions": []
+  }
+],
   "events": []
 }
 

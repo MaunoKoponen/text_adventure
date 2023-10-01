@@ -11,11 +11,12 @@ public class RoomManager : MonoBehaviour
     public ImageFade imageFadeInstance;
     public TMP_Text roomDescriptionText;
     public TMP_Text inventoryText;
+    public TMP_Text flagsText;
 
+    
     public GameObject actionButtonPrefab;
     public Transform actionButtonContainer;
-    public Image image;
-    public Narrator narrator; // Link this in the Inspector
+    public Narrator narrator;
     
     private Room currentRoom;
     private PlayerData playerData = new PlayerData();
@@ -71,13 +72,13 @@ public class RoomManager : MonoBehaviour
                     playerData.Inventory.Add(roomEvent.item_id);
                     break;
                 case "set_flag":
-                    if (playerData.flags.ContainsKey(roomEvent.flag_name))
+                    if (playerData.Flags.ContainsKey(roomEvent.flag_name))
                     {
-                        playerData.flags[roomEvent.flag_name] = roomEvent.value;
+                        playerData.Flags[roomEvent.flag_name] = roomEvent.value;
                     }
                     else
                     {
-                        playerData.flags.Add(roomEvent.flag_name, roomEvent.value);
+                        playerData.Flags.Add(roomEvent.flag_name, roomEvent.value);
                     }
                     break;
                 case "pick_item":
@@ -126,11 +127,20 @@ public class RoomManager : MonoBehaviour
             {
                 // Enemy is defeated
                 Debug.Log($"{currentRoom.combat.enemy_name} has been defeated!");
+                currentRoom.description = "You defeat the enemy!";
+                playerData.SetFlag("win_battle", true);
                 ClearCombatLog();
+                DisplayRoomInfo(); // Refresh the UI
             }
         }
 
-        if (currentRoom.combat.enemy_health > 0)
+        if (action == "Flee")
+        {
+            ClearCombatLog();
+            currentRoom.description = "You cowardly flee from the Battle!";
+            currentRoom.combat = null;
+        }
+        else if (currentRoom.combat.enemy_health > 0)
         {
             EnemyAttack();
         }
@@ -218,6 +228,9 @@ public class RoomManager : MonoBehaviour
                 Debug.Log("exit action: ..." + exit.exit_name );
                 bool any = false;
 
+                // Note, currently if one of any is tok, then player can pass
+                
+                
                 if (exit.conditions.Length == 0)
                     any = true;
                 
@@ -228,6 +241,19 @@ public class RoomManager : MonoBehaviour
                         if (condition == item)
                             any = true;
                     }
+                    
+                    foreach (var flag in playerData.Flags)
+                    {
+                        Debug.Log("checking condition: " + flag.Key + " and its ... "  + flag.Value);
+                        
+                        
+                        if (condition == flag.Key && flag.Value == true)
+                        {
+                            any = true;
+                        }
+                            
+                    }
+
                 }
 
                 if(any)
@@ -242,8 +268,16 @@ public class RoomManager : MonoBehaviour
             
             inventoryString += " - " + item + "\n";
         }
-
         inventoryText.text = inventoryString;
+        
+        string flagsString = "";
+        foreach (var item in playerData.Flags)
+        {
+            flagsString += " - " + item.Key + " " + item.Value + "\n";
+        }
+        flagsText.text = flagsString;
+
+        
     }
     
     
