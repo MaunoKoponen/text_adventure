@@ -9,6 +9,8 @@
   "actions": [
     {
       "action_id": "temple_maid",
+      "flag_false" : "HasSoulStone",
+
       "action_description": "Talk to temple maid"
     }
   ],
@@ -99,6 +101,8 @@
           "responses": [
             {
               "text": "Yes, thank you.",
+              "setFlagTrue": "HasSoulStone",
+              "getItem": "Black Soul Cross",
               "next_step": 1007
             },
             {

@@ -39,6 +39,9 @@ public class RoomManager : MonoBehaviour
         };
         
         LoadRoomFromJson("town_square");
+        playerData.SetFlag("HasSoulStone",false);
+        
+        
         
     }
 
@@ -215,7 +218,28 @@ public class RoomManager : MonoBehaviour
             
             foreach (var action in currentRoom.actions)
             {
-                CreateActionButton(action.action_description, () => HandleRoomAction(action.action_id));
+                if (action.flag_true != null && playerData.Flags.ContainsKey(action.flag_true) &&
+                    playerData.GetFlag(action.flag_true) == true)
+                {
+                    Debug.Log("Had true flag");
+                    CreateActionButton(action.action_description, () => HandleRoomAction(action.action_id));
+                }
+                
+                if (action.flag_false != null && playerData.Flags.ContainsKey(action.flag_false) &&
+                    playerData.GetFlag(action.flag_false) == false)
+                {
+                    Debug.Log("Had false flag");
+                    CreateActionButton(action.action_description, () => HandleRoomAction(action.action_id));
+                }
+
+                if (action.flag_true == null && action.flag_false == null)
+                {
+                   
+                    Debug.Log("Had no flag");
+
+                    CreateActionButton(action.action_description, () => HandleRoomAction(action.action_id));
+                }
+
             }
             
             foreach (string item in currentRoom.items)
@@ -228,8 +252,7 @@ public class RoomManager : MonoBehaviour
                 Debug.Log("exit action: ..." + exit.exit_name );
                 bool any = false;
 
-                // Note, currently if one of any is tok, then player can pass
-                
+                // Note, currently if one of any is ok, then player can pass
                 
                 if (exit.conditions.Length == 0)
                     any = true;
@@ -276,8 +299,6 @@ public class RoomManager : MonoBehaviour
             flagsString += " - " + item.Key + " " + item.Value + "\n";
         }
         flagsText.text = flagsString;
-
-        
     }
     
     
@@ -360,6 +381,16 @@ public class RoomManager : MonoBehaviour
         foreach (var response in dialogue.dialogues[currentDialogueStep].responses)
         {
             int nextStep = response.next_step;
+            if(response.setFlagTrue !=null)
+                playerData.SetFlag(response.setFlagTrue,true);
+            if(response.setFlagFalse !=null)
+                playerData.SetFlag(response.setFlagTrue,false);
+            if(response.getItem !=null)
+                playerData.AddItem(response.getItem);
+            if(response.giveItem !=null)
+                playerData.RemoveItem(response.getItem);
+
+
             CreateActionButton(response.text, () => HandleDialogueResponse(nextStep));
         }
     }
@@ -433,6 +464,9 @@ public class Room
     {
         public string action_description;
         public string action_id;
+        public string flag_false;
+        public string flag_true;
+
     }
     
     
@@ -455,6 +489,11 @@ public class Room
     public class Response
     {
         public string text;
+        public string setFlagTrue;
+        public string setFlagFalse;
+        public string getItem;  // get item from NPC
+        public string giveItem; // give item to NPC
+
         public int next_step;
     }
 
