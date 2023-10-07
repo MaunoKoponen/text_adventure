@@ -317,7 +317,7 @@ public class RoomManager : MonoBehaviour
         Room.NPCDialogue dialogue = currentRoom.npc_dialogues.FirstOrDefault(d => d.npc_name == actionName);
         if (dialogue != null)
         {
-            StartDialogue(actionName);
+            StartDialogue(dialogue);
         }
 
         // Further custom actions (like picking up items, getting aa quest, getting item from NPC ) can be added here
@@ -339,16 +339,15 @@ public class RoomManager : MonoBehaviour
 
     
     
-    private void StartDialogue(string npc)
+    private void StartDialogue(/*string npc*/ Room.NPCDialogue dialogue)
     {
-        currentNPC = npc;
+        currentNPC = dialogue.npc_name;
         currentDialogueStep = 0;
         DisplayDialogue();
         
-        var newSprite = GetSpriteByName(npc);
+        var newSprite = GetSpriteByName(dialogue.dialogue_image);
         imageFadeInstance.SetImageWithFade(newSprite);
-        currentImage = npc;
-        
+        currentImage = dialogue.dialogue_image;
     }
 
     
@@ -502,6 +501,7 @@ public class Room
     public class NPCDialogue
     {
         public string npc_name;
+        public string dialogue_image;
         public DialogueStep[] dialogues;
     }
     

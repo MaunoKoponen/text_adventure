@@ -2,19 +2,25 @@
   "room_id": "temple_of_lost_souls",
   "description": "You find yourself standing in the enigmatic Temple of Lost Souls. The cold, gray stones that make up its walls seem to pulsate with an eerie glow. In t he center, a dimly lit altar surrounded by flickering candles casts long, dancing shadows. There is a temple maid  standing nearby.",
   "npcs": [
-    "temple_maid"
+    "temple_maid_1", "temple_maid_2"
   ],
   "items": [],
   "actions": [
     {
-      "action_id": "temple_maid",
+      "action_id": "temple_maid_1",
       "flag_false" : "HasSoulStone",
+      "action_description": "Talk to temple maid"
+    },
+    {
+      "action_id": "temple_maid_2",
+      "flag_true" : "HasSoulStone",
       "action_description": "Talk to temple maid"
     }
   ],
   "npc_dialogues": [
     {
-      "npc_name": "temple_maid",
+      "npc_name": "temple_maid_1",
+      "dialogue_image": "temple_maid",
       "dialogues": [
         {
           "message": "Greetings, traveler. You stand in the Temple of Lost Souls. What brings you to this sacred place?",
@@ -118,6 +124,21 @@
             }
           ]
         }   
+      ]
+    },
+    {
+      "npc_name": "temple_maid_2",
+      "dialogue_image": "temple_maid",
+      "dialogues": [
+        {
+          "message": "Greetings again, traveler",
+          "responses": [
+            {
+              "text": "I'm just exploring. dont mind me",
+              "next_step": -1
+            }
+          ]
+        }
       ]
     }
   ],
