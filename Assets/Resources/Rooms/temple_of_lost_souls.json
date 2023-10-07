@@ -4,13 +4,11 @@
   "npcs": [
     "temple_maid"
   ],
-  "npcitems": ["soul stone"],
   "items": [],
   "actions": [
     {
       "action_id": "temple_maid",
       "flag_false" : "HasSoulStone",
-
       "action_description": "Talk to temple maid"
     }
   ],
@@ -102,8 +100,8 @@
             {
               "text": "Yes, thank you.",
               "setFlagTrue": "HasSoulStone",
-              "getItem": "Black Soul Cross",
-              "next_step": 1007
+              "getItem": "Soul Stone",
+              "next_step": 7
             },
             {
               "text": "No, I'm fine.",
