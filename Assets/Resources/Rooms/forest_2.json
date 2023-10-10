@@ -18,24 +18,24 @@
       "dialogue_image": "tavernkeeper",
       "dialogues": [
         {
-          "message": "1# Ah, a traveler! Welcome to my humble guest house. What brings you to such a remote place?",
+          "message": "0# Ah, a traveler! Welcome to my humble guest house. What brings you to such a remote place?",
           "responses": [
             {
               "text": "I'm on a quest.",
-              "next_step": 2
+              "next_step": 1
             },
             {
               "text": "Just passing through.",
-              "next_step": 3
+              "next_step": 2
             },
             {
               "text": "I heard tales of this place.",
-              "next_step": 4
+              "next_step": 3
             }
           ]
         },
         {
-          "message": "2# A quest, you say? The forest holds many secrets. Be careful and watch your step.",
+          "message": "1# A quest, you say? The forest holds many secrets. Be careful and watch your step.",
           "responses": [
             {
               "text": "Thank you for the warning.",
@@ -43,12 +43,12 @@
             },
             {
               "text": "Got any tips?",
-              "next_step": 5
+              "next_step": 4
             }
           ]
         },
         {
-          "message": "3# Well, rest your feet here and enjoy the serenity. Not many venture this far.",
+          "message": "2# Well, rest your feet here and enjoy the serenity. Not many venture this far.",
           "responses": [
             {
               "text": "Thank you, I will.",
@@ -57,20 +57,20 @@
           ]
         },
         {
-          "message": "4# Ah, so tales of the enchanted river and the forest spirits reached you. All true, by the way.",
+          "message": "3# Ah, so tales of the enchanted river and the forest spirits reached you. All true, by the way.",
           "responses": [
             {
               "text": "Enchanted?",
-              "next_step": 6
+              "next_step": 5
             },
             {
               "text": "Forest spirits?",
-              "next_step": 7
+              "next_step": 6
             }
           ]
         },
         {
-          "message": "5# Stick to the paths, respect the forest, and if you hear whispers, don't follow them.",
+          "message": "4# Stick to the paths, respect the forest, and if you hear whispers, don't follow them.",
           "responses": [
             {
               "text": "Noted.",
@@ -79,7 +79,7 @@
           ]
         },
         {
-          "message": "6# Yes, it's said that the river grants wishes to those who are pure of heart.",
+          "message": "5# Yes, it's said that the river grants wishes to those who are pure of heart.",
           "responses": [
             {
               "text": "Interesting.",
@@ -88,7 +88,7 @@
           ]
         },
         {
-          "message": "7# Spirits that protect the forest and its inhabitants. Some say they were once humans who loved the forest so much, they became part of it.",
+          "message": "6# Spirits that protect the forest and its inhabitants. Some say they were once humans who loved the forest so much, they became part of it.",
           "responses": [
             {
               "text": "Fascinating.",
@@ -103,24 +103,24 @@
       "dialogue_image": "mysterious_stranger",
       "dialogues": [
         {
-          "message": "1# Why do you approach me, traveler?",
+          "message": "0# Why do you approach me, traveler?",
           "responses": [
             {
               "text": "You seem... interesting.",
-              "next_step": 2
+              "next_step": 1
             },
             {
               "text": "Just curious.",
-              "next_step": 3
+              "next_step": 2
             }
           ]
         },
         {
-          "message": "2# Many find me intriguing, yet not all are ready for the truths I might reveal.",
+          "message": "1# Many find me intriguing, yet not all are ready for the truths I might reveal.",
           "responses": [
             {
               "text": "Try me.",
-              "next_step": 4
+              "next_step": 3
             },
             {
               "text": "Perhaps I should leave.",
@@ -129,7 +129,7 @@
           ]
         },
         {
-          "message": "3# Curiosity can lead to great discoveries, or to peril. Tread cautiously.",
+          "message": "2# Curiosity can lead to great discoveries, or to peril. Tread cautiously.",
           "responses": [
             {
               "text": "I always do.",
@@ -138,12 +138,12 @@
           ]
         },
         {
-          "message": "4# Very well. Here is a riddle for you: 'In daylight, I am not seen. But when night falls, I am the queen. What am I?'",
+          "message": "3# Very well. Here is a riddle for you: 'In daylight, I am not seen. But when night falls, I am the queen. What am I?'",
           "responses": [
             {
               "text": "The moon.",
               "setFlagTrue": "RiddleSolved",
-              "next_step": 5
+              "next_step": 4
             },
             {
               "text": "Stars.",
@@ -156,7 +156,7 @@
           ]
         },
         {
-          "message": "5# Correct. For your wit, I grant you this enchanted feather. It may come in handy.",
+          "message": "4# Correct. For your wit, I grant you this enchanted feather. It may come in handy.",
           "responses": [
             {
               "text": "Thank you, stranger.",

@@ -348,7 +348,7 @@ public class RoomManager : MonoBehaviour
 
     
     
-    private void StartDialogue(/*string npc*/ Room.NPCDialogue dialogue)
+    private void StartDialogue( Room.NPCDialogue dialogue)
     {
         currentNPC = dialogue.npc_name;
         currentDialogueStep = 0;
@@ -376,15 +376,17 @@ public class RoomManager : MonoBehaviour
         Room.NPCDialogue dialogue = currentRoom.dialogues.FirstOrDefault(d => d.npc_name == currentNPC);
 
         if (dialogue == null) return;
-
-        if (currentDialogueStep > 1000)
-            currentDialogueStep -= 1000;
+        
         roomDescriptionText.text = ParseMessage(dialogue.dialogues[currentDialogueStep].message);
         
         foreach (Transform child in actionButtonContainer)
         {
             Destroy(child.gameObject);
         }
+
+        Debug.Log(">>>>> dialogue.dialogues[currentDialogueStep] + dialogue.dialogues[currentDialogueStep]");
+        Debug.Log(">>>>> dialogue.dialogues.Length " + dialogue.dialogues.Length);
+        Debug.Log(">>>>> dialogue.dialogues[currentDialogueStep].responses " +dialogue.dialogues[currentDialogueStep].responses.Length);
 
         foreach (var response in dialogue.dialogues[currentDialogueStep].responses)
         {
