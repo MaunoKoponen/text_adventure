@@ -1,26 +1,50 @@
 {
   "room_id": "haunted_cemetery",
   "description": "You're in a haunted cemetery. Suddenly, a skeleton warrior appears!",
-  "npcs": [],
+  "npcs": ["loot"],
   "items": [],
-  "actions": [],
+    "actions": [
+      {
+        "action_id": "loot",
+        "flag_false": "gate_key",
+        "action_description": "Loot corpse"
+      }
+    ],
   "combat": {
     "enemy_name": "Skeleton Warrior",
     "enemy_health": 50,
-    "combat_actions": ["Attack", "Flee", "Use Item"]
+    "combat_actions": ["Attack", "Use Item... not implemented yet though"]
   },
+  "dialogues": [
+    {
+      "npc_name": "loot",
+      "dialogue_image": "haunted_cemetery",
+      "dialogues": [
+        {
+          "message": "You examine the remains of the skeleton. in midst of the bones you see a rusty old key. Could it be the key to the city gates?",
+          "responses": [
+            {
+              "text": "Take the key",
+              "setFlagTrue": "gate_key",
+              "getItem": "gate key",
+              "next_step": -1
+            },
+            {
+              "text": "Leave the key on ground",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    }
+  ], 
   "exits": [
     {
-      "exit_name": "examine the body",
-      "leads_to": "haunted_cemetery_2",
-      "conditions": ["win_battle"]
-    },
-  {
-    "exit_name": "Return to city gates",
-    "leads_to": "city_gates",
-    "conditions": []
-  }
-],
-  "events": []
+      "exit_name": "Return to city gates",
+      "leads_to": "city_gates",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
 }
 

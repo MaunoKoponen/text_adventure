@@ -1,17 +1,16 @@
 {
   "room_id": "muttons_horn_tavern",
   "description": "You're in the Mutton's Horn tavern...",
-  "npcs": ["bartender"],
-  "items": [],
   "actions": [
     {
       "action_id": "bartender",
       "action_description": "Talk to bartender"
     }
   ],
-  "npc_dialogues": [
+  "dialogues": [
     {
       "npc_name": "bartender",
+      "dialogue_image": "bartender",
       "dialogues": [
         {
           "message": "Ah, welcome! What can I get you?",
@@ -48,7 +47,8 @@
     {
       "exit_name": "Exit to town square",
       "leads_to": "town_square",
-      "conditions": []
+      "conditions": [],
+      "conditions_not": []
     }
   ]
 }

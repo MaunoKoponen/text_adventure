@@ -1,0 +1,185 @@
+{
+  "room_id": "forest_guest_house",
+  "description": "Nestled deep within the heart of the forest, beside a gently flowing river, stands a cozy guest house. The melodious hum of the river is complemented by the distant chirping of the birds. Thick trees shield the guest house from the rest of the world, creating a sense of isolation. Inside, a warm, golden glow emanates from lanterns, illuminating the tavern section where a tavernkeeper is serving drinks. At a dimly lit corner, a mysterious stranger cloaked in shadows observes silently.",
+  "items": [],
+  "actions": [
+    {
+      "action_id": "tavernkeeper_1",
+      "action_description": "Talk to the tavernkeeper"
+    },
+    {
+      "action_id": "mysterious_stranger_1",
+      "action_description": "Approach the mysterious stranger"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "tavernkeeper_1",
+      "dialogue_image": "tavernkeeper",
+      "dialogues": [
+        {
+          "message": "1# Ah, a traveler! Welcome to my humble guest house. What brings you to such a remote place?",
+          "responses": [
+            {
+              "text": "I'm on a quest.",
+              "next_step": 2
+            },
+            {
+              "text": "Just passing through.",
+              "next_step": 3
+            },
+            {
+              "text": "I heard tales of this place.",
+              "next_step": 4
+            }
+          ]
+        },
+        {
+          "message": "2# A quest, you say? The forest holds many secrets. Be careful and watch your step.",
+          "responses": [
+            {
+              "text": "Thank you for the warning.",
+              "next_step": -1
+            },
+            {
+              "text": "Got any tips?",
+              "next_step": 5
+            }
+          ]
+        },
+        {
+          "message": "3# Well, rest your feet here and enjoy the serenity. Not many venture this far.",
+          "responses": [
+            {
+              "text": "Thank you, I will.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "4# Ah, so tales of the enchanted river and the forest spirits reached you. All true, by the way.",
+          "responses": [
+            {
+              "text": "Enchanted?",
+              "next_step": 6
+            },
+            {
+              "text": "Forest spirits?",
+              "next_step": 7
+            }
+          ]
+        },
+        {
+          "message": "5# Stick to the paths, respect the forest, and if you hear whispers, don't follow them.",
+          "responses": [
+            {
+              "text": "Noted.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "6# Yes, it's said that the river grants wishes to those who are pure of heart.",
+          "responses": [
+            {
+              "text": "Interesting.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "7# Spirits that protect the forest and its inhabitants. Some say they were once humans who loved the forest so much, they became part of it.",
+          "responses": [
+            {
+              "text": "Fascinating.",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "npc_name": "mysterious_stranger_1",
+      "dialogue_image": "mysterious_stranger",
+      "dialogues": [
+        {
+          "message": "1# Why do you approach me, traveler?",
+          "responses": [
+            {
+              "text": "You seem... interesting.",
+              "next_step": 2
+            },
+            {
+              "text": "Just curious.",
+              "next_step": 3
+            }
+          ]
+        },
+        {
+          "message": "2# Many find me intriguing, yet not all are ready for the truths I might reveal.",
+          "responses": [
+            {
+              "text": "Try me.",
+              "next_step": 4
+            },
+            {
+              "text": "Perhaps I should leave.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "3# Curiosity can lead to great discoveries, or to peril. Tread cautiously.",
+          "responses": [
+            {
+              "text": "I always do.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "4# Very well. Here is a riddle for you: 'In daylight, I am not seen. But when night falls, I am the queen. What am I?'",
+          "responses": [
+            {
+              "text": "The moon.",
+              "setFlagTrue": "RiddleSolved",
+              "next_step": 5
+            },
+            {
+              "text": "Stars.",
+              "next_step": -1
+            },
+            {
+              "text": "The night.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "5# Correct. For your wit, I grant you this enchanted feather. It may come in handy.",
+          "responses": [
+            {
+              "text": "Thank you, stranger.",
+              "getItem": "Enchanted Feather",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Path deeper into the forest",
+      "leads_to": "deep_forest",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "Path back to the forest edge",
+      "leads_to": "forest_1",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
+}

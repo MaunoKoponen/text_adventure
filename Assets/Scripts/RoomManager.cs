@@ -5,9 +5,11 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public class RoomManager : MonoBehaviour
 {
+    public ScrollManager scrollManager;
     public ImageFade imageFadeInstance;
     public TMP_Text roomDescriptionText;
     public TMP_Text inventoryText;
@@ -38,11 +40,9 @@ public class RoomManager : MonoBehaviour
             damageType = Weapon.DamageType.Physical
         };
         
-        LoadRoomFromJson("town_square");
+        LoadRoomFromJson("haunted_cemetery");
         playerData.SetFlag("HasSoulStone",false);
-        
-        
-        
+        playerData.SetFlag("gate_key",false);
     }
 
     private void LoadRoomFromJson(string roomId)
@@ -131,7 +131,6 @@ public class RoomManager : MonoBehaviour
                 // Enemy is defeated
                 Debug.Log($"{currentRoom.combat.enemy_name} has been defeated!");
                 currentRoom.description = "You defeat the enemy!";
-                playerData.SetFlag("win_battle", true);
                 ClearCombatLog();
                 DisplayRoomInfo(); // Refresh the UI
             }
@@ -143,6 +142,7 @@ public class RoomManager : MonoBehaviour
             currentRoom.description = "You cowardly flee from the Battle!";
             currentRoom.combat = null;
         }
+        
         else if (currentRoom.combat.enemy_health > 0)
         {
             EnemyAttack();
@@ -157,8 +157,8 @@ public class RoomManager : MonoBehaviour
         player.health -= enemyDamageDealt;
 
         combatLog.Add($"{currentRoom.combat.enemy_name} attacked you for {enemyDamageDealt} damage!");
-        combatLog.Add($" Your health is now {player.health}");
-
+        combatLog.Add($" Your health is now {player.health} ");
+        combatLog.Add("\n");
         
         // Check if the player is defeated:
         if (player.health <= 0)
@@ -177,7 +177,6 @@ public class RoomManager : MonoBehaviour
     private string currentImage = "";
     private void DisplayRoomInfo()
     {
-        //roomDescriptionText.text = currentRoom.description;
         roomDescriptionText.text = currentRoom.description + "\n\n" + string.Join("\n", combatLog);
 
         string imageName = currentRoom.room_id;
@@ -209,53 +208,42 @@ public class RoomManager : MonoBehaviour
         }
         else
         {
-            // Display room actions and exits
-            //foreach (string action in currentRoom.actions)
-            //{
-            //    Debug.Log("RoomAction ..." + action);
-            //    CreateActionButton(action, () => HandleRoomAction(action));
-            //}
-            
-            foreach (var action in currentRoom.actions)
+            if (currentRoom.actions != null)
             {
-                if (action.flag_true != null && playerData.Flags.ContainsKey(action.flag_true) &&
-                    playerData.GetFlag(action.flag_true) == true)
+                foreach (var action in currentRoom.actions)
                 {
-                    Debug.Log("Had true flag");
-                    CreateActionButton(action.action_description, () => HandleRoomAction(action.action_id));
-                }
+                    if (action.flag_true != null && playerData.Flags.ContainsKey(action.flag_true) &&
+                        playerData.GetFlag(action.flag_true) == true)
+                    {
+                        Debug.Log("Had true flag");
+                        CreateActionButton(action.action_description, () => HandleRoomAction(action.action_id));
+                    }
                 
-                if (action.flag_false != null && playerData.Flags.ContainsKey(action.flag_false) &&
-                    playerData.GetFlag(action.flag_false) == false)
-                {
-                    Debug.Log("Had false flag");
-                    CreateActionButton(action.action_description, () => HandleRoomAction(action.action_id));
-                }
+                    if (action.flag_false != null && playerData.Flags.ContainsKey(action.flag_false) &&
+                        playerData.GetFlag(action.flag_false) == false)
+                    {
+                        Debug.Log("Had false flag");
+                        CreateActionButton(action.action_description, () => HandleRoomAction(action.action_id));
+                    }
 
-                if (action.flag_true == null && action.flag_false == null)
-                {
+                    if (action.flag_true == null && action.flag_false == null)
+                    {
                    
-                    Debug.Log("Had no flag");
+                        Debug.Log("Had no flag");
 
-                    CreateActionButton(action.action_description, () => HandleRoomAction(action.action_id));
-                }
+                        CreateActionButton(action.action_description, () => HandleRoomAction(action.action_id));
+                    }
 
-            }
-            
-            foreach (string item in currentRoom.items)
-            {
-                CreateActionButton($"Pick up {item}", () => PickUpItem(item));
+                }    
             }
             
             foreach (Room.Exit exit in currentRoom.exits)
             {
-                Debug.Log("exit action: ..." + exit.exit_name );
-                bool any = false;
+                Debug.Log("exit action: ..." + exit.exit_name);
+                bool any = false;    
 
                 // Note, currently if one of any is ok, then player can pass
                 
-                if (exit.conditions.Length == 0)
-                    any = true;
                 
                 foreach (var condition in exit.conditions)
                 {
@@ -264,21 +252,39 @@ public class RoomManager : MonoBehaviour
                         if (condition == item)
                             any = true;
                     }
-                    
+
                     foreach (var flag in playerData.Flags)
                     {
-                        Debug.Log("checking condition: " + flag.Key + " and its ... "  + flag.Value);
-                        
+                        Debug.Log("checking condition: " + flag.Key + " and its ... " + flag.Value);
                         
                         if (condition == flag.Key && flag.Value == true)
                         {
                             any = true;
                         }
-                            
                     }
+                }
+                
+                foreach (var condition in exit.conditions_not)
+                {
 
+                    foreach (var flag in playerData.Flags)
+                    {
+                        Debug.Log("checking negative condition: " + flag.Key + " and its ... " + flag.Value);
+
+                        if (condition == flag.Key && flag.Value == false)
+                        {
+                            Debug.Log("found a flag that is supposed to be false and it is");
+                            any = true;
+                        }
+                    }
                 }
 
+                if (exit.conditions.Length == 0 && exit.conditions_not.Length == 0)
+                {
+                    Debug.Log("there wasnt any condition at all, so you may pass");
+                    any = true;
+                }
+                
                 if(any)
                     CreateActionButton(exit.exit_name, () => LoadRoomFromJson(exit.leads_to));
             }
@@ -299,6 +305,9 @@ public class RoomManager : MonoBehaviour
             flagsString += " - " + item.Key + " " + item.Value + "\n";
         }
         flagsText.text = flagsString;
+        
+        scrollManager.ScrollToBottom();
+        
     }
     
     
@@ -314,7 +323,7 @@ public class RoomManager : MonoBehaviour
         }
 
         // If the action isn't an exit, it might be an NPC interaction
-        Room.NPCDialogue dialogue = currentRoom.npc_dialogues.FirstOrDefault(d => d.npc_name == actionName);
+        Room.NPCDialogue dialogue = currentRoom.dialogues.FirstOrDefault(d => d.npc_name == actionName);
         if (dialogue != null)
         {
             StartDialogue(dialogue);
@@ -364,7 +373,7 @@ public class RoomManager : MonoBehaviour
     
     private void DisplayDialogue()
     {
-        Room.NPCDialogue dialogue = currentRoom.npc_dialogues.FirstOrDefault(d => d.npc_name == currentNPC);
+        Room.NPCDialogue dialogue = currentRoom.dialogues.FirstOrDefault(d => d.npc_name == currentNPC);
 
         if (dialogue == null) return;
 
@@ -380,37 +389,48 @@ public class RoomManager : MonoBehaviour
         foreach (var response in dialogue.dialogues[currentDialogueStep].responses)
         {
             int nextStep = response.next_step;
+            string setFlagTrue = null;
+            string setFlagFalse = null;
+            string getItem = null;
+            string giveItem = null;
+            
+            
             if(response.setFlagTrue !=null)
-                playerData.SetFlag(response.setFlagTrue,true);
+                setFlagTrue = response.setFlagTrue;
             if(response.setFlagFalse !=null)
-                playerData.SetFlag(response.setFlagTrue,false);
+                setFlagFalse = response.setFlagFalse;
             if(response.getItem !=null)
-                playerData.AddItem(response.getItem);
-            if(response.giveItem !=null)
-                playerData.RemoveItem(response.getItem);
+                getItem = response.getItem;
+            if (response.giveItem != null)
+                giveItem = response.giveItem;
+        
 
-
-            CreateActionButton(response.text, () => HandleDialogueResponse(nextStep));
+            CreateActionButton(response.text, () => HandleDialogueResponse(nextStep,setFlagTrue,setFlagFalse,getItem,giveItem));
         }
     }
 
-    private void HandleDialogueResponse(int nextStep)
+    private void HandleDialogueResponse(int nextStep, string setFlagTrue = null, string setFlagFalse = null, string getItem=null, string giveItem = null)
     {
-        if (nextStep > 1000)
-        {
-            Debug.Log("should receive item");
-            ReceiveItem(currentRoom.npcitems.FirstOrDefault());
-        }
+       if(setFlagTrue !=null)
+            playerData.SetFlag(setFlagTrue,true);
+       if(setFlagFalse !=null)
+            playerData.SetFlag(setFlagFalse,false);
+       if(getItem !=null)
+            playerData.AddItem(getItem);
+       if(giveItem !=null)
+            playerData.RemoveItem(giveItem);
         
-        if (nextStep == -1)
-        {
+        
+        
+       if (nextStep == -1)
+       {
             EndDialogue();
-        }
-        else
-        {
+       }
+       else
+       {
             currentDialogueStep = nextStep;
             DisplayDialogue();
-        }
+       }
     }
 
     private void EndDialogue()
@@ -449,13 +469,11 @@ public class Room
     public string description;
     public string[] npcs;
     public List<string> items;
-    public List<string> npcitems;
-
     public Action[] actions;
     public Exit[] exits;
     public Combat combat;
-    public RoomEvent[] events;  // This is the new field
-    public List<NPCDialogue> npc_dialogues;
+    public RoomEvent[] events;
+    public List<NPCDialogue> dialogues;
 
 
     [System.Serializable]
@@ -475,6 +493,8 @@ public class Room
         public string exit_name;
         public string leads_to;
         public string[] conditions;
+        public string[] conditions_not
+            ;
     }
     
     [System.Serializable]

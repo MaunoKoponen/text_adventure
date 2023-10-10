@@ -1,17 +1,16 @@
 {
   "room_id": "city_gates",
   "description": "You stand before the towering city gates, symbols of protection and isolation. They're massive, constructed from old, darkened oak, reinforced with black iron. To your right, there's a smaller, less imposing passage that leads to the cemetery. The constant murmur of the town can be heard faintly behind you, while the allure of the forest beckons from beyond the gates.",
-  "npcs": ["guardman"],
-  "items": [],
   "actions": [
     {
       "action_id": "guardman",
       "action_description": "Talk to  guardman"
     }
   ],
-  "npc_dialogues": [
+  "dialogues": [
     {
       "npc_name": "guardman",
+      "dialogue_image": "guardman",
       "dialogues": [
         {
           "message": "Halt! The main gate is locked; the key's gone missing. You're not the first to ask, either. What's your business?",
@@ -57,17 +56,26 @@
     {
       "exit_name": "Passage to the cemetery",
       "leads_to": "haunted_cemetery",
-      "conditions": []
+      "conditions": [],
+      "conditions_not": ["gate_key"]
+    },
+    {
+      "exit_name": "Passage to the cemetery",
+      "leads_to": "haunted_cemetery_2",
+      "conditions": ["gate_key"],
+      "conditions_not": []
     },
     {
       "exit_name": "Main gate to the forest",
       "leads_to": "forest_1",
-      "conditions": ["city_gate_key"]
+      "conditions": ["gate_key"],
+      "conditions_not": []
     },
     {
       "exit_name": "Back to town square",
       "leads_to": "town_square",
-      "conditions": []
+      "conditions": [],
+      "conditions_not": []
     }
   ]
 }
