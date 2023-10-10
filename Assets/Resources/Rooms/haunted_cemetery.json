@@ -13,7 +13,7 @@
   "combat": {
     "enemy_name": "Skeleton Warrior",
     "enemy_health": 50,
-    "combat_actions": ["Attack", "Use Item... not implemented yet though"]
+    "combat_actions": ["Attack", "Use Item", "Flee"]
   },
   "dialogues": [
     {

@@ -21,6 +21,8 @@ public class RoomManager : MonoBehaviour
     public Narrator narrator;
     
     private Room currentRoom;
+    private string previousRoom;
+
     private PlayerData playerData = new PlayerData();
     private int currentDialogueStep = -1;
     private string currentNPC = "";
@@ -40,12 +42,13 @@ public class RoomManager : MonoBehaviour
             damageType = Weapon.DamageType.Physical
         };
         
-        LoadRoomFromJson("haunted_cemetery");
+        LoadRoomFromJson("city_gates");
         playerData.SetFlag("HasSoulStone",false);
         playerData.SetFlag("gate_key",false);
+        playerData.Inventory.Add("small healing potion");
     }
 
-    private void LoadRoomFromJson(string roomId)
+    private void LoadRoomFromJson(string roomId, string extraString = "")
     {
         TextAsset roomData = Resources.Load<TextAsset>("Rooms/" + roomId);
 
@@ -53,9 +56,16 @@ public class RoomManager : MonoBehaviour
         {
             string jsonData = roomData.text;
             Debug.Log("JSON string: " + jsonData);
+
+            if (currentRoom != null)
+            {
+                previousRoom = currentRoom.room_id;
+                
+            }
+            
             currentRoom = JsonUtility.FromJson<Room>(jsonData);
             
-            DisplayRoomInfo();
+            DisplayRoomInfo(extraString);
         }
         else
         {
@@ -132,7 +142,8 @@ public class RoomManager : MonoBehaviour
                 Debug.Log($"{currentRoom.combat.enemy_name} has been defeated!");
                 currentRoom.description = "You defeat the enemy!";
                 ClearCombatLog();
-                DisplayRoomInfo(); // Refresh the UI
+                playerData.SetFlag("battle_won",true);
+                DisplayRoomInfo(""); // Refresh the UI
             }
         }
 
@@ -141,6 +152,8 @@ public class RoomManager : MonoBehaviour
             ClearCombatLog();
             currentRoom.description = "You cowardly flee from the Battle!";
             currentRoom.combat = null;
+            LoadRoomFromJson(previousRoom, "You cowardly flee from the Battle!\n");
+            return;
         }
         
         else if (currentRoom.combat.enemy_health > 0)
@@ -148,7 +161,7 @@ public class RoomManager : MonoBehaviour
             EnemyAttack();
         }
 
-        DisplayRoomInfo(); // Refresh the UI
+        DisplayRoomInfo(""); // Refresh the UI
     }
 
     private void EnemyAttack()
@@ -175,9 +188,9 @@ public class RoomManager : MonoBehaviour
     }
     
     private string currentImage = "";
-    private void DisplayRoomInfo()
+    private void DisplayRoomInfo(string extraString)
     {
-        roomDescriptionText.text = currentRoom.description + "\n\n" + string.Join("\n", combatLog);
+        roomDescriptionText.text = extraString + currentRoom.description + "\n\n" + string.Join("\n", combatLog);
 
         string imageName = currentRoom.room_id;
         if (imageName != currentImage)
@@ -281,7 +294,7 @@ public class RoomManager : MonoBehaviour
 
                 if (exit.conditions.Length == 0 && exit.conditions_not.Length == 0)
                 {
-                    Debug.Log("there wasnt any condition at all, so you may pass");
+                    Debug.Log("there wasn't any condition at all, so you may pass");
                     any = true;
                 }
                 
@@ -336,14 +349,14 @@ public class RoomManager : MonoBehaviour
     {
         playerData.AddItem(itemId);
         currentRoom.items.Remove(itemId);
-        DisplayRoomInfo(); // Refresh the UI
+        DisplayRoomInfo(""); // Refresh the UI
     }
     private void ReceiveItem(string itemId)
     {
       Debug.Log("received item   " + itemId);
         
         playerData.AddItem(itemId);
-        DisplayRoomInfo(); // Refresh the UI
+        DisplayRoomInfo(""); // Refresh the UI
     }
 
     
@@ -439,7 +452,7 @@ public class RoomManager : MonoBehaviour
     {
         currentNPC = "";
         currentDialogueStep = -1;
-        DisplayRoomInfo();
+        DisplayRoomInfo("");
     }
     
 
