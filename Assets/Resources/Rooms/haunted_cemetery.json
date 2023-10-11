@@ -1,6 +1,6 @@
 {
   "room_id": "haunted_cemetery",
-  "description": "You're in a haunted cemetery. Suddenly, a skeleton warrior appears!",
+  "description": "You enter the haunted cemetery. Suddenly, a skeleton warrior appears!",
   "npcs": ["loot"],
   "items": [],
     "actions": [
@@ -12,7 +12,7 @@
     ],
   "combat": {
     "enemy_name": "Skeleton Warrior",
-    "enemy_health": 50,
+    "enemy_health": 500,
     "combat_actions": ["Attack", "Use Item", "Flee"]
   },
   "dialogues": [

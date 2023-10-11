@@ -14,6 +14,7 @@ public class RoomManager : MonoBehaviour
     public TMP_Text roomDescriptionText;
     public TMP_Text inventoryText;
     public TMP_Text flagsText;
+    public TMP_Text healthText;
 
     
     public GameObject actionButtonPrefab;
@@ -22,6 +23,8 @@ public class RoomManager : MonoBehaviour
     
     private Room currentRoom;
     private string previousRoom;
+    private string respawnRoom;
+
 
     private PlayerData playerData = new PlayerData();
     private int currentDialogueStep = -1;
@@ -34,7 +37,7 @@ public class RoomManager : MonoBehaviour
     void Start()
     {
         // Example initialization
-        player.health = 100;
+        player.health = 10;
         player.equippedWeapon = new Weapon 
         {
             name = "Sword",
@@ -42,7 +45,10 @@ public class RoomManager : MonoBehaviour
             damageType = Weapon.DamageType.Physical
         };
         
-        LoadRoomFromJson("city_gates");
+        
+        //-------------- Init values ------------//
+        LoadRoomFromJson("forest_tavern");
+        respawnRoom = "temple_of_lost_souls";
         playerData.SetFlag("HasSoulStone",false);
         playerData.SetFlag("gate_key",false);
         playerData.Inventory.Add("small healing potion");
@@ -50,6 +56,8 @@ public class RoomManager : MonoBehaviour
 
     private void LoadRoomFromJson(string roomId, string extraString = "")
     {
+        Debug.Log(">>>>> LoadRoomFromJSON: " + roomId);
+        
         TextAsset roomData = Resources.Load<TextAsset>("Rooms/" + roomId);
 
         if (roomData != null)
@@ -104,7 +112,10 @@ public class RoomManager : MonoBehaviour
     
     private void HandleCombatAction(string action)
     {
-        Debug.Log("handle combat action");
+        if ( player.health <= 0)
+        {
+            Debug.Log(">>>>> HandleCombatAction  Player health  zero!");
+        }
         
         int totalDamage = player.equippedWeapon.damageAmount;
         
@@ -133,7 +144,7 @@ public class RoomManager : MonoBehaviour
 
             combatLog.Add($" Enemy health is now {currentRoom.combat.enemy_health}");
 
-            Debug.Log("enemy health: " + currentRoom.combat.enemy_health);
+            //Debug.Log("enemy health: " + currentRoom.combat.enemy_health);
             
             // Check if the enemy is defeated
             if (currentRoom.combat.enemy_health <= 0)
@@ -142,9 +153,9 @@ public class RoomManager : MonoBehaviour
                 Debug.Log($"{currentRoom.combat.enemy_name} has been defeated!");
                 currentRoom.description = "You defeat the enemy!";
                 ClearCombatLog();
-                playerData.SetFlag("battle_won",true);
                 DisplayRoomInfo(""); // Refresh the UI
             }
+            
         }
 
         if (action == "Flee")
@@ -176,9 +187,14 @@ public class RoomManager : MonoBehaviour
         // Check if the player is defeated:
         if (player.health <= 0)
         {
-            combatLog.Add("You have been defeated!");
-            // Add logic here for player defeat if necessary (e.g., restart game, etc.)
+            Debug.Log(">>>>> EnemyAttack -> player health ZERO");
+            
+            
+            Debug.Log($"{currentRoom.combat.enemy_name} has defeated you!");
             ClearCombatLog();
+            currentRoom.combat = null;
+            player.health = 0;
+            LoadRoomFromJson(respawnRoom, "You wake up from odd dream.\n");
         }
     }
     
@@ -190,6 +206,8 @@ public class RoomManager : MonoBehaviour
     private string currentImage = "";
     private void DisplayRoomInfo(string extraString)
     {
+        Debug.Log(">>>>> DisplayRoomInfo");
+        
         roomDescriptionText.text = extraString + currentRoom.description + "\n\n" + string.Join("\n", combatLog);
 
         string imageName = currentRoom.room_id;
@@ -209,6 +227,20 @@ public class RoomManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+
+        /*
+        if (currentRoom.combat != null && player.health < 0)
+        {
+            Debug.Log(">>>>> DisplayRoomInfo -> zero -> load new room");
+            
+            Debug.Log($"{currentRoom.combat.enemy_name} has defeated you!");
+            ClearCombatLog();
+            currentRoom.combat = null;
+            player.health = 0;
+            LoadRoomFromJson(respawnRoom, "You wake up from odd dream.\n");
+            return;
+        }
+*/
 
         if (currentRoom.combat != null && currentRoom.combat.enemy_health > 0)
         {

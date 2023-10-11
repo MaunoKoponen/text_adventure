@@ -4,8 +4,8 @@
   "actions": [],
   "exits": [
     {
-      "exit_name": "Go north deeper into the woods",
-      "leads_to": "forest_2",
+      "exit_name": "Path leading to a river",
+      "leads_to": "forest_tavern",
       "conditions": [],
       "conditions_not": []
     },

@@ -1,10 +1,10 @@
 {
-  "room_id": "forest_guest_house",
+  "room_id": "forest_tavern",
   "description": "Nestled deep within the heart of the forest, beside a gently flowing river, stands a cozy guest house. The melodious hum of the river is complemented by the distant chirping of the birds. Thick trees shield the guest house from the rest of the world, creating a sense of isolation. Inside, a warm, golden glow emanates from lanterns, illuminating the tavern section where a tavernkeeper is serving drinks. At a dimly lit corner, a mysterious stranger cloaked in shadows observes silently.",
   "items": [],
   "actions": [
     {
-      "action_id": "tavernkeeper_1",
+      "action_id": "forest_tavern_lady",
       "action_description": "Talk to the tavernkeeper"
     },
     {
@@ -14,7 +14,8 @@
   ],
   "dialogues": [
     {
-      "npc_name": "tavernkeeper_1",
+      "npc_name": "forest_tavern_lady",
+      "dialogue_image": "forest_tavern_lady",
       "dialogue_image": "tavernkeeper",
       "dialogues": [
         {

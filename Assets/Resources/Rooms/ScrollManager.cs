@@ -27,7 +27,7 @@ public class ScrollManager : MonoBehaviour
         // Wait for end of frame AND force update all canvases before setting to bottom.
         yield return new WaitForEndOfFrame ();
         Canvas.ForceUpdateCanvases ();
-        Debug.Log(scrollRect.normalizedPosition);
+        //Debug.Log(scrollRect.normalizedPosition);
         
         scrollRect.normalizedPosition = new Vector2(0, 0);
         Canvas.ForceUpdateCanvases ();
