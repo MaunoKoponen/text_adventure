@@ -101,7 +101,7 @@
     },
     {
       "npc_name": "mysterious_stranger_1",
-      "dialogue_image": "mysterious_stranger",
+      "dialogue_image": "mysterious_stranger_1",
       "dialogues": [
         {
           "message": "0# Why do you approach me, traveler?",

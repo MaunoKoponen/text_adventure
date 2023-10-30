@@ -1,0 +1,59 @@
+{
+  "room_id": "temple_of_lost_souls_resurrect",
+  "description": "You find yourself in a spectral version of the Temple of Lost Souls. Ethereal lights float around you, and the atmosphere is heavy with ancient magic. An angelic figure shimmers in the ethereal glow, waiting to guide lost souls.",
+  "items": [],
+  "actions": [
+    {
+      "action_id": "angelic_figure",
+      "action_description": "Approach the angelic figure"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "angelic_figure",
+      "dialogue_image": "angel",
+      "dialogues": [
+        {
+          "message": "Fear not, lost soul. I am here to guide you back to the realm of the living. Are you ready to return?",
+          "responses": [
+            {
+              "text": "Yes, please help me.",
+              "next_step": 1
+            },
+            {
+              "text": "Where am I?",
+              "next_step": 2
+            }
+          ]
+        },
+        {
+          "message": "1# Take a deep breath. Focus on my light. Soon, you'll feel your essence returning to your body.",
+          "responses": [
+            {
+              "text": "Thank you.",
+              "setFlagFalse": "Dead",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "2# You're in a place between life and death. But worry not, for I will help you find your way back.",
+          "responses": [
+            {
+              "text": "Thank you.",
+              "next_step": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+    "exits": [
+    {
+      "exit_name": "Return to temple",
+      "leads_to": "temple_of_lost_souls",
+      "conditions": [],
+      "conditions_not": ["Dead"]
+    }
+  ]
+}

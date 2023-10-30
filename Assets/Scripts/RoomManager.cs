@@ -18,7 +18,10 @@ public class RoomManager : MonoBehaviour
 
     
     public GameObject actionButtonPrefab;
+    
     public Transform actionButtonContainer;
+    public Transform itemButtonContainer;
+
     public Narrator narrator;
     
     private Room currentRoom;
@@ -30,28 +33,38 @@ public class RoomManager : MonoBehaviour
     private int currentDialogueStep = -1;
     private string currentNPC = "";
 
-    public PlayerStats player = new PlayerStats();
     
     private List<string> combatLog = new List<string>();
 
+    void SetHealth(int value)
+    {
+        playerData.health = value;
+        healthText.text = value.ToString();
+    }
+    
     void Start()
     {
         // Example initialization
-        player.health = 10;
+        SetHealth(500);
+        /*
         player.equippedWeapon = new Weapon 
         {
             name = "Sword",
             damageAmount = 10,
             damageType = Weapon.DamageType.Physical
         };
-        
+        */
         
         //-------------- Init values ------------//
-        LoadRoomFromJson("forest_tavern");
-        respawnRoom = "temple_of_lost_souls";
+        LoadRoomFromJson("town_square");
+        respawnRoom = "temple_of_lost_souls_resurrect";
         playerData.SetFlag("HasSoulStone",false);
+        playerData.SetFlag("Dead",false);
         playerData.SetFlag("gate_key",false);
-        playerData.Inventory.Add("small healing potion");
+        
+        playerData.Inventory.Add(Item.ScrollOfFire);
+        playerData.Inventory.Add(Item.PotionOfHealing);
+
     }
 
     private void LoadRoomFromJson(string roomId, string extraString = "")
@@ -90,7 +103,7 @@ public class RoomManager : MonoBehaviour
             switch (roomEvent.event_type)
             {
                 case "add_item":
-                    playerData.Inventory.Add(roomEvent.item_id);
+                    playerData.AddItem(roomEvent.item_id);
                     break;
                 case "set_flag":
                     if (playerData.Flags.ContainsKey(roomEvent.flag_name))
@@ -112,31 +125,16 @@ public class RoomManager : MonoBehaviour
     
     private void HandleCombatAction(string action)
     {
-        if ( player.health <= 0)
+        if ( playerData.health <= 0)
         {
             Debug.Log(">>>>> HandleCombatAction  Player health  zero!");
         }
-        
-        int totalDamage = player.equippedWeapon.damageAmount;
+
+        int totalDamage = 15; //player.equippedWeapon.damageAmount;
         
         // Assuming 'player' is an instance of PlayerStats
         if (action == "Attack")
         {
-            /* todo later:
-            switch (player.equippedWeapon.damageType)
-            {
-                case Weapon.DamageType.Fire:
-                    totalDamage = totalDamage * (100 - player.fireResistance) / 100;
-                    break;
-                case Weapon.DamageType.Cold:
-                    totalDamage = totalDamage * (100 - player.coldResistance) / 100;
-                    break;
-                case Weapon.DamageType.Poison:
-                    totalDamage = totalDamage * (100 - player.poisonResistance) / 100;
-                    break;
-                
-            }
-            */
 
             combatLog.Add($"You attacked the {currentRoom.combat.enemy_name} for {totalDamage} damage!");
 
@@ -145,17 +143,6 @@ public class RoomManager : MonoBehaviour
             combatLog.Add($" Enemy health is now {currentRoom.combat.enemy_health}");
 
             //Debug.Log("enemy health: " + currentRoom.combat.enemy_health);
-            
-            // Check if the enemy is defeated
-            if (currentRoom.combat.enemy_health <= 0)
-            {
-                // Enemy is defeated
-                Debug.Log($"{currentRoom.combat.enemy_name} has been defeated!");
-                currentRoom.description = "You defeat the enemy!";
-                ClearCombatLog();
-                DisplayRoomInfo(""); // Refresh the UI
-            }
-            
         }
 
         if (action == "Flee")
@@ -167,7 +154,55 @@ public class RoomManager : MonoBehaviour
             return;
         }
         
-        else if (currentRoom.combat.enemy_health > 0)
+        if (action == "Use Item")
+        {
+            // make inventory buttons
+            foreach (var item in playerData.Inventory)
+            {
+                CreateInventoryButton(item.shortDescription, () =>
+                {
+
+                    // TODO: check if usage possible (for example if target has immunity)
+                    
+                    if (item.target == Item.Target.Self)
+                    {
+                        if (item.effectType == Item.EffectType.Heal)
+                        {
+                            playerData.health += item.effectAmount;
+                            combatLog.Add("\n" + item.usageSuccess);
+                            combatLog.Add("your health is now " + playerData.health);
+
+                        }
+                    }    
+                    
+                    if (item.target == Item.Target.NPC)
+                    {
+                        if (item.effectType == Item.EffectType.Damage)
+                        {
+                            currentRoom.combat.enemy_health -= item.effectAmount;
+                    
+                            combatLog.Add("\n" + item.usageSuccess);
+                            combatLog.Add($" Enemy health is now {currentRoom.combat.enemy_health}");
+                        }
+                    }    
+                    
+                    DisplayRoomInfo(""); // Refresh the UI
+                    
+                });
+            }
+        }
+        
+        // Check if the enemy is defeated
+        if (currentRoom.combat.enemy_health <= 0)
+        {
+            // Enemy is defeated
+            Debug.Log($"{currentRoom.combat.enemy_name} has been defeated!");
+            currentRoom.description = "You defeat the enemy!";
+            ClearCombatLog();
+            DisplayRoomInfo("");
+            return; // Refresh the UI
+        }
+        else if(currentRoom.combat.enemy_health > 0)
         {
             EnemyAttack();
         }
@@ -178,22 +213,23 @@ public class RoomManager : MonoBehaviour
     private void EnemyAttack()
     {
         int enemyDamageDealt = currentRoom.combat.enemyDamage;
-        player.health -= enemyDamageDealt;
+        SetHealth(playerData.health - enemyDamageDealt);
 
         combatLog.Add($"{currentRoom.combat.enemy_name} attacked you for {enemyDamageDealt} damage!");
-        combatLog.Add($" Your health is now {player.health} ");
+        combatLog.Add($" Your health is now {playerData.health} ");
         combatLog.Add("\n");
         
         // Check if the player is defeated:
-        if (player.health <= 0)
+        if (playerData.health <= 0)
         {
             Debug.Log(">>>>> EnemyAttack -> player health ZERO");
             
-            
+            playerData.SetFlag("Dead",true);
             Debug.Log($"{currentRoom.combat.enemy_name} has defeated you!");
             ClearCombatLog();
             currentRoom.combat = null;
-            player.health = 0;
+            SetHealth(0);
+            
             LoadRoomFromJson(respawnRoom, "You wake up from odd dream.\n");
         }
     }
@@ -294,7 +330,7 @@ public class RoomManager : MonoBehaviour
                 {
                     foreach (var item in playerData.Inventory)
                     {
-                        if (condition == item)
+                        if (condition == item.shortDescription)
                             any = true;
                     }
 
@@ -338,9 +374,9 @@ public class RoomManager : MonoBehaviour
         string inventoryString = "";
         foreach (var item in playerData.Inventory)
         {
-            Debug.Log("add to text: " + item);
+            Debug.Log("add to text: " + item.shortDescription);
             
-            inventoryString += " - " + item + "\n";
+            inventoryString += " - " + item.shortDescription + "\n";
         }
         inventoryText.text = inventoryString;
         
@@ -355,6 +391,21 @@ public class RoomManager : MonoBehaviour
         
     }
     
+    private void UseItemInCombat(Item item)
+    {
+        Debug.Log("TODO Use item: " + item.shortDescription);
+        
+        // check if usage possible (for example if target has immunity)
+        
+        // if not, show fizzle text
+        
+        // if possible,
+        //calculate effect on target stats
+        // create text
+        
+        combatLog.Add("\n" + "----> Item usage");
+        //DisplayRoomInfo(item.usageSuccess);
+    }
     
     private void HandleRoomAction(string actionName)
     {
@@ -376,21 +427,6 @@ public class RoomManager : MonoBehaviour
 
         // Further custom actions (like picking up items, getting aa quest, getting item from NPC ) can be added here
     }
-
-    private void PickUpItem(string itemId)
-    {
-        playerData.AddItem(itemId);
-        currentRoom.items.Remove(itemId);
-        DisplayRoomInfo(""); // Refresh the UI
-    }
-    private void ReceiveItem(string itemId)
-    {
-      Debug.Log("received item   " + itemId);
-        
-        playerData.AddItem(itemId);
-        DisplayRoomInfo(""); // Refresh the UI
-    }
-
     
     
     private void StartDialogue( Room.NPCDialogue dialogue)
@@ -490,7 +526,6 @@ public class RoomManager : MonoBehaviour
 
     private void CreateActionButton(string actionName, UnityAction callback)
     {
-        
         GameObject buttonObj = Instantiate(actionButtonPrefab, actionButtonContainer);
         Button buttonComponent = buttonObj.GetComponent<Button>();
         buttonComponent.onClick.AddListener(callback);
@@ -501,11 +536,28 @@ public class RoomManager : MonoBehaviour
         }
     }
     
-        public Sprite GetSpriteByName(string name)
+    private void CreateInventoryButton(string itemName, UnityAction callback)
+    {
+        
+        GameObject buttonObj = Instantiate(actionButtonPrefab, itemButtonContainer);
+        Button buttonComponent = buttonObj.GetComponent<Button>();
+        buttonComponent.onClick.AddListener(callback);
+        TMP_Text buttonText = buttonObj.GetComponentInChildren<TMP_Text>();
+        if (buttonText)
         {
-            return Resources.Load<Sprite>($"Images/{name}");
+            buttonText.text = itemName;
         }
     }
+
+    
+
+    
+    
+    public Sprite GetSpriteByName(string name)
+    {
+        return Resources.Load<Sprite>($"Images/{name}");
+    }
+}
 
 
 

@@ -1,0 +1,99 @@
+{
+  "room_id": "cartographers_guild",
+  "description": "You enter the bustling Cartographer's Guild. Walls adorned with maps of various lands, ranging from familiar territories to mysterious, uncharted regions. The faint scent of old parchment and ink fills the room. An old adventurer, with a weathered face and piercing eyes, is examining a map on a table. The Guild leader sit at a large desk. INear cooridor leading to lbrary, an experienced adventurer is reading a book",
+  "items": [],
+  "actions": [
+    {
+      "action_id": "old_adventurer",
+      "action_description": "Talk to the adventurer"
+    },
+    {
+      "action_id": "guild_leader",
+      "action_description": "Talk to the Guild leader"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "old_adventurer",
+      "dialogue_image": "old_adventurer",
+      "dialogues": [
+        {
+          "message": "Ah, a new face! I've been around these parts for a long time. Ever heard about the Whispering Copper Mine?",
+          "responses": [
+            {
+              "text": "No, what's that?",
+              "next_step": 1
+            },
+            {
+              "text": "No, and not interested. Have a nice day.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "1# It's an ancient mine located near the Shadowspeak Mountains. Rumor has it that it holds secrets beyond just copper...",
+          "responses": [
+            {
+              "text": "Sounds intriguing. I might check it out.",
+              "next_step": -1
+            },
+            {
+              "text": "Do you have any maps of it?",
+              "next_step": 2
+            }
+          ]
+        },
+        {
+          "message": "2# Unfortunately, no. It's been lost to time, and many have tried to chart it but never returned. Tread carefully if you venture there.",
+          "responses": [
+            {
+              "text": "Thanks for the warning.",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "npc_name": "guild_leader",
+      "dialogue_image": "guild_leader",
+      "dialogues": [
+        {
+          "message": "Greetings, traveler. Are you interested in joining the Cartographer's Guild?",
+          "responses": [
+            {
+              "text": "Yes, I am.",
+              "next_step": 1
+            },
+            {
+              "text": "Not right now.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "1# Splendid! But first, you must prove your worth. There's a place, the Enchanted Estuary, which hasn't been mapped in years. Go there, investigate, and bring back a detailed map.",
+          "responses": [
+            {
+              "text": "Sounds challenging, I'll do it.",
+              "setFlagTrue": "AcceptedGuildQuest",
+              "next_step": -1
+            },
+            {
+              "text": "That's too much for me.",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Exit to the town square",
+      "leads_to": "town_square",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
+}

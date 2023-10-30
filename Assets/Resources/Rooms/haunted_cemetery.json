@@ -12,7 +12,7 @@
     ],
   "combat": {
     "enemy_name": "Skeleton Warrior",
-    "enemy_health": 500,
+    "enemy_health": 100,
     "combat_actions": ["Attack", "Use Item", "Flee"]
   },
   "dialogues": [
@@ -26,7 +26,7 @@
             {
               "text": "Take the key",
               "setFlagTrue": "gate_key",
-              "getItem": "gate key",
+              "getItem": "Gate key",
               "next_step": -1
             },
             {

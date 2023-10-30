@@ -15,8 +15,8 @@
       "conditions_not": []
     },
     {
-      "exit_name": "Examine the fountain",
-      "leads_to": "fountain",
+      "exit_name": "Cartographers Guild",
+      "leads_to": "cartographers_guild",
       "conditions": [],
       "conditions_not": []
     },

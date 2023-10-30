@@ -3,29 +3,58 @@ using UnityEngine;
 
 public class PlayerData
 {
-    public List<string> Inventory  = new List<string>();
+    public int health = 100;
+    
+    public List<Item> Inventory  = new List<Item>();
     public Dictionary<string, bool> Flags = new Dictionary<string, bool>();
-
-    public void AddItem(string itemId)
+    
+    public void AddItem(Item item)
     {
-        if (!Inventory.Contains(itemId))
+        // Depending on stacking logic, you might want to check if the item already exists
+        // and increase its quantity, etc.
+        Inventory.Add(item);
+    }
+    
+    public void AddItem(string item)
+    {
+        
+        Item itemToAdd = ItemRegistry.GetItem(item);
+        if(itemToAdd != null)
         {
-            Inventory.Add(itemId);
+            Inventory.Add(itemToAdd);
+        }
+        else
+        {
+            Debug.LogError("Item needs to be added to dict: " + item);
         }
     }
 
-    public void RemoveItem(string itemId)
+    public void RemoveItem(string item)
+    {
+        
+        Item itemToAdd = ItemRegistry.GetItem(item);
+        if(itemToAdd != null)
+        {
+            Inventory.Remove(itemToAdd);
+        }
+        else
+        {
+            Debug.LogError("Item needs to be added to dict: " + item);
+        }
+    }
+    
+    public void RemoveItem(Item item)
     {
         for (int i = 0; i < Inventory.Count; i++) {
-            if (Inventory[i].Equals(itemId)) {
+            if (Inventory[i].Equals(item)) {
                 Inventory.RemoveAt(i);   
             }
         }
     }
     
-    public bool HasItem(string itemId)
+    public bool HasItem(Item item)
     {
-        return Inventory.Contains(itemId);
+        return Inventory.Contains(item);
     }
 
     public void SetFlag(string flagName, bool value)

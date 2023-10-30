@@ -5,7 +5,7 @@ using System.Collections;
 public class ImageFade : MonoBehaviour
 {
     public Image targetImage;
-    public float fadeDuration = 0.5f;
+    public float fadeDuration = 0.25f;
 
     public void SetImageWithFade(Sprite newSprite)
     {
