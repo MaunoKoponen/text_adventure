@@ -52,6 +52,22 @@ public class PlayerData
         }
     }
     
+    public void DecreaseStackSize(Item item, int amount)
+    {
+        for (int i = 0; i < Inventory.Count; i++) {
+            if (Inventory[i].Equals(item))
+            {
+                Inventory[i].stackedAmount -= amount;
+
+                if (Inventory[i].stackedAmount <= 0)
+                {
+                    Inventory.RemoveAt(i); 
+                }
+            }
+        }
+    }
+
+    
     public bool HasItem(Item item)
     {
         return Inventory.Contains(item);

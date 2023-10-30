@@ -18,6 +18,8 @@ public class RoomManager : MonoBehaviour
 
     
     public GameObject actionButtonPrefab;
+    public GameObject combatInventoryPrefab;
+
     
     public Transform actionButtonContainer;
     public Transform itemButtonContainer;
@@ -156,11 +158,22 @@ public class RoomManager : MonoBehaviour
         
         if (action == "Use Item")
         {
+            ToggleCombatInventory(true);
             // make inventory buttons
             foreach (var item in playerData.Inventory)
             {
                 CreateInventoryButton(item.shortDescription, () =>
                 {
+                    ToggleCombatInventory(false);
+                    
+                    if (!item.stacking)
+                    {
+                        playerData.RemoveItem(item);
+                    }
+                    if (item.stacking)
+                    {
+                        playerData.DecreaseStackSize(item, 1);
+                    }
 
                     // TODO: check if usage possible (for example if target has immunity)
                     
@@ -184,12 +197,20 @@ public class RoomManager : MonoBehaviour
                             combatLog.Add("\n" + item.usageSuccess);
                             combatLog.Add($" Enemy health is now {currentRoom.combat.enemy_health}");
                         }
-                    }    
+                    }
+
+                   
                     
                     DisplayRoomInfo(""); // Refresh the UI
                     
                 });
             }
+            
+            CreateInventoryButton("Back", () =>
+            {
+                ToggleCombatInventory(false);
+                combatLog.Add("You stopped rummaging through you bag...");
+            });
         }
         
         // Check if the enemy is defeated
@@ -210,6 +231,19 @@ public class RoomManager : MonoBehaviour
         DisplayRoomInfo(""); // Refresh the UI
     }
 
+    void ToggleCombatInventory(bool value)
+    {
+        if (! value)  // clear the list of buttons 
+        {
+            foreach (Transform child in combatInventoryPrefab.transform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+        
+        combatInventoryPrefab.SetActive(value);
+    }
+    
     private void EnemyAttack()
     {
         int enemyDamageDealt = currentRoom.combat.enemyDamage;

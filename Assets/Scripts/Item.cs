@@ -14,6 +14,7 @@ public class Item
     public string category;
     public Target target;
     public bool stacking;
+    public int stackedAmount = 0;
 
     public enum EffectType
     {
@@ -76,7 +77,7 @@ public class Item
         effectAmount = 50, // For example, 50 points of fire damage.
         category = "Scroll",
         target = Target.NPC,
-        stacking = true
+        stacking = false
     };
 
     public static Item Antidote = new Item
