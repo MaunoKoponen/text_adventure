@@ -76,7 +76,7 @@
           "responses": [
             {
               "text": "Sounds challenging, I'll do it.",
-              "setFlagTrue": "AcceptedGuildQuest",
+              "setFlagTrue": "Quest_Cartograper_01",
               "next_step": -1
             },
             {

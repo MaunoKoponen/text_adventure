@@ -15,6 +15,7 @@ public class MainUIButtons : MonoBehaviour
     public GameObject SettingsGO;
     public GameObject MapGO;
 
+    public InventoryView inventoryView;
     
     void Start()
     {
@@ -28,6 +29,7 @@ public class MainUIButtons : MonoBehaviour
         {
             if (InventoryGO.activeSelf)
             {
+               
                 InventoryGO.SetActive(false);
                 return;
             }
@@ -37,6 +39,16 @@ public class MainUIButtons : MonoBehaviour
                 go.SetActive(false);
             }
             InventoryGO.SetActive(! InventoryGO.activeSelf);
+
+
+            if (InventoryGO.activeSelf)
+            {
+                inventoryView.ResetInventory();
+                inventoryView.CreateInventory();
+            }
+           
+            
+            
         });
         
         DiaryButton.onClick.AddListener(() =>

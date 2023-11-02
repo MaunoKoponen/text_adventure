@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class Item
@@ -14,8 +15,8 @@ public class Item
     public string category;
     public Target target;
     public bool stacking;
-    public int stackedAmount = 0;
-
+    public int count = 0;
+    public string image;
     public enum EffectType
     {
         Damage,
@@ -47,7 +48,8 @@ public class Item
         effectAmount = 1,
         category = "Stone",
         target = Target.Self,
-        stacking = false
+        stacking = false,
+        image = "scroll_red"
     };
     
     public static Item PotionOfHealing = new Item
@@ -62,7 +64,8 @@ public class Item
         effectAmount = 20,
         category = "Potion",
         target = Target.Self,
-        stacking = false
+        stacking = false,
+        image = "potion_fire"
     };
 
     public static Item ScrollOfFire = new Item
@@ -77,7 +80,8 @@ public class Item
         effectAmount = 50, // For example, 50 points of fire damage.
         category = "Scroll",
         target = Target.NPC,
-        stacking = false
+        stacking = false,
+        image = "scroll_red"
     };
 
     public static Item Antidote = new Item
@@ -92,7 +96,8 @@ public class Item
         effectAmount = 1,
         category = "Potion",
         target = Target.Self,
-        stacking = true
+        stacking = true,
+        image = "scroll_red"
     };
 
     // Some invented items:
@@ -109,7 +114,8 @@ public class Item
         effectAmount = 1,
         category = "Magical Stone",
         target = Target.Self,
-        stacking = false
+        stacking = false,
+        image = "scroll_red"
     };
 
     public static Item ElixirOfStrength = new Item
@@ -124,7 +130,8 @@ public class Item
         effectAmount = 1,
         category = "Potion",
         target = Target.Self,
-        stacking = false
+        stacking = false,
+        image = "scroll_red"
     };
 
     public static Item GateKey = new Item
@@ -139,7 +146,8 @@ public class Item
         effectAmount = 1,
         category = "key",
         target = Target.Lock,
-        stacking = false
+        stacking = false,
+        image = "key_copper"
     };
 
 

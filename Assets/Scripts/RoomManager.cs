@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
@@ -31,7 +30,7 @@ public class RoomManager : MonoBehaviour
     private string respawnRoom;
 
 
-    private PlayerData playerData = new PlayerData();
+    public static  PlayerData playerData = new PlayerData();
     private int currentDialogueStep = -1;
     private string currentNPC = "";
 
@@ -57,20 +56,46 @@ public class RoomManager : MonoBehaviour
         };
         */
         
-        //-------------- Init values ------------//
-        LoadRoomFromJson("town_square");
-        respawnRoom = "temple_of_lost_souls_resurrect";
-        playerData.SetFlag("HasSoulStone",false);
-        playerData.SetFlag("Dead",false);
-        playerData.SetFlag("gate_key",false);
         
-        playerData.Inventory.Add(Item.ScrollOfFire);
-        playerData.Inventory.Add(Item.PotionOfHealing);
+        
+        //-------------- Init values ------------//
 
+        if (SaveGameManager.SaveFileExists())
+        {
+            SaveGameManager.LoadGame();
+        }
+        else
+        {
+
+            playerData.currentRoom = "town_square";
+            playerData.SetFlag("HasSoulStone",false);
+            playerData.SetFlag("Dead",false);
+            playerData.SetFlag("gate_key",false);
+            playerData.Inventory.Add(Item.ScrollOfFire);
+            playerData.Inventory.Add(Item.PotionOfHealing);
+            
+            SaveGameManager.SaveGame(playerData);
+        }
+        
+        respawnRoom = "temple_of_lost_souls_resurrect";
+        
+        // for overriding saved location, when testing things
+        //playerData.currentRoom = "town_square";
+        
+        LoadRoomFromJson( playerData.currentRoom);
+       
     }
 
-    private void LoadRoomFromJson(string roomId, string extraString = "")
+    
+    
+    
+    public void LoadRoomFromJson(string roomId, string extraString = "")
     {
+        // Lets save the gameState here
+
+        playerData.currentRoom = roomId;
+        SaveGameManager.SaveGame(playerData);
+        
         Debug.Log(">>>>> LoadRoomFromJSON: " + roomId);
         
         TextAsset roomData = Resources.Load<TextAsset>("Rooms/" + roomId);
@@ -198,8 +223,6 @@ public class RoomManager : MonoBehaviour
                             combatLog.Add($" Enemy health is now {currentRoom.combat.enemy_health}");
                         }
                     }
-
-                   
                     
                     DisplayRoomInfo(""); // Refresh the UI
                     
@@ -448,6 +471,9 @@ public class RoomManager : MonoBehaviour
         if (exit != null)
         {
             narrator.FadeOut(0.2f); // Fades out the audio over 1 second return;
+            
+
+            
             LoadRoomFromJson(exit.leads_to);
             
         }

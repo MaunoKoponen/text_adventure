@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class PlayerData
 {
     public int health = 100;
-    
+    public string currentRoom;
     public List<Item> Inventory  = new List<Item>();
     public Dictionary<string, bool> Flags = new Dictionary<string, bool>();
     
@@ -57,9 +58,9 @@ public class PlayerData
         for (int i = 0; i < Inventory.Count; i++) {
             if (Inventory[i].Equals(item))
             {
-                Inventory[i].stackedAmount -= amount;
+                Inventory[i].count -= amount;
 
-                if (Inventory[i].stackedAmount <= 0)
+                if (Inventory[i].count <= 0)
                 {
                     Inventory.RemoveAt(i); 
                 }
