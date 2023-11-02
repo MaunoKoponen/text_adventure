@@ -29,6 +29,8 @@ public class SettingsUI : MonoBehaviour
        
        tempData.currentRoom = "town_square";
        tempData.SetFlag("HasSoulStone",false);
+       
+       tempData.SetFlag("quest_cartographer_01",false);
        tempData.SetFlag("Dead",false);
        tempData.SetFlag("gate_key",false);
        tempData.Inventory.Add(Item.ScrollOfFire);

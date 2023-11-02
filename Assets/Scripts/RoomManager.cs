@@ -37,6 +37,8 @@ public class RoomManager : MonoBehaviour
     
     private List<string> combatLog = new List<string>();
 
+    public Diary diary;
+    
     void SetHealth(int value)
     {
         playerData.health = value;
@@ -141,6 +143,7 @@ public class RoomManager : MonoBehaviour
                     {
                         playerData.Flags.Add(roomEvent.flag_name, roomEvent.value);
                     }
+                    
                     break;
                 case "pick_item":
                     playerData.AddItem(roomEvent.item_id);
@@ -552,12 +555,24 @@ public class RoomManager : MonoBehaviour
         }
     }
 
-    private void HandleDialogueResponse(int nextStep, string setFlagTrue = null, string setFlagFalse = null, string getItem=null, string giveItem = null)
+    private void HandleDialogueResponse(int nextStep, string FlagToSetTrue = null, string FlagToSetFalse = null, string getItem=null, string giveItem = null)
     {
-       if(setFlagTrue !=null)
-            playerData.SetFlag(setFlagTrue,true);
-       if(setFlagFalse !=null)
-            playerData.SetFlag(setFlagFalse,false);
+        if (FlagToSetTrue != null)
+        {
+            // Quest?
+            playerData.SetFlag(FlagToSetTrue,true);
+            if (FlagToSetTrue.Contains("quest"))
+            {
+                SaveGameManager.SaveGame(playerData);
+                Debug.Log("Quest start detected!");
+                diary.OnQuestReceived(FlagToSetTrue);
+                
+            }
+
+        }
+           
+       if(FlagToSetFalse !=null)
+            playerData.SetFlag(FlagToSetFalse,false);
        if(getItem !=null)
             playerData.AddItem(getItem);
        if(giveItem !=null)
