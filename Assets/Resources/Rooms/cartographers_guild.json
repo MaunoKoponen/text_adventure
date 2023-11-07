@@ -1,6 +1,6 @@
 {
   "room_id": "cartographers_guild",
-  "description": "You enter the bustling Cartographer's Guild. Walls adorned with maps of various lands, ranging from familiar territories to mysterious, uncharted regions. The faint scent of old parchment and ink fills the room. An old adventurer, with a weathered face and piercing eyes, is examining a map on a table. The Guild leader sit at a large desk. INear cooridor leading to lbrary, an experienced adventurer is reading a book",
+  "description": "You enter the bustling Cartographer's Guild. Walls adorned with maps of various lands, ranging from familiar territories to mysterious, uncharted regions. The faint scent of old parchment and ink fills the room. You see the guild leader sitting at a large desk. Near a corridor leading to library, confident looking adventurer is reading a book",
   "items": [],
   "actions": [
     {
@@ -26,7 +26,7 @@
               "next_step": 1
             },
             {
-              "text": "No, and not interested. Have a nice day.",
+              "text": "No, and not interested right now. Maybe we can chat later.",
               "next_step": -1
             }
           ]
@@ -36,6 +36,7 @@
           "responses": [
             {
               "text": "Sounds intriguing. I might check it out.",
+              "setFlagTrue": "location_shadowspeak_mountain",
               "next_step": -1
             },
             {
@@ -49,6 +50,7 @@
           "responses": [
             {
               "text": "Thanks for the warning.",
+              "setFlagTrue": "location_shadowspeak_mountain",
               "next_step": -1
             }
           ]

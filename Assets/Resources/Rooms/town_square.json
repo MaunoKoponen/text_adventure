@@ -9,7 +9,7 @@
       "conditions_not": []
     },
     {
-      "exit_name": "Enter the Mutton's Horn tavern",
+      "exit_name": "Enter Muttons Horn tavern",
       "leads_to": "muttons_horn_tavern",
       "conditions": [],
       "conditions_not": []

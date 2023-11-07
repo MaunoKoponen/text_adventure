@@ -33,8 +33,15 @@ public class SettingsUI : MonoBehaviour
        tempData.SetFlag("quest_cartographer_01",false);
        tempData.SetFlag("Dead",false);
        tempData.SetFlag("gate_key",false);
+       
        tempData.Inventory.Add(Item.ScrollOfFire);
-       tempData.Inventory.Add(Item.PotionOfHealing);
+/*       tempData.Inventory.Add(Item.PotionOfHealing);
+       tempData.Inventory.Add(Item.SoulStone);
+       tempData.Inventory.Add(Item.Antidote);
+       tempData.Inventory.Add(Item.ElixirOfStrength);
+       tempData.Inventory.Add(Item.StoneOfEvasion);
+       tempData.Inventory.Add(Item.ScrollOfFireball);
+  */     
        
        SaveGameManager.SaveGame(tempData);
        

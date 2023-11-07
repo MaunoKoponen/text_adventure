@@ -31,7 +31,8 @@ public class Item
     {
         NPC,
         Self,
-        Lock
+        Lock,
+        None
     }
 
     // Example items:
@@ -97,7 +98,7 @@ public class Item
         category = "Potion",
         target = Target.Self,
         stacking = true,
-        image = "scroll_red"
+        image = "potion_green_red"
     };
 
     // Some invented items:
@@ -131,7 +132,7 @@ public class Item
         category = "Potion",
         target = Target.Self,
         stacking = false,
-        image = "scroll_red"
+        image = "potion_green_red"
     };
 
     public static Item GateKey = new Item
@@ -150,6 +151,23 @@ public class Item
         image = "key_copper"
     };
 
+    public static Item ScrollOfFireball = new Item
+    {
+
+        usageSuccess = "You unroll the scroll and a fiery ball of destruction erupts from your hand!",
+        usageFail = "You attempt to use the scroll but nothing happens.",
+        description = "A magical scroll containing instructions for casting the powerful fireball spell.",
+        shortDescription = "Scroll of Fireball",
+        buyPrice = 500,
+        sellPrice = 400,
+        effectType = EffectType.Damage,
+        effectAmount = 1,
+        category = "Scroll",
+        target = Target.NPC,
+        stacking = false,
+        image = "scroll_red"
+
+    };
 
     
 }

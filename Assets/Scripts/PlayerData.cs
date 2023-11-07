@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerData
 {
     public int health = 100;
+    public int coins = 300;
     public string currentRoom;
     public List<Item> Inventory  = new List<Item>();
     public Dictionary<string, bool> Flags = new Dictionary<string, bool>();

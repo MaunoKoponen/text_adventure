@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
@@ -8,6 +9,9 @@ using UnityEngine.UI;
 
 public class Diary : MonoBehaviour
 {
+    private int maxCharactersOnPage = 600;
+    
+    
     public Button ExitButton;
 
     private QuestLog questLog = new QuestLog();
@@ -40,33 +44,44 @@ public class Diary : MonoBehaviour
     
     public void OnQuestReceived(string questID)
     {
-        QuestLogEntry newEntry = new QuestLogEntry()
-        {
-            QuestID = questID,
-            QuestName = "The Enchanted Estuary",
-            QuestDescription = "Map the Enchanted Estuary. Map the Enchanted Estuary. Map the Enchanted Estuary. Map the Enchanted Estuary. Map the Enchanted Estuary. Map the Enchanted Estuary. Map the Enchanted Estuary. Map the Enchanted Estuary.",
-            IsCompleted = false
-        };
+        QuestLogEntry newEntry = LoadQuestData(questID);
 
-        // Assuming you have a questLog object already
-        questLog.AddQuestEntry(newEntry);
-        SaveQuestLog(questLog);
-
-        
-        string wholeText = "";
-        
-        foreach (var QuestLogEntry in questLog.Entries)
+        if (newEntry != null)
         {
-           string entryAsText =  FormatQuestLogEntryForDisplay(QuestLogEntry);
-           wholeText += entryAsText;
+            // Assuming you have a questLog object already
+            questLog.AddQuestEntry(newEntry);
+            SaveQuestLog(questLog);
+
+            string wholeText = "";
+
+            foreach (var QuestLogEntry in questLog.Entries)
+            {
+                string entryAsText = FormatQuestLogEntryForDisplay(QuestLogEntry);
+                wholeText += entryAsText + "\n---\n"; // Added a separator between entries
+            }
+
+            List<string> pages = PaginateText(wholeText, maxCharactersOnPage); // Adjust the max characters per page as needed
+
+            // Update your UI here. Make sure to add checks if there are fewer pages than text components.
+            text1.text = pages.Count > 0 ? pages[0] : "";
+            text2.text = pages.Count > 1 ? pages[1] : "";
         }
-
-        List<string> pages = PaginateText(wholeText, 40);
-
-        text1.text = pages[0];
-        text2.text = pages[1];
-
-
+    }
+    
+    public QuestLogEntry LoadQuestData(string questID)
+    {
+        TextAsset questDataAsset = Resources.Load<TextAsset>("Quests/" + questID);
+        
+        if (questDataAsset != null)
+        {
+            QuestLogEntry questData = JsonUtility.FromJson<QuestLogEntry>(questDataAsset.text);
+            return questData;
+        }
+        else
+        {
+            Debug.LogError("Quest data file not found for: " + questID);
+            return null;
+        }
     }
     
     
@@ -123,18 +138,6 @@ public class Diary : MonoBehaviour
 
         return pages;
     }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     void CloseView()

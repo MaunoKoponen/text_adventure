@@ -17,6 +17,7 @@
           "responses": [
             {"text": "A drink.", "next_step": 3},
             {"text": "Any rumors?", "next_step": 1},
+            {"text": "Show me your wares.", "next_step": 1000},
             {"text": "Nothing for now.", "next_step": -1}
           ]
         },

@@ -1,0 +1,106 @@
+{
+  "room_id": "adventurers_guild",
+  "description": "Stepping into the Adventurers' Guild, you are met with a cacophony of voices discussing recent exploits and daring escapades. The walls are lined with trophies of past adventures, from gleaming swords to mystical artifacts. A robust figure, clad in armor, cleans a hefty axe at one table, while the Guildmaster, a seasoned veteran with eyes like a hawk, oversees operations from their commanding desk.",
+  "items": [
+    {
+      "item_id": "guild_trophy",
+      "item_description": "A trophy from a legendary beast, it serves as inspiration for your future quests."
+    }
+  ],
+  "actions": [
+    {
+      "action_id": "veteran_adventurer",
+      "action_description": "Chat with the armored adventurer"
+    },
+    {
+      "action_id": "guildmaster",
+      "action_description": "Approach the Guildmaster"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "veteran_adventurer",
+      "dialogue_image": "veteran_adventurer",
+      "dialogues": [
+        {
+          "message": "Welcome to the fray! Looking to make a name for yourself, or just in for the gold?",
+          "responses": [
+            {
+              "text": "I'm here for glory and treasure.",
+              "next_step": 1
+            },
+            {
+              "text": "Just passing through for now.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "1# Bold! Well, if it's treasure you seek, the Caverns of Sorrow are ripe for the taking. Just be wary of the echoes; they say they're the last words of those who failed...",
+          "responses": [
+            {
+              "text": "I'll take my chances with those caverns.",
+              "setFlagTrue": "location_caverns_of_sorrow",
+              "next_step": -1
+            },
+            {
+              "text": "Perhaps another time. I'm not ready for such a task.",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "npc_name": "guildmaster",
+      "dialogue_image": "guildmaster",
+      "dialogues": [
+        {
+          "message": "Ah, an eager new recruit! Tell me, do you have the courage to brave the unknown for riches and renown?",
+          "responses": [
+            {
+              "text": "I have the courage. What challenge awaits?",
+              "next_step": 1
+            },
+            {
+              "text": "I'm still preparing myself for such undertakings.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "1# A test of mettle, then! A merchant's caravan was ambushed by bandits near the Old Watchtower. Retrieve any valuable goods you find, and more importantly, bring justice to those scoundrels.",
+          "responses": [
+            {
+              "text": "Consider it done. Justice will be served.",
+              "setFlagTrue": "quest_adventurer_01",
+              "next_step": -1
+            },
+            {
+              "text": "I'm not quite the avenger type. Maybe another quest?",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Exit to the town square",
+      "leads_to": "town_square",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "Back alley door",
+      "leads_to": "back_alley",
+      "conditions": [
+        {
+          "flag_true": "guild_trust"
+        }
+      ],
+      "conditions_not": []
+    }
+  ]
+}

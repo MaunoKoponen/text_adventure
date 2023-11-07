@@ -38,6 +38,8 @@ public class RoomManager : MonoBehaviour
     private List<string> combatLog = new List<string>();
 
     public Diary diary;
+    public ShopView shopView;
+    
     
     void SetHealth(int value)
     {
@@ -74,8 +76,13 @@ public class RoomManager : MonoBehaviour
             playerData.SetFlag("Dead",false);
             playerData.SetFlag("gate_key",false);
             playerData.Inventory.Add(Item.ScrollOfFire);
+            /*
             playerData.Inventory.Add(Item.PotionOfHealing);
-            
+            playerData.Inventory.Add(Item.SoulStone);
+            playerData.Inventory.Add(Item.Antidote);
+            playerData.Inventory.Add(Item.ElixirOfStrength);
+            playerData.Inventory.Add(Item.StoneOfEvasion);
+            */
             SaveGameManager.SaveGame(playerData);
         }
         
@@ -555,6 +562,7 @@ public class RoomManager : MonoBehaviour
         }
     }
 
+
     private void HandleDialogueResponse(int nextStep, string FlagToSetTrue = null, string FlagToSetFalse = null, string getItem=null, string giveItem = null)
     {
         if (FlagToSetTrue != null)
@@ -579,8 +587,11 @@ public class RoomManager : MonoBehaviour
             playerData.RemoveItem(giveItem);
         
         
-        
-       if (nextStep == -1)
+       if (nextStep == 1000)
+       {
+           shopView.SetupShop();
+           EndDialogue();
+       }else if (nextStep == -1)
        {
             EndDialogue();
        }

@@ -21,10 +21,9 @@ public class InventoryView : MonoBehaviour
     {
         foreach (var item in RoomManager.playerData.Inventory)
         {
-            CreateInventoryButton(item.shortDescription, () =>
+            CreateInventoryButton(item, () =>
             {
                 Debug.Log("Button Clicked");
-
                 description.text = item.description;
                 name.text = item.shortDescription;
                 string path = "InventoryItems/" + item.image;
@@ -35,7 +34,7 @@ public class InventoryView : MonoBehaviour
     }
     void UpdateInventory()
     {
-
+        // todo
     }
 
     public void ResetInventory()
@@ -47,7 +46,7 @@ public class InventoryView : MonoBehaviour
     }
 
 
-    void CreateInventoryButton(string itemName, UnityAction callback)
+    void CreateInventoryButton(Item item, UnityAction callback)
     {
 
         GameObject buttonObj = Instantiate(actionButtonPrefab, actionButtonContainer);
@@ -56,7 +55,12 @@ public class InventoryView : MonoBehaviour
         TMP_Text buttonText = buttonObj.GetComponentInChildren<TMP_Text>();
         if (buttonText)
         {
-            buttonText.text = itemName;
+            buttonText.text = item.shortDescription;
         }
+
+        string path = "InventoryItems/" + item.image;
+        image.sprite = Resources.Load<Sprite>(path);
+        
+        buttonComponent.GetComponent<Image>().sprite = Resources.Load<Sprite>(path);
     }
 }
