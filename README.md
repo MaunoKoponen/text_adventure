@@ -57,7 +57,7 @@ Note: the json dialogue data uses "numbering" of responses, in format  1# , 2# -
 
 
 Here is the actual prompt used to create first version of Cartographers Guild room description
-
+```
 Topic: json for Cartographers guild
 Hi! Im making a text adventure, that used json as "rooms" - here is  a sample json:
 {
@@ -212,7 +212,7 @@ Hi! Im making a text adventure, that used json as "rooms" - here is  a sample js
 }
 dialogues responses are numbered 0#...N# so its easy to follow the dialogue. Flags can be set to be true of false, and item can be given or received. I would want you to make a Room in this format, location being Cartographers Guild, and in there are old adventurer, that can give rumour about a old copper mine outside a location (come up with cool name), and Guild leader, who ask player if he/her is interested in joinig guild - if so, first quest is given (come up with interesting place to locate and investigate)
 
-
+```
 
 
 **Notes about adding new content**
