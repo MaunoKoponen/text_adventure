@@ -14,36 +14,37 @@ As generative AI 3d object creation does not yet (end of 2023) give any real adv
 **Generative AI is used it this project in different ways**
 
 Code/data structure:
-Deciding the structure of data: Chatgpt was prompted to get the initial json format for the room/dialogue data
-Game code: ChatGPT was used to get the initial game code. (As complexity grew, more human developer involvement is needed)      
+- Deciding the structure of data: Chatgpt was prompted to get the initial json format for the room/dialogue data
+- Game code: ChatGPT was used to get the initial game code. (As complexity grew, more human developer involvement is needed)      
+
 Visuals: 
-Character/location images are created with StableDiffusion, Automatic1111 local installation.
-Item graphics are creatd first with Dalle-3 and then modified with StableDiffusion to make variations
-UI elements: base images created with Dalle-3, then modified in Krita.
-Content creation: room description json files are generated prompting ChatGPT (and local LLM with OobaBooga text generation web-UI using Mythalion with TheBloke_Mythalion-13B-GPTQ model) and then refined by hand.
+- Character/location images are created with StableDiffusion, Automatic1111 local installation.
+- Item graphics are creatd first with Dalle-3 and then modified with StableDiffusion to make variations
+- UI elements: base images created with Dalle-3, then modified in Krita.
+- Content creation: room description json files are generated prompting ChatGPT (and local LLM with OobaBooga text generation web-UI using Mythalion with TheBloke_Mythalion-13B-GPTQ model) and then refined by hand.
 
 **Main features**
 
-Rooms: - locations with possibility for dialogue with npcs. room acces can be set  to be based on item in inventory, flag set
-Dialogues: have branching, can trigger receiving items, setting flags, starting/concluding quests
-Quests Log: quests are logged in a journal, status updted when conluded
-Items: items with description, effect, price, icon
-Invetory: Invetory showing owned item with item icon, description
-Shop: NPC's can have shop functionlaity triggered during conversation. Shop view show item available, price, and player inventory 
-Map: (wip) current location, visited/ known locations shown on map
-Combat (wip) attacking enemy, using items during combat, death leads to resurrect sequence
-Savegame: Game state is preserved between session,starting a new game from menu will erase previous progress  
+- Rooms: - locations with possibility for dialogue with npcs. room acces can be set  to be based on item in inventory, flag set
+- Dialogues: have branching, can trigger receiving items, setting flags, starting/concluding quests
+- Quests Log: quests are logged in a journal, status updted when conluded
+- Items: items with description, effect, price, icon
+- Invetory: Invetory showing owned item with item icon, description
+- Shop: NPC's can have shop functionlaity triggered during conversation. Shop view show item available, price, and player inventory 
+- Map: (wip) current location, visited/ known locations shown on map
+- Combat (wip) attacking enemy, using items during combat, death leads to resurrect sequence
+- Savegame: Game state is preserved between session,starting a new game from menu will erase previous progress  
 
 Status of the project:
 Most features are working, mostly bugfree. Combat is very wip. The content of game, "story" is unfinished, there is just some content to show/test most features.
 
 **Notes on content highlighting game mechanics**
 
-Muttons Horn Tavern: Bartender has a shop: "Show me you wares"
-Cartograpers guild: 2 quests can be started here, Additionally, the Adventurer dialogue triggers location flag (but map counterpart of the feature not working yet)
-City gates: show how to restrict access to room based on items. You need a key to get to the forest.
-Cemetery: shows combat system. Also shows how 2 locations can be used to "fake" a change in location - after beating the enemy, re-entering cemetery will show change in the environment
-Guesthouse: shows how to conclude a quest
+- Muttons Horn Tavern: Bartender has a shop: "Show me you wares"
+- Cartograpers guild: 2 quests can be started here, Additionally, the Adventurer dialogue triggers location flag (but map counterpart of the feature not working yet)
+- City gates: show how to restrict access to room based on items. You need a key to get to the forest.
+- Cemetery: shows combat system. Also shows how 2 locations can be used to "fake" a change in location - after beating the enemy, re-entering cemetery will show change in the environment
+- Guesthouse: shows how to conclude a quest
 
 **Notes about prompting for images**
 
