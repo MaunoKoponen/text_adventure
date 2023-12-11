@@ -1,48 +1,48 @@
 Unity project, a text adventure game engine, using generative AI to aid development
 
 
-This a experimantal game project, created to test generative AI capabilities for game development.
+This an experimantal game project, created to test generative AI capabilities for game development.
 
 **Background**
 
-The rise of large language models and generative image creation technologies like Stable Diffusion and Midjourney, starting from 2022,  substantial influence on shaping the expectations and predictions about the future of game development processes.4
+The rise of large language models and generative image creation technologies like Stable Diffusion and Midjourney, starting from 2022, have a substantial influence on shaping the expectations and predictions about the future of game development processes.
 
-In this project, my goal is to experiment with currently available tools, and find  good practices and workflows for game development in a small team, or even for a solo game creator.
+In this project my goal is to experiment with currently available tools, and find good practices and workflows for game development in a small team, or even for a solo game creator.
 
-As generative AI 3d object creation does not yet (end of 2023) give any real advantage in game development, I chose to make a game project that is based on traditional text adventure format. Also, I decided to make the game traditional, "non gen ai" in sense that the game content creation is not based on on-the-fly generation while player is engaging with the game, but is produced during game development and is thus "static". This is to separate the two use cases clearly: gen AI aided game development and gen AI as a game engine.  
+As generative AI 3d object creation does not yet (end of 2023) give any real advantage in game development, I chose to make a game project that is based on traditional text adventure format. Also, I decided to make the game traditional, "non gen ai" in sense that the game content creation is not based on on-the-fly content generation while player is engaging with the game, but is produced during game development and is thus "static". This is to separate the two use cases clearly: gen AI aided game development and gen AI as a game engine.  
 
-**Generative AI is used it this project in different ways**
+**Generative AI is used it this project**
 
 Code/data structure:
-- Deciding the structure of data: Chatgpt was prompted to get the initial json format for the room/dialogue data
-- Game code: ChatGPT was used to get the initial game code. (As complexity grew, more human developer involvement is needed)      
+- Deciding the structure of data: ChatGPT 4 was prompted to get the initial json format for the room/dialogue data
+- Game code: ChatGPT 4 was used to get the initial game code. (As complexity grew, more human developer involvement is needed)      
 
 Visuals: 
 - Character/location images are created with StableDiffusion, Automatic1111 local installation.
 - Item graphics are creatd first with Dalle-3 and then modified with StableDiffusion to make variations
 - UI elements: base images created with Dalle-3, then modified in Krita.
-- Content creation: room description json files are generated prompting ChatGPT (and local LLM with OobaBooga text generation web-UI using Mythalion with TheBloke_Mythalion-13B-GPTQ model) and then refined by hand.
+- Content creation: room description json files are generated prompting ChatGPT (and local LLM with OobaBooga text generation web-UI using TheBloke_Mythalion-13B-GPTQ model) and then refined by hand.
 
 **Main features**
 
-- Rooms: - locations with possibility for dialogue with npcs. room acces can be set  to be based on item in inventory, flag set
+- Rooms: - locations with possibility for dialogue with npcs. room access can be set to be based on item in inventory, flag set
 - Dialogues: have branching, can trigger receiving items, setting flags, starting/concluding quests
-- Quests Log: quests are logged in a journal, status updted when conluded
+- Quests Log: quests are logged in a journal, status updted when concluded
 - Items: items with description, effect, price, icon
-- Invetory: Invetory showing owned item with item icon, description
-- Shop: NPC's can have shop functionality triggered during conversation. Shop view show item available, price, and player inventory 
+- Inventory: Inventory showing owned item with item icon, description
+- Shop: NPC's can have shop functionality triggered during conversation. Shop view shows items available for purchase, prices, and player inventory 
 - Map: (wip) current location, visited/ known locations shown on map
-- Combat (wip) attacking enemy, using items during combat, death leads to resurrect sequence
+- Combat (wip) attacking enemy, using items during combat, death leading to a resurrection sequence
 - Savegame: Game state is preserved between session,starting a new game from menu will erase previous progress  
 
 **Status of the project:**
 Most features are working, mostly bugfree. Combat is very wip. The content of game, "story" is unfinished, there is just some content to show/test most features.
 
-**Notes on content highlighting game mechanics**
+**Notes on content, highlighting game mechanics**
 
 - Muttons Horn Tavern: Bartender has a shop: "Show me you wares"
 - Cartograpers guild: 2 quests can be started here, Additionally, the Adventurer dialogue triggers location flag (but map counterpart of the feature not working yet)
-- City gates: show how to restrict access to room based on items. You need a key to get to the forest.
+- City gates: shows how to restrict access to room based on items. You need a key to get to the forest.
 - Cemetery: shows combat system. Also shows how 2 locations can be used to "fake" a change in location - after beating the enemy, re-entering cemetery will show change in the environment
 - Guesthouse: shows how to conclude a quest
 
@@ -53,7 +53,7 @@ Image prompting: all location / npc images have the prompt included in the image
 
 **Notes about prompting for Room descriptions**
  
-There is no ready "template" for the room data prompting yet. Best approace is to give a  general description of the game to LLM and then add example data, and then tell what changes/features you wish.
+There is no ready "template" for the room data prompting yet. Best approace is to give a general description of the game to LLM and then add example data, and then tell what changes/features you wish.
 Note: the json dialogue data uses "numbering" of responses, in format  1# , 2# - this is mainly for developers convenience, and the numbering  will be removed by code.
 
 
@@ -220,7 +220,7 @@ dialogues responses are numbered 0#...N# so its easy to follow the dialogue. Fla
 
 (wip)
 
-In many cases, if you are going to use a certain flag, it makes sense to set it false in the beginning of new game (doable only on  code side currently)
+In many cases, if you are going to use a certain flag, it makes sense to set it false in the beginning of new game (doable only on code side currently)
 This is done currently in RoomManager And in SettingsUI (needs fixing naturally): playerData.SetFlag("HasSoulStone","false");
 
 For items to work, Items need to be in the Items class and also in the ItemRegistry List 
