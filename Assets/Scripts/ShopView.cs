@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ShopView : MonoBehaviour
@@ -18,7 +19,7 @@ public class ShopView : MonoBehaviour
     public GameObject actionButtonPrefab;
     public Transform actionButtonContainer;
     
-    public Transform ShopButtonContainer;
+    public Transform shopButtonContainer;
 
     public List<Item> shopInventory  = new List<Item>();
     
@@ -29,21 +30,28 @@ public class ShopView : MonoBehaviour
 
     private Item selectedItem;
     private bool selectedIsOwnItem;
-    
+
+    private List<GameObject> shopItemGOs = new List<GameObject>();
     private void Awake()
     {
         ExitButton.onClick.AddListener(CloseView);
         BuyButton.onClick.AddListener(BuyItem);
-
     }
     
     
-    public void SetupShop()
+    public void SetupShop(List<string> items)
     {
-        shopInventory.Add(Item.ScrollOfFireball);
-        shopInventory.Add(Item.PotionOfHealing);
-
         ResetInventory();
+
+        // these should come from room json or somewhere else        
+        //shopInventory.Add(Item.ScrollOfFireball);
+        //shopInventory.Add(Item.PotionOfHealing);
+
+        foreach (var itemString in items)
+        {
+            Item item = ItemRegistry.GetItem(itemString);
+            shopInventory.Add(item);
+        }
         
         CreateInventory();
         CreateShopInventory();
@@ -81,7 +89,7 @@ public class ShopView : MonoBehaviour
     {
         foreach (var item in shopInventory)
         {
-            CreateInventoryButton(item, ShopButtonContainer,() =>
+             GameObject go = CreateInventoryButton(item, shopButtonContainer,() =>
             {
                 selectedItem = item;
                 selectedIsOwnItem = false;
@@ -94,6 +102,8 @@ public class ShopView : MonoBehaviour
                 
                 SetBuyButton();
             });
+             
+             shopItemGOs.Add(go);
         }
     }
 
@@ -154,7 +164,7 @@ public class ShopView : MonoBehaviour
     }
 
 
-    void CreateInventoryButton(Item item, Transform container, UnityAction callback )
+    GameObject CreateInventoryButton(Item item, Transform container, UnityAction callback )
     {
 
         GameObject buttonObj = Instantiate(actionButtonPrefab, container);
@@ -166,15 +176,33 @@ public class ShopView : MonoBehaviour
             buttonText.text = item.shortDescription;
         }
 
+        Debug.Log(" item " + item + "  " + item.image);        
         string path = "InventoryItems/" + item.image;
-        image.sprite = Resources.Load<Sprite>(path);
+        //image.sprite = Resources.Load<Sprite>(path);
         
         buttonComponent.GetComponent<Image>().sprite = Resources.Load<Sprite>(path);
+
+        return buttonObj;
     }
     
     void CloseView()
     {
-        this.gameObject.SetActive(false);
+        SaveGameManager.SaveGame(RoomManager.playerData);
+        
+        ResetInventory();
+        
+        // shopItemGOs
+        foreach (var go  in shopItemGOs)
+        {
+            Destroy(go);
+        }
+        shopItemGOs.Clear();
+        
+        shopInventory.Clear();
+
+        image.sprite = null;
+        name.text = "";
+        gameObject.SetActive(false);
     }
     
     

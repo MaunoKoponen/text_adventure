@@ -8,7 +8,7 @@ public class PlayerData
     public int coins = 300;
     public string currentRoom;
     public List<Item> Inventory  = new List<Item>();
-    public Dictionary<string, bool> Flags = new Dictionary<string, bool>();
+    public Dictionary<string, string> Flags = new Dictionary<string, string>();
     
     public void AddItem(Item item)
     {
@@ -75,14 +75,14 @@ public class PlayerData
         return Inventory.Contains(item);
     }
 
-    public void SetFlag(string flagName, bool value)
+    public void SetFlag(string flagName, string value)
     {
         Flags[flagName] = value;
         Debug.Log("Set Flag " + flagName + " to " + value);
         
     }
     
-    public bool GetFlag(string flagName)
+    public string GetFlag(string flagName)
     {
         if (Flags.ContainsKey(flagName))
         {
@@ -93,7 +93,7 @@ public class PlayerData
             // Handle the case where the flag doesn't exist.
             // This can be a Debug.Log, throw an exception, or return a default value.
             Debug.LogError("Flag " + flagName + " does not exist.");
-            return false; // default value
+            return "false"; // default value
         }
     }
     

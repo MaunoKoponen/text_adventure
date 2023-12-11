@@ -51,5 +51,6 @@
       "conditions": [],
       "conditions_not": []
     }
-  ]
+  ],
+  "shop_inventory": ["Soul Stone","Healing Potion"]
 }

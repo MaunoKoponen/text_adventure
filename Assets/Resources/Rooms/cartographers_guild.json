@@ -11,6 +11,11 @@
       "action_id": "guild_leader",
       "flag_false" : "quest_cartographer_01",
       "action_description": "Talk to the Guild leader"
+    },
+    {
+      "action_id": "guild_cat",
+      "flag_false" : "quest_deliver_01",
+      "action_description": "Talk to the Guild cat"
     }
   ],
   "dialogues": [
@@ -84,6 +89,39 @@
             },
             {
               "text": "That's too much for me.",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "npc_name": "guild_cat",
+      "dialogue_image": "cartographer_cat",
+      "dialogues": [
+        {
+          "message": "Meow - Greetings.I have a small task for you, if you are interested",
+          "responses": [
+            {
+              "text": "Yes, I am.",
+              "next_step": 1
+            },
+            {
+              "text": "Not right now.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "1# great. please deliver this letter to the owner of the tavern in the woods north from here.",
+          "responses": [
+            {
+              "text": "Sure, count on me, I'll do it.",
+              "setFlagTrue": "quest_deliver_01",
+              "next_step": -1
+            },
+            {
+              "text": "Sounds tedious, I'll pass on that.",
               "next_step": -1
             }
           ]

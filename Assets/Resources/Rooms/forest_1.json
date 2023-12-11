@@ -5,7 +5,7 @@
   "exits": [
     {
       "exit_name": "Path leading to a river",
-      "leads_to": "forest_tavern",
+      "leads_to": "forest_tavern_exterior",
       "conditions": [],
       "conditions_not": []
     },

@@ -1,11 +1,16 @@
 {
-  "room_id": "forest_tavern",
-  "description": "Nestled deep within the heart of the forest, beside a gently flowing river, stands a cozy guest house. The melodious hum of the river is complemented by the distant chirping of the birds. Thick trees shield the guest house from the rest of the world, creating a sense of isolation. Inside, a warm, golden glow emanates from lanterns, illuminating the tavern section where a tavernkeeper is serving drinks. At a dimly lit corner, a mysterious stranger cloaked in shadows observes silently.",
+  "room_id": "forest_tavern_interior",
+  "description": "Inside the guesthouse , a warm, golden glow emanates from lanterns, illuminating the tavern section where a tavernkeeper is serving drinks. At a dimly lit corner, a mysterious stranger cloaked in shadows observes silently.",
   "items": [],
   "actions": [
     {
       "action_id": "forest_tavern_lady",
       "action_description": "Talk to the tavernkeeper"
+    },
+    {
+      "action_id": "deliver_quest_completion",
+      "flag_true" : "quest_deliver_01",
+      "action_description": "Give tavern keeper the Letter"
     },
     {
       "action_id": "mysterious_stranger_1",
@@ -100,6 +105,22 @@
       ]
     },
     {
+      "npc_name": "deliver_quest_completion",
+      "dialogue_image": "forest_tavern_lady",
+      "dialogues": [
+        {
+          "message": "You hand the letter you received from the cat in Cartographers guilt to taverkeeper. She seems pleased.",
+          "responses": [
+            {
+              "text": "Here is a letter I was asked to deliver to you",
+              "setFlagConcluded": "quest_deliver_01",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
       "npc_name": "mysterious_stranger_1",
       "dialogue_image": "mysterious_stranger_1",
       "dialogues": [
@@ -171,15 +192,15 @@
   ],
   "exits": [
     {
-      "exit_name": "Path deeper into the forest",
-      "leads_to": "deep_forest",
+      "exit_name": "Go outside",
+      "leads_to": "forest_tavern_exterior",
       "conditions": [],
       "conditions_not": []
     },
     {
-      "exit_name": "Path back to the forest edge",
-      "leads_to": "forest_1",
-      "conditions": [],
+      "exit_name": "go upstairs",
+      "leads_to": "forest_tavern_2nd_floor",
+      "conditions": ["guest_room_key"],
       "conditions_not": []
     }
   ]

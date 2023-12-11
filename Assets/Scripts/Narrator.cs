@@ -6,7 +6,8 @@ public class Narrator : MonoBehaviour
 {
     private AudioSource audioSource;
     private Coroutine fadeCoroutine;
-
+    public bool enabled;
+    
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -14,6 +15,9 @@ public class Narrator : MonoBehaviour
 
     public void PlayNarration(string roomName)
     {
+        if (!enabled)
+            return;
+        
         AudioClip clipToPlay = Resources.Load<AudioClip>($"Sounds/{roomName}");
         if (clipToPlay)
         {

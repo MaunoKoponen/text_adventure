@@ -24,15 +24,21 @@ public class SettingsUI : MonoBehaviour
     void NewGame()
     {
        // wipe current progress
-
+       //QuestLog newLog =  new QuestLog();
+       //string json = JsonUtility.ToJson(newLog);
+       PlayerPrefs.SetString("QuestLog", "");
+       PlayerPrefs.Save();
+       RoomManager.Diary.questLog.Entries.Clear();
+       
        PlayerData tempData = new PlayerData();
        
        tempData.currentRoom = "town_square";
-       tempData.SetFlag("HasSoulStone",false);
+       tempData.SetFlag("HasSoulStone","false");
        
-       tempData.SetFlag("quest_cartographer_01",false);
-       tempData.SetFlag("Dead",false);
-       tempData.SetFlag("gate_key",false);
+       tempData.SetFlag("quest_deliver_01","false");
+       tempData.SetFlag("quest_cartographer_01","false");
+       tempData.SetFlag("Dead","false");
+       tempData.SetFlag("gate_key","false");
        
        tempData.Inventory.Add(Item.ScrollOfFire);
 /*       tempData.Inventory.Add(Item.PotionOfHealing);

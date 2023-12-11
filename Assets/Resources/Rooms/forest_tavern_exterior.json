@@ -1,0 +1,25 @@
+{
+  "room_id": "forest_tavern_exterior",
+  "description": "Nestled deep within the heart of the forest, beside a gently flowing river, stands a cozy guest house. The melodious hum of the river is complemented by the distant chirping of the birds. Thick trees shield the guest house from the rest of the world, creating a sense of isolation.",
+  "items": [],
+  "exits": [
+    {
+      "exit_name": "Enter the quest house",
+      "leads_to": "forest_tavern_interior",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "Path deeper into the forest",
+      "leads_to": "deep_forest",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "Path back to the forest edge",
+      "leads_to": "forest_1",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
+}

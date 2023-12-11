@@ -13,20 +13,35 @@ public class Diary : MonoBehaviour
     
     
     public Button ExitButton;
+    public Button prevButton;
+    public Button nextButton;
 
-    private QuestLog questLog = new QuestLog();
+    
+    public QuestLog questLog;
 
     public TMP_Text text1;
-    public TMP_Text text2;
+    //public TMP_Text text2;
 
+    private int currentPage = 0;
+    private List<string> pages;
+    public TMP_Text pageNumber;
     
     private void Awake()
     {
         ExitButton.onClick.AddListener(CloseView);
-        LoadQuestLog();
+        prevButton.onClick.AddListener(PrevPage);
+        nextButton.onClick.AddListener(NextPage);
+
+        questLog = LoadQuestLog();
+        RewriteDiary();
     }
     
-    //--------------
+    private void OnEnable()
+    {
+        questLog = LoadQuestLog();
+        RewriteDiary();
+    }
+    
     
     public void SaveQuestLog(QuestLog log)
     {
@@ -35,9 +50,23 @@ public class Diary : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    public void ResetQuestLog()
+    {
+        PlayerPrefs.SetString("QuestLog", "");
+        PlayerPrefs.Save();
+    }
+
+    
     public QuestLog LoadQuestLog()
     {
         string json = PlayerPrefs.GetString("QuestLog");
+        if (string.IsNullOrEmpty(json)) // game reseted
+        {
+            QuestLog newLog =  new QuestLog();
+            questLog = newLog;
+            return questLog;
+        }
+        
         return JsonUtility.FromJson<QuestLog>(json);
     }
     
@@ -46,26 +75,63 @@ public class Diary : MonoBehaviour
     {
         QuestLogEntry newEntry = LoadQuestData(questID);
 
+        if (questLog == null)
+        {
+            questLog =  new QuestLog();
+        }
+            
         if (newEntry != null)
         {
             // Assuming you have a questLog object already
             questLog.AddQuestEntry(newEntry);
             SaveQuestLog(questLog);
 
-            string wholeText = "";
-
-            foreach (var QuestLogEntry in questLog.Entries)
-            {
-                string entryAsText = FormatQuestLogEntryForDisplay(QuestLogEntry);
-                wholeText += entryAsText + "\n---\n"; // Added a separator between entries
-            }
-
-            List<string> pages = PaginateText(wholeText, maxCharactersOnPage); // Adjust the max characters per page as needed
-
-            // Update your UI here. Make sure to add checks if there are fewer pages than text components.
-            text1.text = pages.Count > 0 ? pages[0] : "";
-            text2.text = pages.Count > 1 ? pages[1] : "";
+            RewriteDiary();
         }
+        else
+        {
+            Debug.LogError("Ooops, no quest data found with questID " + questID);
+        }
+    }
+    
+    public void OnQuestConcluded(string questID)
+    {
+        questLog = LoadQuestLog();
+        
+        foreach (var questLogEntry in questLog.Entries)
+        {
+            Debug.Log("Comparing " + questLogEntry.QuestID  + " <----> " + questID );
+            
+            if (questLogEntry.QuestID == questID)
+            {
+                Debug.Log("Found the quest entry, changing it to concluded");
+                questLogEntry.IsCompleted = true;
+            }
+           
+        }
+        SaveQuestLog(questLog);
+        RewriteDiary();
+    }
+
+    void RewriteDiary()
+    {
+        string wholeText = "";
+        foreach (var QuestLogEntry in questLog.Entries)
+        {
+            Debug.Log("-------> GuestLogEntry: " + QuestLogEntry.QuestName +  " completed?: " + QuestLogEntry.IsCompleted);
+            
+            string entryAsText = FormatQuestLogEntryForDisplay(QuestLogEntry);
+            wholeText += entryAsText + "\n---\n"; // Added a separator between entries
+        }
+
+        pages = PaginateText(wholeText, maxCharactersOnPage); // Adjust the max characters per page as needed
+        
+        // Update your UI here. Make sure to add checks if there are fewer pages than text components.
+
+        text1.text = pages[currentPage];
+
+        //text1.text = pages.Count > 0 ? pages[0] : "";
+        //text2.text = pages.Count > 1 ? pages[1] : "";
     }
     
     public QuestLogEntry LoadQuestData(string questID)
@@ -108,7 +174,7 @@ public class Diary : MonoBehaviour
     
     public List<string> PaginateText(string text, int maxCharactersPerPage)
     {
-        List<string> pages = new List<string>();
+       pages = new List<string>();
 
         string[] words = text.Split(' ');
         string currentPageText = "";
@@ -137,6 +203,20 @@ public class Diary : MonoBehaviour
         }
 
         return pages;
+    }
+    
+    void PrevPage()
+    {
+        currentPage--;
+        text1.text = pages[currentPage];
+        pageNumber.text = (currentPage + 1).ToString();
+    }
+    void NextPage()
+    {
+       
+        currentPage++;
+        text1.text = pages[currentPage];
+        pageNumber.text = (currentPage + 1).ToString();
     }
     
     

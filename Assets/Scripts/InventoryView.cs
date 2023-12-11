@@ -16,7 +16,13 @@ public class InventoryView : MonoBehaviour
     public RoomManager roomManager;
     //private PlayerData playerData;
     
+    public Button ExitButton;
 
+    
+    private void Awake()
+    {
+        ExitButton.onClick.AddListener(CloseView);
+    }
     public void CreateInventory()
     {
         foreach (var item in RoomManager.playerData.Inventory)
@@ -62,5 +68,10 @@ public class InventoryView : MonoBehaviour
         image.sprite = Resources.Load<Sprite>(path);
         
         buttonComponent.GetComponent<Image>().sprite = Resources.Load<Sprite>(path);
+    }
+    
+    void CloseView()
+    {
+        this.gameObject.SetActive(false);
     }
 }

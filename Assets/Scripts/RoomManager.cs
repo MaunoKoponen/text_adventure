@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,6 +39,8 @@ public class RoomManager : MonoBehaviour
     private List<string> combatLog = new List<string>();
 
     public Diary diary;
+    public static Diary Diary;
+
     public ShopView shopView;
     
     
@@ -46,9 +49,16 @@ public class RoomManager : MonoBehaviour
         playerData.health = value;
         healthText.text = value.ToString();
     }
-    
+
+    private void Awake()
+    {
+        Diary = diary;
+    }
+
     void Start()
     {
+        
+        
         // Example initialization
         SetHealth(500);
         /*
@@ -72,9 +82,9 @@ public class RoomManager : MonoBehaviour
         {
 
             playerData.currentRoom = "town_square";
-            playerData.SetFlag("HasSoulStone",false);
-            playerData.SetFlag("Dead",false);
-            playerData.SetFlag("gate_key",false);
+            playerData.SetFlag("HasSoulStone","false");
+            playerData.SetFlag("Dead","false");
+            playerData.SetFlag("gate_key","false");
             playerData.Inventory.Add(Item.ScrollOfFire);
             /*
             playerData.Inventory.Add(Item.PotionOfHealing);
@@ -92,7 +102,9 @@ public class RoomManager : MonoBehaviour
         //playerData.currentRoom = "town_square";
         
         LoadRoomFromJson( playerData.currentRoom);
-       
+
+        diary.LoadQuestLog();
+        Diary = diary;
     }
 
     
@@ -100,8 +112,6 @@ public class RoomManager : MonoBehaviour
     
     public void LoadRoomFromJson(string roomId, string extraString = "")
     {
-        // Lets save the gameState here
-
         playerData.currentRoom = roomId;
         SaveGameManager.SaveGame(playerData);
         
@@ -291,7 +301,7 @@ public class RoomManager : MonoBehaviour
         {
             Debug.Log(">>>>> EnemyAttack -> player health ZERO");
             
-            playerData.SetFlag("Dead",true);
+            playerData.SetFlag("Dead","true");
             Debug.Log($"{currentRoom.combat.enemy_name} has defeated you!");
             ClearCombatLog();
             currentRoom.combat = null;
@@ -303,6 +313,7 @@ public class RoomManager : MonoBehaviour
     
     private void ClearCombatLog()
     {
+        Debug.Log("-------- CLEAR COMBAT LOG ------");
         combatLog.Clear();
     }
     
@@ -361,14 +372,14 @@ public class RoomManager : MonoBehaviour
                 foreach (var action in currentRoom.actions)
                 {
                     if (action.flag_true != null && playerData.Flags.ContainsKey(action.flag_true) &&
-                        playerData.GetFlag(action.flag_true) == true)
+                        playerData.GetFlag(action.flag_true) == "true")
                     {
                         Debug.Log("Had true flag");
                         CreateActionButton(action.action_description, () => HandleRoomAction(action.action_id));
                     }
                 
                     if (action.flag_false != null && playerData.Flags.ContainsKey(action.flag_false) &&
-                        playerData.GetFlag(action.flag_false) == false)
+                        playerData.GetFlag(action.flag_false) == "false")
                     {
                         Debug.Log("Had false flag");
                         CreateActionButton(action.action_description, () => HandleRoomAction(action.action_id));
@@ -405,7 +416,7 @@ public class RoomManager : MonoBehaviour
                     {
                         Debug.Log("checking condition: " + flag.Key + " and its ... " + flag.Value);
                         
-                        if (condition == flag.Key && flag.Value == true)
+                        if (condition == flag.Key && flag.Value == "true")
                         {
                             any = true;
                         }
@@ -419,7 +430,7 @@ public class RoomManager : MonoBehaviour
                     {
                         Debug.Log("checking negative condition: " + flag.Key + " and its ... " + flag.Value);
 
-                        if (condition == flag.Key && flag.Value == false)
+                        if (condition == flag.Key && flag.Value == "false")
                         {
                             Debug.Log("found a flag that is supposed to be false and it is");
                             any = true;
@@ -438,6 +449,7 @@ public class RoomManager : MonoBehaviour
             }
         }
 
+        /*
         string inventoryString = "";
         foreach (var item in playerData.Inventory)
         {
@@ -446,6 +458,7 @@ public class RoomManager : MonoBehaviour
             inventoryString += " - " + item.shortDescription + "\n";
         }
         inventoryText.text = inventoryString;
+        */
         
         string flagsString = "";
         foreach (var item in playerData.Flags)
@@ -481,11 +494,7 @@ public class RoomManager : MonoBehaviour
         if (exit != null)
         {
             narrator.FadeOut(0.2f); // Fades out the audio over 1 second return;
-            
-
-            
             LoadRoomFromJson(exit.leads_to);
-            
         }
 
         // If the action isn't an exit, it might be an NPC interaction
@@ -544,6 +553,8 @@ public class RoomManager : MonoBehaviour
             int nextStep = response.next_step;
             string setFlagTrue = null;
             string setFlagFalse = null;
+            string setFlagConcluded = null;
+
             string getItem = null;
             string giveItem = null;
             
@@ -552,35 +563,54 @@ public class RoomManager : MonoBehaviour
                 setFlagTrue = response.setFlagTrue;
             if(response.setFlagFalse !=null)
                 setFlagFalse = response.setFlagFalse;
+            if(response.setFlagConcluded !=null)
+                setFlagConcluded = response.setFlagConcluded;
             if(response.getItem !=null)
                 getItem = response.getItem;
             if (response.giveItem != null)
                 giveItem = response.giveItem;
         
 
-            CreateActionButton(response.text, () => HandleDialogueResponse(nextStep,setFlagTrue,setFlagFalse,getItem,giveItem));
+            CreateActionButton(response.text, () => HandleDialogueResponse(nextStep,setFlagTrue,setFlagFalse,setFlagConcluded,getItem,giveItem));
         }
     }
 
 
-    private void HandleDialogueResponse(int nextStep, string FlagToSetTrue = null, string FlagToSetFalse = null, string getItem=null, string giveItem = null)
+    private void HandleDialogueResponse(int nextStep, string FlagToSetTrue = null, string FlagToSetFalse = null, string FlagToSetConcluded = null, string getItem=null, string giveItem = null)
     {
         if (FlagToSetTrue != null)
         {
             // Quest?
-            playerData.SetFlag(FlagToSetTrue,true);
+            playerData.SetFlag(FlagToSetTrue,"true");
             if (FlagToSetTrue.Contains("quest"))
             {
                 SaveGameManager.SaveGame(playerData);
                 Debug.Log("Quest start detected!");
                 diary.OnQuestReceived(FlagToSetTrue);
+                Diary = diary;
                 
             }
-
         }
            
        if(FlagToSetFalse !=null)
-            playerData.SetFlag(FlagToSetFalse,false);
+            playerData.SetFlag(FlagToSetFalse,"false");
+       
+       if (FlagToSetConcluded != null)
+       {
+           // Quest?
+           playerData.SetFlag(FlagToSetConcluded,"concluded");
+           if (FlagToSetConcluded.Contains("quest"))
+           {
+               SaveGameManager.SaveGame(playerData);
+               Debug.Log("Quest finished detected!");
+               diary.OnQuestConcluded(FlagToSetConcluded);
+               Diary = diary;
+                
+           }
+       }
+
+       
+       
        if(getItem !=null)
             playerData.AddItem(getItem);
        if(giveItem !=null)
@@ -589,7 +619,7 @@ public class RoomManager : MonoBehaviour
         
        if (nextStep == 1000)
        {
-           shopView.SetupShop();
+           shopView.SetupShop(currentRoom.shop_inventory);
            EndDialogue();
        }else if (nextStep == -1)
        {
@@ -634,9 +664,6 @@ public class RoomManager : MonoBehaviour
             buttonText.text = itemName;
         }
     }
-
-    
-
     
     
     public Sprite GetSpriteByName(string name)
@@ -654,6 +681,7 @@ public class Room
     public string description;
     public string[] npcs;
     public List<string> items;
+    public List<string> shop_inventory;
     public Action[] actions;
     public Exit[] exits;
     public Combat combat;
@@ -695,6 +723,7 @@ public class Room
         public string text;
         public string setFlagTrue;
         public string setFlagFalse;
+        public string setFlagConcluded; // finish quest, for example
         public string getItem;  // get item from NPC
         public string giveItem; // give item to NPC
 
@@ -716,7 +745,7 @@ public class Room
         public string event_type;
         public string item_id;         // for "add_item" event
         public string flag_name;       // for "set_flag" event
-        public bool value;             // for "set_flag" event
+        public string value;             // for "set_flag" event
     }
     
     [System.Serializable]

@@ -1,8 +1,8 @@
 {
   "QuestID": "Quest_Cartographer_01",
   "QuestName": "The Enchanted Estuary",
-  "QuestDescription": "Map the Enchanted Estuary...",
-  "IsCompleted": false
+  "QuestDescription": "Map the Enchanted Estuary... In the mystical realm of Prelucia, you were born under the rare alignment of three moons, marking you as a child of destiny. \n\nTragically orphaned when your village was razed by shadow dragons, you were raised by a wise old druid in the heart of the Whispering Forest. \n\nNow, with a cherished pendant as your only link to your past, you set out on a quest to find your purpose amidst the vast kingdoms, enchanted lands, and intricate webs of romance and rivalry. In the mystical realm of Prelucia, you were born under the rare alignment of three moons, marking you as a child of destiny. \n\nTragically orphaned when your village was razed by shadow dragons, you were raised by a wise old druid in the heart of the Whispering Forest. \n\nNow, with a cherished pendant as your only link to your past, you set out on a quest to find your purpose amidst the vast kingdoms, enchanted lands, and intricate webs of romance and rivalry.",
+  "IsCompleted": "false"
 }
 
   

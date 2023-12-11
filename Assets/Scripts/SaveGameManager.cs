@@ -33,14 +33,9 @@ public static class SaveGameManager
                         Debug.LogError("Save file is empty.");
                         //return null;
                     }
-
                     BinaryFormatter formatter = new BinaryFormatter();
-                    
-                    
                     RoomManager.playerData =  formatter.Deserialize(stream) as PlayerData;
-                    
                     Debug.Log("Loading data should be ok.");
-
                 }
             }
             else

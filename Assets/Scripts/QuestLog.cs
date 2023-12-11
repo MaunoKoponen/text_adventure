@@ -18,8 +18,4 @@ public class QuestLog
     {
         Entries.Add(entry);
     }
-
-    // Method to set a quest as completed
-    // Method to get quest description by quest ID
-    // etc.
 }
