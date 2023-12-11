@@ -4,6 +4,7 @@ Unity project, a text adventure game engine, using generative AI to aid developm
 This a experimantal game project, created to test generative AI capabilities for game development.
 
 **Background**
+
 The rise of large language models and generative image creation technologies like Stable Diffusion and Midjourney, starting from 2022,  substantial influence on shaping the expectations and predictions about the future of game development processes.4
 
 In this project, my goal is to experiment with currently available tools, and find  good practices and workflows for game developme nt in small team, or even for a solo game  creator.
@@ -11,6 +12,7 @@ In this project, my goal is to experiment with currently available tools, and fi
 As generative AI 3d object creation does not yet (end of 2023) give any real advantage in game development, I chose to make a game project that is based on traditional text adventure format. Also, I decided to make the game traditional, "non gen ai" in sense that the game content creation is not based on on-the-fly generation while player is engaging with the game, but is produced during game development and is thus "static". This is to separate the two use cases clearly: gen AI aided game development and gen AI as a game engine.  
 
 **Generative AI is used it this project in different ways**
+
 Code/data structure:
 Deciding the structure of data: Chatgpt was prompted to get the initial json format for the room/dialogue data
 Game code: ChatGPT was used to get the initial game code. (As complexity grew, more human developer involvement is needed)      
@@ -21,6 +23,7 @@ UI elements: base images created with Dalle-3, then modified in Krita.
 Content creation: room description json files are generated prompting ChatGPT (and local LLM with OobaBooga text generation web-UI using Mythalion with TheBloke_Mythalion-13B-GPTQ model) and then refined by hand.
 
 **Main features**
+
 Rooms: - locations with possibility for dialogue with npcs. room acces can be set  to be based on item in inventory, flag set
 Dialogues: have branching, can trigger receiving items, setting flags, starting/concluding quests
 Quests Log: quests are logged in a journal, status updted when conluded
@@ -213,6 +216,7 @@ dialogues responses are numbered 0#...N# so its easy to follow the dialogue. Fla
 
 
 **Notes about adding new content**
+
 (wip)
 
 In many cases, if you are going to use a certain flag, it makes sense to set it false in the beginning of new game (doable only on  code side currently)
