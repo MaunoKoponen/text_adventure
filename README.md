@@ -7,7 +7,7 @@ This a experimantal game project, created to test generative AI capabilities for
 
 The rise of large language models and generative image creation technologies like Stable Diffusion and Midjourney, starting from 2022,  substantial influence on shaping the expectations and predictions about the future of game development processes.4
 
-In this project, my goal is to experiment with currently available tools, and find  good practices and workflows for game developme nt in small team, or even for a solo game  creator.
+In this project, my goal is to experiment with currently available tools, and find  good practices and workflows for game development in a small team, or even for a solo game creator.
 
 As generative AI 3d object creation does not yet (end of 2023) give any real advantage in game development, I chose to make a game project that is based on traditional text adventure format. Also, I decided to make the game traditional, "non gen ai" in sense that the game content creation is not based on on-the-fly generation while player is engaging with the game, but is produced during game development and is thus "static". This is to separate the two use cases clearly: gen AI aided game development and gen AI as a game engine.  
 
@@ -30,12 +30,12 @@ Visuals:
 - Quests Log: quests are logged in a journal, status updted when conluded
 - Items: items with description, effect, price, icon
 - Invetory: Invetory showing owned item with item icon, description
-- Shop: NPC's can have shop functionlaity triggered during conversation. Shop view show item available, price, and player inventory 
+- Shop: NPC's can have shop functionality triggered during conversation. Shop view show item available, price, and player inventory 
 - Map: (wip) current location, visited/ known locations shown on map
 - Combat (wip) attacking enemy, using items during combat, death leads to resurrect sequence
 - Savegame: Game state is preserved between session,starting a new game from menu will erase previous progress  
 
-Status of the project:
+**Status of the project:**
 Most features are working, mostly bugfree. Combat is very wip. The content of game, "story" is unfinished, there is just some content to show/test most features.
 
 **Notes on content highlighting game mechanics**
@@ -57,7 +57,7 @@ There is no ready "template" for the room data prompting yet. Best approace is t
 Note: the json dialogue data uses "numbering" of responses, in format  1# , 2# - this is mainly for developers convenience, and the numbering  will be removed by code.
 
 
-Here is the actual prompt used to create first version of Cartographers Guild room description
+Here is the actual prompt used to create first version of Cartographers Guild room description with ChatGPT-4:
 ```
 Topic: json for Cartographers guild
 Hi! Im making a text adventure, that used json as "rooms" - here is  a sample json:
