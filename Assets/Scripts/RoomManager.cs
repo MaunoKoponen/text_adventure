@@ -42,7 +42,7 @@ public class RoomManager : MonoBehaviour
     public static Diary Diary;
 
     public ShopView shopView;
-    
+    public SettingsUI settingsUI;
     
     void SetHealth(int value)
     {
@@ -80,20 +80,7 @@ public class RoomManager : MonoBehaviour
         }
         else
         {
-
-            playerData.currentRoom = "town_square";
-            playerData.SetFlag("HasSoulStone","false");
-            playerData.SetFlag("Dead","false");
-            playerData.SetFlag("gate_key","false");
-            playerData.Inventory.Add(Item.ScrollOfFire);
-            /*
-            playerData.Inventory.Add(Item.PotionOfHealing);
-            playerData.Inventory.Add(Item.SoulStone);
-            playerData.Inventory.Add(Item.Antidote);
-            playerData.Inventory.Add(Item.ElixirOfStrength);
-            playerData.Inventory.Add(Item.StoneOfEvasion);
-            */
-            SaveGameManager.SaveGame(playerData);
+            settingsUI.NewGame();
         }
         
         respawnRoom = "temple_of_lost_souls_resurrect";

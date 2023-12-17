@@ -1,0 +1,13 @@
+{
+  "currentRoom": "town_square",
+  "flags": [
+    {"Key": "HasSoulStone", "Value": "false"},
+    {"Key": "quest_deliver_01", "Value": "false"},
+    {"Key": "quest_cartographer_01", "Value": "false"},
+    {"Key": "Dead", "Value": "false"},
+    {"Key": "gate_key", "Value": "false"}
+  ],
+  "inventory": [
+    "ScrollOfFire"
+  ]
+}

@@ -587,8 +587,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1247219133}
   m_HandleRect: {fileID: 1247219132}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.9973512
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2725,7 +2725,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -82.1, y: 81.6}
+  m_AnchoredPosition: {x: -82.1, y: 81.6001}
   m_SizeDelta: {x: 322.7, y: 139.99994}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &372342340
@@ -8907,7 +8907,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 526.43994}
+  m_AnchoredPosition: {x: 0, y: 526.44006}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1690985353
@@ -10065,6 +10065,7 @@ MonoBehaviour:
   narrator: {fileID: 996198526}
   diary: {fileID: 366758450}
   shopView: {fileID: 707975697}
+  settingsUI: {fileID: 2090827475}
 --- !u!114 &2006562095
 MonoBehaviour:
   m_ObjectHideFlags: 0

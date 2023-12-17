@@ -20,44 +20,57 @@ public class SettingsUI : MonoBehaviour
         ExitButton.onClick.AddListener(CloseView);
     }
 
-
-    void NewGame()
+    [System.Serializable]
+    private class Flag
     {
-       // wipe current progress
-       //QuestLog newLog =  new QuestLog();
-       //string json = JsonUtility.ToJson(newLog);
-       PlayerPrefs.SetString("QuestLog", "");
-       PlayerPrefs.Save();
-       
-       if (RoomManager.Diary.questLog != null)
-       {
-           RoomManager.Diary.questLog.Entries.Clear();
-       }
-       PlayerData tempData = new PlayerData();
-       
-       tempData.currentRoom = "town_square";
-       tempData.SetFlag("HasSoulStone","false");
-       
-       tempData.SetFlag("quest_deliver_01","false");
-       tempData.SetFlag("quest_cartographer_01","false");
-       tempData.SetFlag("Dead","false");
-       tempData.SetFlag("gate_key","false");
-       
-       tempData.Inventory.Add(Item.ScrollOfFire);
-/*       tempData.Inventory.Add(Item.PotionOfHealing);
-       tempData.Inventory.Add(Item.SoulStone);
-       tempData.Inventory.Add(Item.Antidote);
-       tempData.Inventory.Add(Item.ElixirOfStrength);
-       tempData.Inventory.Add(Item.StoneOfEvasion);
-       tempData.Inventory.Add(Item.ScrollOfFireball);
-  */     
-       
-       SaveGameManager.SaveGame(tempData);
-       
-       SaveGameManager.LoadGame();
-       
-       roomManager.LoadRoomFromJson(RoomManager.playerData.currentRoom);
-       
+        public string Key;
+        public string Value;
+    }
+
+    [System.Serializable]
+    private class GameParameters
+    {
+        public string currentRoom;
+        public List<Flag> flags;
+        public List<string> inventory;
+    }
+    
+    
+    public void NewGame()
+    {
+        // Load the parameters from the JSON file in the Resources folder
+        TextAsset jsonFile = Resources.Load<TextAsset>("NewGameParameters");
+        GameParameters parameters = JsonUtility.FromJson<GameParameters>(jsonFile.text);
+
+        // Wipe current progress
+        PlayerPrefs.SetString("QuestLog", "");
+        PlayerPrefs.Save();
+
+        if (RoomManager.Diary.questLog != null)
+        {
+            RoomManager.Diary.questLog.Entries.Clear();
+        }
+
+        PlayerData tempData = new PlayerData
+        {
+            currentRoom = parameters.currentRoom
+        };
+
+        // Set flags from JSON
+        foreach (var flag in parameters.flags)
+        {
+            tempData.SetFlag(flag.Key, flag.Value);
+        }
+
+        // Add inventory items from JSON
+        foreach (var itemName in parameters.inventory)
+        {
+            tempData.Inventory.Add(ItemRegistry.GetItem(itemName));
+        }
+
+        SaveGameManager.SaveGame(tempData);
+        SaveGameManager.LoadGame();
+        roomManager.LoadRoomFromJson(RoomManager.playerData.currentRoom);
     }
     
     void LoadGame()
