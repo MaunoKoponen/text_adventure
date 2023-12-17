@@ -28,8 +28,11 @@ public class SettingsUI : MonoBehaviour
        //string json = JsonUtility.ToJson(newLog);
        PlayerPrefs.SetString("QuestLog", "");
        PlayerPrefs.Save();
-       RoomManager.Diary.questLog.Entries.Clear();
        
+       if (RoomManager.Diary.questLog != null)
+       {
+           RoomManager.Diary.questLog.Entries.Clear();
+       }
        PlayerData tempData = new PlayerData();
        
        tempData.currentRoom = "town_square";
