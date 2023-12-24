@@ -6,6 +6,9 @@ using System.Linq;
 using TMPro;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
+
+
 
 public class RoomManager : MonoBehaviour
 {
@@ -26,9 +29,9 @@ public class RoomManager : MonoBehaviour
 
     public Narrator narrator;
     
-    private Room currentRoom;
-    private string previousRoom;
-    private string respawnRoom;
+    public Room currentRoom;
+    public string previousRoom;
+    public string respawnRoom;
 
 
     public static  PlayerData playerData = new PlayerData();
@@ -36,15 +39,20 @@ public class RoomManager : MonoBehaviour
     private string currentNPC = "";
 
     
-    private List<string> combatLog = new List<string>();
+    public List<string> combatLog = new List<string>();
 
     public Diary diary;
     public static Diary Diary;
 
     public ShopView shopView;
     public SettingsUI settingsUI;
-    
-    void SetHealth(int value)
+
+    public Combat Combat
+    {
+        get { return _combat; }
+    }
+
+    public void SetHealth(int value)
     {
         playerData.health = value;
         healthText.text = value.ToString();
@@ -156,156 +164,16 @@ public class RoomManager : MonoBehaviour
         }
     }
 
-    
-    private void HandleCombatAction(string action)
-    {
-        if ( playerData.health <= 0)
-        {
-            Debug.Log(">>>>> HandleCombatAction  Player health  zero!");
-        }
 
-        int totalDamage = 15; //player.equippedWeapon.damageAmount;
-        
-        // Assuming 'player' is an instance of PlayerStats
-        if (action == "Attack")
-        {
-
-            combatLog.Add($"You attacked the {currentRoom.combat.enemy_name} for {totalDamage} damage!");
-
-            currentRoom.combat.enemy_health -= totalDamage;
-
-            combatLog.Add($" Enemy health is now {currentRoom.combat.enemy_health}");
-
-            //Debug.Log("enemy health: " + currentRoom.combat.enemy_health);
-        }
-
-        if (action == "Flee")
-        {
-            ClearCombatLog();
-            currentRoom.description = "You cowardly flee from the Battle!";
-            currentRoom.combat = null;
-            LoadRoomFromJson(previousRoom, "You cowardly flee from the Battle!\n");
-            return;
-        }
-        
-        if (action == "Use Item")
-        {
-            ToggleCombatInventory(true);
-            // make inventory buttons
-            foreach (var item in playerData.Inventory)
-            {
-                CreateInventoryButton(item.shortDescription, () =>
-                {
-                    ToggleCombatInventory(false);
-                    
-                    if (!item.stacking)
-                    {
-                        playerData.RemoveItem(item);
-                    }
-                    if (item.stacking)
-                    {
-                        playerData.DecreaseStackSize(item, 1);
-                    }
-
-                    // TODO: check if usage possible (for example if target has immunity)
-                    
-                    if (item.target == Item.Target.Self)
-                    {
-                        if (item.effectType == Item.EffectType.Heal)
-                        {
-                            playerData.health += item.effectAmount;
-                            combatLog.Add("\n" + item.usageSuccess);
-                            combatLog.Add("your health is now " + playerData.health);
-
-                        }
-                    }    
-                    
-                    if (item.target == Item.Target.NPC)
-                    {
-                        if (item.effectType == Item.EffectType.Damage)
-                        {
-                            currentRoom.combat.enemy_health -= item.effectAmount;
-                    
-                            combatLog.Add("\n" + item.usageSuccess);
-                            combatLog.Add($" Enemy health is now {currentRoom.combat.enemy_health}");
-                        }
-                    }
-                    
-                    DisplayRoomInfo(""); // Refresh the UI
-                    
-                });
-            }
-            
-            CreateInventoryButton("Back", () =>
-            {
-                ToggleCombatInventory(false);
-                combatLog.Add("You stopped rummaging through you bag...");
-            });
-        }
-        
-        // Check if the enemy is defeated
-        if (currentRoom.combat.enemy_health <= 0)
-        {
-            // Enemy is defeated
-            Debug.Log($"{currentRoom.combat.enemy_name} has been defeated!");
-            currentRoom.description = "You defeat the enemy!";
-            ClearCombatLog();
-            DisplayRoomInfo("");
-            return; // Refresh the UI
-        }
-        else if(currentRoom.combat.enemy_health > 0)
-        {
-            EnemyAttack();
-        }
-
-        DisplayRoomInfo(""); // Refresh the UI
-    }
-
-    void ToggleCombatInventory(bool value)
-    {
-        if (! value)  // clear the list of buttons 
-        {
-            foreach (Transform child in combatInventoryPrefab.transform)
-            {
-                Destroy(child.gameObject);
-            }
-        }
-        
-        combatInventoryPrefab.SetActive(value);
-    }
-    
-    private void EnemyAttack()
-    {
-        int enemyDamageDealt = currentRoom.combat.enemyDamage;
-        SetHealth(playerData.health - enemyDamageDealt);
-
-        combatLog.Add($"{currentRoom.combat.enemy_name} attacked you for {enemyDamageDealt} damage!");
-        combatLog.Add($" Your health is now {playerData.health} ");
-        combatLog.Add("\n");
-        
-        // Check if the player is defeated:
-        if (playerData.health <= 0)
-        {
-            Debug.Log(">>>>> EnemyAttack -> player health ZERO");
-            
-            playerData.SetFlag("Dead","true");
-            Debug.Log($"{currentRoom.combat.enemy_name} has defeated you!");
-            ClearCombatLog();
-            currentRoom.combat = null;
-            SetHealth(0);
-            
-            LoadRoomFromJson(respawnRoom, "You wake up from odd dream.\n");
-        }
-    }
-    
-    private void ClearCombatLog()
-    {
-        Debug.Log("-------- CLEAR COMBAT LOG ------");
-        combatLog.Clear();
-    }
-    
     private string currentImage = "";
-    private void DisplayRoomInfo(string extraString)
+    private readonly Combat _combat;
+
+    public RoomManager()
+    {
+        _combat = new Combat(this);
+    }
+
+    public void DisplayRoomInfo(string extraString)
     {
         Debug.Log(">>>>> DisplayRoomInfo");
         
@@ -349,7 +217,7 @@ public class RoomManager : MonoBehaviour
             foreach (string action in currentRoom.combat.combat_actions)
             {
                 Debug.Log("Combat action: "  + action);
-                CreateActionButton(action, () => HandleCombatAction(action));
+                CreateActionButton(action, () => Combat.HandleCombatAction(action));
             }
         }
         else
@@ -639,7 +507,7 @@ public class RoomManager : MonoBehaviour
         }
     }
     
-    private void CreateInventoryButton(string itemName, UnityAction callback)
+    public void CreateInventoryButton(string itemName, UnityAction callback)
     {
         
         GameObject buttonObj = Instantiate(actionButtonPrefab, itemButtonContainer);
