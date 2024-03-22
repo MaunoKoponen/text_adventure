@@ -7,7 +7,11 @@
     {"Key": "Dead", "Value": "false"},
     {"Key": "gate_key", "Value": "false"}
   ],
+  "equipments": [
+    {"Key": "MainHand", "Value": "A Sword"}
+  ],
   "inventory": [
-    "Scroll of Fire"
+    "Scroll of Fire",
+    "An Icy Sword"
   ]
 }

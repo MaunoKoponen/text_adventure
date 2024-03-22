@@ -12,21 +12,56 @@ public class Item
     public int sellPrice;
     public EffectType effectType;
     public int effectAmount; // This is to denote the strength/quantity of the effect
-    public string category;
+    public Category category;
     public Target target;
     public bool stacking;
     public int count = 0;
     public string image;
+    public EquipSlot equipSlot;
+    
     public enum EffectType
     {
         Damage,
         Heal,
         Bless,
         CurePoison,
-        Open
+        Open,
+        Cold
         // ... More effects here.
     }
 
+    public enum Category
+    {
+        Scroll,
+        Potion,
+        Key,
+        Valuables,
+        Rune,
+        Armor,
+        Weapon,
+        Shield,
+        Ring,
+        Necklace
+    }
+    
+    public enum EquipSlot
+    {
+        Helmet,
+        Neck,
+        Breast,
+        Pants,
+        Bracers,
+        Gauntlets,
+        Boots,
+        MainHand,
+        SecondaryHand,
+        MainFinger,
+        SecondaryFinger,
+        None
+    }
+
+    
+    
     public enum Target
     {
         NPC,
@@ -37,6 +72,41 @@ public class Item
 
     // Example items:
 
+    public static Item BasicSword = new Item
+    {
+        usageSuccess = "You smash the enemy with you sword!",
+        usageFail = "You swing your sword. it cuts through the air. But not through the enemy.",
+        description = "An ordinary looking one-hand sword with no markings on it",
+        shortDescription = "A Sword",
+        buyPrice = 100,
+        sellPrice = 80,
+        effectType = EffectType.Damage,
+        effectAmount = 10, // For example, 50 points of fire damage.
+        category = Category.Weapon,
+        equipSlot = EquipSlot.MainHand,
+        target = Target.NPC,
+        stacking = false,
+        image = "sword_01"
+    };
+    
+    public static Item IceSword = new Item
+    {
+        usageSuccess = "Shards of ice hit yor enemy",
+        usageFail = "You swing your sword. Shards of ice appear from the blade, fly towards enemy, but misses their target!",
+        description = "One-hand sword with icy touch and cold blue appearance",
+        shortDescription = "An Icy Sword",
+        buyPrice = 200,
+        sellPrice = 120,
+        effectType = EffectType.Cold,
+        effectAmount = 10, // For example, 50 points of fire damage.
+        category = Category.Weapon,
+        equipSlot = EquipSlot.MainHand,
+        target = Target.NPC,
+        stacking = false,
+        image = "sword_ice"
+    };
+    
+    
     public static Item SoulStone = new Item
     {
         usageSuccess = "You focus your energy on the stone. Divine aura surround you.",
@@ -47,7 +117,7 @@ public class Item
         sellPrice = 0,
         effectType = EffectType.Bless,
         effectAmount = 1,
-        category = "Stone",
+        category = Category.Rune,
         target = Target.Self,
         stacking = false,
         image = "scroll_red"
@@ -63,7 +133,7 @@ public class Item
         sellPrice = 60,
         effectType = EffectType.Heal,
         effectAmount = 20,
-        category = "Potion",
+        category = Category.Potion,
         target = Target.Self,
         stacking = false,
         image = "potion_fire"
@@ -79,7 +149,7 @@ public class Item
         sellPrice = 80,
         effectType = EffectType.Damage,
         effectAmount = 50, // For example, 50 points of fire damage.
-        category = "Scroll",
+        category = Category.Scroll,
         target = Target.NPC,
         stacking = false,
         image = "scroll_red"
@@ -95,7 +165,7 @@ public class Item
         sellPrice = 40,
         effectType = EffectType.CurePoison,
         effectAmount = 1,
-        category = "Potion",
+        category = Category.Potion,
         target = Target.Self,
         stacking = true,
         image = "potion_green_red"
@@ -113,7 +183,7 @@ public class Item
         sellPrice = 100,
         effectType = EffectType.Bless,
         effectAmount = 1,
-        category = "Magical Stone",
+        category = Category.Rune,
         target = Target.Self,
         stacking = false,
         image = "scroll_red"
@@ -129,7 +199,7 @@ public class Item
         sellPrice = 125,
         effectType = EffectType.Bless,
         effectAmount = 1,
-        category = "Potion",
+        category = Category.Potion,
         target = Target.Self,
         stacking = false,
         image = "potion_green_red"
@@ -145,7 +215,7 @@ public class Item
         sellPrice = 90,
         effectType = EffectType.Open,
         effectAmount = 1,
-        category = "key",
+        category = Category.Key,
         target = Target.Lock,
         stacking = false,
         image = "key_copper"
@@ -162,7 +232,7 @@ public class Item
         sellPrice = 400,
         effectType = EffectType.Damage,
         effectAmount = 1,
-        category = "Scroll",
+        category = Category.Scroll,
         target = Target.NPC,
         stacking = false,
         image = "scroll_red"
@@ -182,7 +252,8 @@ public static class ItemRegistry
         {"Scroll of Fire", Item.ScrollOfFire},
         {"Soul Stone", Item.SoulStone},
         {"Gate key", Item.GateKey},
-
+        {"A Sword", Item.BasicSword},
+        {"An Icy Sword", Item.IceSword}
         // ... add other items here.
     };
 

@@ -606,6 +606,8 @@ public class Room
     [System.Serializable]
     public class Combat
     {
+        // This is the json data from room...
+        
         public string enemy_name;
         public int enemy_health;
         public string[] combat_actions;

@@ -54,7 +54,6 @@ public class InventoryView : MonoBehaviour
 
     void CreateInventoryButton(Item item, UnityAction callback)
     {
-
         GameObject buttonObj = Instantiate(actionButtonPrefab, actionButtonContainer);
         Button buttonComponent = buttonObj.GetComponent<Button>();
         buttonComponent.onClick.AddListener(callback);

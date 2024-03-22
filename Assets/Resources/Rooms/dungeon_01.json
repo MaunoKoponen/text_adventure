@@ -1,0 +1,30 @@
+{
+  "room_id": "dungeon room",
+  "description": "You enter the the room. Suddenly, a skeleton warrior appears!",
+  "items": [],
+    "actions": [
+      {
+        "action_id": "loot",
+        "action_description": "Loot corpse"
+      }
+    ],
+  "combat": {
+    "enemy_name": "Skeleton Warrior"
+  },
+  ], 
+  "exits": [
+    {
+      "exit_name": "return to previous room",
+      "leads_to": "previousRoom",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "Door to left",
+      "leads_to": "nextRoom",
+      "conditions": ["battle won"],
+      "conditions_not": []
+    }
+  ]
+}
+

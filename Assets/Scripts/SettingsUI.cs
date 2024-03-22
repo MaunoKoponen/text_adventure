@@ -28,11 +28,21 @@ public class SettingsUI : MonoBehaviour
     }
 
     [System.Serializable]
+    private class Equipment
+    {
+        public string Key;
+        public string Value;
+    }
+
+    
+    [System.Serializable]
     private class GameParameters
     {
         public string currentRoom;
         public List<Flag> flags;
+        public List<Equipment> equipments;
         public List<string> inventory;
+        
     }
     
     
@@ -62,12 +72,19 @@ public class SettingsUI : MonoBehaviour
             tempData.SetFlag(flag.Key, flag.Value);
         }
 
+        // Set flags from JSON
+        foreach (var equipment in parameters.equipments)
+        {
+            tempData.SetEquipment(equipment.Key, equipment.Value);
+        }
+        
         // Add inventory items from JSON
         foreach (var itemName in parameters.inventory)
         {
             tempData.Inventory.Add(ItemRegistry.GetItem(itemName));
         }
 
+        
         SaveGameManager.SaveGame(tempData);
         SaveGameManager.LoadGame();
         roomManager.LoadRoomFromJson(RoomManager.playerData.currentRoom);

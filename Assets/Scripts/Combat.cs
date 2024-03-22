@@ -6,6 +6,11 @@ public class Combat
 {
     private RoomManager _roomManager;
 
+    //public string enemy_name;
+    //public int enemy_health;
+    //public string[] combat_actions;
+    //public int enemyDamage = 5;  // How much damage the enemy does
+    
     public Combat(RoomManager roomManager)
     {
         _roomManager = roomManager;
@@ -18,18 +23,24 @@ public class Combat
             Debug.Log(">>>>> HandleCombatAction  Player health  zero!");
         }
 
-        int totalDamage = 15; //player.equippedWeapon.damageAmount;
         
         // Assuming 'player' is an instance of PlayerStats
         if (action == "Attack")
         {
-            _roomManager.combatLog.Add($"You attacked the {_roomManager.currentRoom.combat.enemy_name} for {totalDamage} damage!");
+
+            Item mainMandWeapon = ItemRegistry.GetItem(RoomManager.playerData.Equipments["MainHand"]);
+            _roomManager.combatLog.Add(mainMandWeapon.usageSuccess);
+
+            int totalDamage = mainMandWeapon.effectAmount;  //15; //player.equippedWeapon.damageAmount;
+
+            
+            //_roomManager.combatLog.Add($"You attacked the {_roomManager.currentRoom.combat.enemy_name} for {totalDamage} damage!");
 
             _roomManager.currentRoom.combat.enemy_health -= totalDamage;
-
+            
             _roomManager.combatLog.Add($" Enemy health is now {_roomManager.currentRoom.combat.enemy_health}");
 
-            //Debug.Log("enemy health: " + currentRoom.combat.enemy_health);
+            Debug.Log("enemy health: " + _roomManager.currentRoom.combat.enemy_health);
         }
 
         if (action == "Flee")
