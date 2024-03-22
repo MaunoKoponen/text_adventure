@@ -131,7 +131,13 @@ public class RoomManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Room not found!");
+            Debug.LogError("Room not found! " + roomId + " failsafe: loading town_square");
+            
+            // as temp failsafe, set the room to starting room
+            roomData = Resources.Load<TextAsset>("Rooms/" + "town_square");
+            string jsonData = roomData.text;
+            currentRoom = JsonUtility.FromJson<Room>(jsonData);
+            DisplayRoomInfo(extraString);
         }
     }
 
