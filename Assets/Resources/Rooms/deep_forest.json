@@ -1,0 +1,13 @@
+{
+  "room_id": "deep_forest",
+  "description": "deep in forest. (wip - current content ends here)",
+  "actions": [],
+  "exits": [
+    {
+      "exit_name": "Get back",
+      "leads_to": "forest_tavern_exterior",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
+}
