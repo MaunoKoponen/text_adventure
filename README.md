@@ -3,6 +3,14 @@ Unity project, a text adventure game engine, using generative AI to aid developm
 
 This an experimantal game project, created to test generative AI capabilities for game development.
 
+
+
+![F9tZW1LWkAAzbp0](https://github.com/user-attachments/assets/3d86b13e-3d39-4add-a8d0-ad6397eee0f1)
+
+![F9tZDkMXwAEE8a8](https://github.com/user-attachments/assets/0140ec52-23dd-4796-b6ad-a6ab8dabd9c9)
+
+![F9tYup9X0AAmNlR](https://github.com/user-attachments/assets/1940c190-34f3-4b88-ad5f-774fe731de86)
+
 **Background**
 
 The rise of large language models and generative image creation technologies like Stable Diffusion and Midjourney, starting from 2022, have a substantial influence on shaping the expectations and predictions about the future of game development processes.
