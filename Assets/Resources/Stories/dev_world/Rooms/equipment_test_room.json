@@ -1,0 +1,123 @@
+{
+  "room_id": "equipment_test_room",
+  "description": "You enter the Equipment Testing Chamber. Weapon racks line the walls, and armor stands display various protective gear. A magical chest in the center contains test items.\n\nThis room is for testing weapon damage dice, armor AC bonuses, and equipment properties.",
+  "npcs": ["equipment_vendor"],
+  "items": [],
+  "dialogues": [
+    {
+      "npc_name": "equipment_vendor",
+      "dialogue_image": "equipment_room",
+      "dialogues": [
+        {
+          "message": "Welcome to the Equipment Testing Chamber! What would you like to receive?",
+          "responses": [
+            {
+              "text": "Get Weapons",
+              "next_step": 1
+            },
+            {
+              "text": "Get Armor",
+              "next_step": 2
+            },
+            {
+              "text": "Get Consumables",
+              "next_step": 3
+            },
+            {
+              "text": "Exit",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "Select a weapon to receive:",
+          "responses": [
+            {
+              "text": "Longsword (1d8 slashing)",
+              "getItem": "longsword",
+              "next_step": 0
+            },
+            {
+              "text": "Rapier (1d8 piercing, finesse)",
+              "getItem": "rapier",
+              "next_step": 0
+            },
+            {
+              "text": "Greatsword (2d6 slashing, two-handed)",
+              "getItem": "greatsword",
+              "next_step": 0
+            },
+            {
+              "text": "Shortbow (1d6 piercing, ranged)",
+              "getItem": "shortbow",
+              "next_step": 0
+            }
+          ]
+        },
+        {
+          "message": "Select armor to receive:",
+          "responses": [
+            {
+              "text": "Leather Armor (AC 11 + DEX)",
+              "getItem": "leather_armor",
+              "next_step": 0
+            },
+            {
+              "text": "Chain Mail (AC 16, max DEX +0)",
+              "getItem": "chain_mail",
+              "next_step": 0
+            },
+            {
+              "text": "Plate Armor (AC 18, max DEX +0)",
+              "getItem": "plate_armor",
+              "next_step": 0
+            },
+            {
+              "text": "Shield (+2 AC)",
+              "getItem": "shield",
+              "next_step": 0
+            }
+          ]
+        },
+        {
+          "message": "Select consumables to receive:",
+          "responses": [
+            {
+              "text": "Health Potion (2d4+2 healing)",
+              "getItem": "health_potion",
+              "next_step": 0
+            },
+            {
+              "text": "Greater Health Potion (4d4+4 healing)",
+              "getItem": "greater_health_potion",
+              "next_step": 0
+            },
+            {
+              "text": "Scroll of Fireball (8d6 fire damage)",
+              "getItem": "scroll_fireball",
+              "next_step": 0
+            },
+            {
+              "text": "Back",
+              "next_step": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Return to Hub",
+      "leads_to": "dev_hub",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "Test Equipment in Combat",
+      "leads_to": "combat_test_arena",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
+}

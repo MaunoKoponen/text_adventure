@@ -1,0 +1,35 @@
+{
+  "room_id": "combat_skeleton",
+  "description": "A skeletal warrior raises its ancient blade, empty eye sockets fixed upon you!",
+  "combat": {
+    "enemy_name": "Skeleton Warrior",
+    "enemy_health": 26,
+    "enemyDamage": 8,
+    "combat_actions": ["Attack", "Use Item", "Flee"],
+    "armorClass": 13,
+    "attacks": [
+      {
+        "name": "Shortsword",
+        "attackBonus": 4,
+        "damageDice": "1d6+2",
+        "damageType": "piercing"
+      },
+      {
+        "name": "Shortbow",
+        "attackBonus": 4,
+        "damageDice": "1d6+2",
+        "damageType": "piercing"
+      }
+    ],
+    "vulnerabilities": ["bludgeoning"],
+    "immunities": ["poison"]
+  },
+  "exits": [
+    {
+      "exit_name": "Return to Arena",
+      "leads_to": "combat_test_arena",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
+}

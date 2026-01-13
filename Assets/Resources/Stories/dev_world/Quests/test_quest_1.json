@@ -1,0 +1,56 @@
+{
+  "questId": "test_quest_1",
+  "questName": "The Test Quest",
+  "questDescription": "A quest to test all the quest system mechanics. Collect a Test Item, defeat a goblin, and return to the Quest Giver.",
+  "questGiver": "quest_giver",
+  "questGiverLocation": "quest_test_start",
+  "prerequisiteQuests": [],
+  "prerequisiteFlags": [],
+  "objectives": [
+    {
+      "objectiveId": "collect_test_item",
+      "description": "Collect the Test Item from Location Alpha",
+      "type": "CollectItem",
+      "targetId": "test_item",
+      "targetCount": 1,
+      "currentCount": 0,
+      "isComplete": false,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "defeat_goblin",
+      "description": "Defeat a Goblin in the Combat Arena",
+      "type": "DefeatEnemy",
+      "targetId": "goblin",
+      "targetCount": 1,
+      "currentCount": 0,
+      "isComplete": false,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "return_to_giver",
+      "description": "Return to the Quest Giver",
+      "type": "TalkToNPC",
+      "targetId": "quest_giver",
+      "targetCount": 1,
+      "currentCount": 0,
+      "isComplete": false,
+      "isOptional": false
+    }
+  ],
+  "revealsOnAccept": ["location_alpha"],
+  "revealsOnComplete": ["location_gamma"],
+  "rewards": {
+    "experiencePoints": 50,
+    "gold": 100,
+    "itemIds": ["test_trophy"],
+    "flagsToSet": [
+      {
+        "flagName": "completed_test_quest",
+        "flagValue": "true"
+      }
+    ],
+    "skillPointAwards": []
+  },
+  "state": "NotStarted"
+}

@@ -1,0 +1,96 @@
+{
+  "room_id": "quest_test_start",
+  "description": "You enter the Quest Testing Chamber. A wise-looking NPC stands ready to give you test quests.\n\nThis room tests:\n- Quest acceptance and tracking\n- Objective types (talk, collect, defeat)\n- Quest chains and prerequisites\n- Reward distribution",
+  "npcs": ["quest_giver"],
+  "items": [],
+  "dialogues": [
+    {
+      "npc_name": "quest_giver",
+      "dialogue_image": "quest_room",
+      "dialogues": [
+        {
+          "message": "Greetings, adventurer! I have quests that need completing. Would you like to help?",
+          "responses": [
+            {
+              "text": "Tell me about the Test Quest",
+              "next_step": 1
+            },
+            {
+              "text": "I'm here to complete a quest",
+              "next_step": 2
+            },
+            {
+              "text": "Not right now",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "The Test Quest chain will have you:\n1. Collect a Test Item from Location Alpha\n2. Defeat a goblin in the arena\n3. Return here to complete the quest\n\nWill you accept?",
+          "responses": [
+            {
+              "text": "Accept the quest",
+              "setFlagTrue": "quest_test_active",
+              "questId": "test_quest_1",
+              "next_step": 3
+            },
+            {
+              "text": "Not yet",
+              "next_step": 0
+            }
+          ]
+        },
+        {
+          "message": "Have you completed the Test Quest objectives?",
+          "responses": [
+            {
+              "text": "Yes, I've done everything!",
+              "next_step": 4
+            },
+            {
+              "text": "Not yet",
+              "next_step": 0
+            }
+          ]
+        },
+        {
+          "message": "Excellent! Your quest has begun. Check your diary for objectives. First, go to Location Alpha through the Map Test Room.",
+          "responses": [
+            {
+              "text": "I'll get started",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "Well done! You've completed the Test Quest!\n\nRewards:\n- 100 Gold\n- 50 XP\n- Test Trophy item",
+          "responses": [
+            {
+              "text": "Collect rewards",
+              "setFlagTrue": "quest_test_concluded",
+              "getItem": "test_trophy",
+              "next_step": 5
+            }
+          ]
+        },
+        {
+          "message": "Thank you for testing the quest system! Return anytime to test again.",
+          "responses": [
+            {
+              "text": "You're welcome!",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Return to Hub",
+      "leads_to": "dev_hub",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
+}

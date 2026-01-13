@@ -136,8 +136,19 @@ public class Diary : MonoBehaviour
     
     public QuestLogEntry LoadQuestData(string questID)
     {
-        TextAsset questDataAsset = Resources.Load<TextAsset>("Quests/" + questID);
-        
+        // Try story-specific path first (if StoryManager exists)
+        TextAsset questDataAsset = null;
+        if (StoryManager.Instance != null)
+        {
+            questDataAsset = StoryManager.Instance.LoadQuestData(questID);
+        }
+
+        // Fall back to legacy path
+        if (questDataAsset == null)
+        {
+            questDataAsset = Resources.Load<TextAsset>("Quests/" + questID);
+        }
+
         if (questDataAsset != null)
         {
             QuestLogEntry questData = JsonUtility.FromJson<QuestLogEntry>(questDataAsset.text);

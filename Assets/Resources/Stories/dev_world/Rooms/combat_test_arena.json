@@ -1,0 +1,83 @@
+{
+  "room_id": "combat_test_arena",
+  "description": "You stand in a large circular arena. Stone pillars line the edges, and magical runes glow on the floor. This is the Combat Test Arena - choose your opponent wisely.\n\nAvailable challenges:\n- Goblin (Easy, AC 12, HP 15)\n- Skeleton (Medium, AC 13, HP 26)\n- Ogre (Hard, AC 11, HP 59)\n- Knight (Elite, AC 18, HP 52)",
+  "npcs": ["arena_master"],
+  "items": [],
+  "dialogues": [
+    {
+      "npc_name": "arena_master",
+      "dialogue_image": "combat_arena",
+      "dialogues": [
+        {
+          "message": "Welcome to the Combat Arena! Which opponent would you like to face?",
+          "responses": [
+            {
+              "text": "Fight a Goblin (Easy)",
+              "next_step": 1
+            },
+            {
+              "text": "Fight a Skeleton (Medium)",
+              "next_step": 2
+            },
+            {
+              "text": "Fight an Ogre (Hard)",
+              "next_step": 3
+            },
+            {
+              "text": "Fight a Knight (Elite)",
+              "next_step": 4
+            }
+          ]
+        },
+        {
+          "message": "A goblin scurries into the arena! Prepare yourself!",
+          "responses": [
+            {
+              "text": "Begin combat!",
+              "go_to_room": "combat_goblin",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "Bones rattle as a skeleton rises from the ground!",
+          "responses": [
+            {
+              "text": "Begin combat!",
+              "go_to_room": "combat_skeleton",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "The ground shakes as a massive ogre enters the arena!",
+          "responses": [
+            {
+              "text": "Begin combat!",
+              "go_to_room": "combat_ogre",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "A heavily armored knight strides forward, sword gleaming!",
+          "responses": [
+            {
+              "text": "Begin combat!",
+              "go_to_room": "combat_knight",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Return to Hub",
+      "leads_to": "dev_hub",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
+}

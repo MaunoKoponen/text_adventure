@@ -1,0 +1,27 @@
+{
+  "room_id": "combat_goblin",
+  "description": "A sneaky goblin brandishes a rusty dagger, ready to fight!",
+  "combat": {
+    "enemy_name": "Goblin",
+    "enemy_health": 15,
+    "enemyDamage": 5,
+    "combat_actions": ["Attack", "Use Item", "Flee"],
+    "armorClass": 12,
+    "attacks": [
+      {
+        "name": "Scimitar",
+        "attackBonus": 4,
+        "damageDice": "1d6+2",
+        "damageType": "slashing"
+      }
+    ]
+  },
+  "exits": [
+    {
+      "exit_name": "Return to Arena",
+      "leads_to": "combat_test_arena",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
+}

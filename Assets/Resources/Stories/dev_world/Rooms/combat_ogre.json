@@ -1,0 +1,33 @@
+{
+  "room_id": "combat_ogre",
+  "description": "A massive ogre towers over you, its greatclub dripping with the remains of previous challengers!",
+  "combat": {
+    "enemy_name": "Ogre",
+    "enemy_health": 59,
+    "enemyDamage": 13,
+    "combat_actions": ["Attack", "Use Item", "Flee"],
+    "armorClass": 11,
+    "attacks": [
+      {
+        "name": "Greatclub",
+        "attackBonus": 6,
+        "damageDice": "2d8+4",
+        "damageType": "bludgeoning"
+      },
+      {
+        "name": "Javelin",
+        "attackBonus": 6,
+        "damageDice": "2d6+4",
+        "damageType": "piercing"
+      }
+    ]
+  },
+  "exits": [
+    {
+      "exit_name": "Return to Arena",
+      "leads_to": "combat_test_arena",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
+}

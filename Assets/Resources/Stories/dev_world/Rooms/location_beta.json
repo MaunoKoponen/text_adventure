@@ -1,0 +1,14 @@
+{
+  "room_id": "location_beta",
+  "description": "Location Beta is a serene lakeside clearing. The water reflects the sky perfectly. This location was revealed through the map system.",
+  "npcs": [],
+  "items": [],
+  "exits": [
+    {
+      "exit_name": "Return to Map Test Room",
+      "leads_to": "map_test_room",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "mapId": "dev_region",
+  "regionId": "dev_region",
+  "mapImagePath": "Maps/dev_map",
+  "mapSize": {"x": 800, "y": 600},
+  "pins": [
+    {
+      "locationId": "dev_hub",
+      "displayName": "Development Hub",
+      "position": {"x": 400, "y": 300},
+      "iconSpritePath": "",
+      "iconColor": "#FFD700",
+      "iconScale": 1.5,
+      "alwaysVisible": true,
+      "revealFlag": "",
+      "requiredQuests": [],
+      "connectedLocations": ["combat_test_arena", "equipment_test_room", "map_test_room", "quest_test_start"]
+    },
+    {
+      "locationId": "combat_test_arena",
+      "displayName": "Combat Arena",
+      "position": {"x": 400, "y": 150},
+      "iconSpritePath": "",
+      "iconColor": "#FF4444",
+      "iconScale": 1.0,
+      "alwaysVisible": true,
+      "revealFlag": "",
+      "requiredQuests": [],
+      "connectedLocations": ["dev_hub"]
+    },
+    {
+      "locationId": "equipment_test_room",
+      "displayName": "Equipment Room",
+      "position": {"x": 600, "y": 300},
+      "iconSpritePath": "",
+      "iconColor": "#4444FF",
+      "iconScale": 1.0,
+      "alwaysVisible": true,
+      "revealFlag": "",
+      "requiredQuests": [],
+      "connectedLocations": ["dev_hub"]
+    },
+    {
+      "locationId": "map_test_room",
+      "displayName": "Map Test Room",
+      "position": {"x": 400, "y": 450},
+      "iconSpritePath": "",
+      "iconColor": "#44FF44",
+      "iconScale": 1.0,
+      "alwaysVisible": true,
+      "revealFlag": "",
+      "requiredQuests": [],
+      "connectedLocations": ["dev_hub", "location_alpha", "location_beta"]
+    },
+    {
+      "locationId": "quest_test_start",
+      "displayName": "Quest Chamber",
+      "position": {"x": 200, "y": 300},
+      "iconSpritePath": "",
+      "iconColor": "#FF44FF",
+      "iconScale": 1.0,
+      "alwaysVisible": true,
+      "revealFlag": "",
+      "requiredQuests": [],
+      "connectedLocations": ["dev_hub"]
+    },
+    {
+      "locationId": "location_alpha",
+      "displayName": "Location Alpha",
+      "position": {"x": 550, "y": 500},
+      "iconSpritePath": "",
+      "iconColor": "#AAAAAA",
+      "iconScale": 1.0,
+      "alwaysVisible": false,
+      "revealFlag": "location_alpha",
+      "requiredQuests": [],
+      "connectedLocations": ["map_test_room"]
+    },
+    {
+      "locationId": "location_beta",
+      "displayName": "Location Beta",
+      "position": {"x": 250, "y": 500},
+      "iconSpritePath": "",
+      "iconColor": "#AAAAAA",
+      "iconScale": 1.0,
+      "alwaysVisible": false,
+      "revealFlag": "location_beta",
+      "requiredQuests": [],
+      "connectedLocations": ["map_test_room"]
+    }
+  ],
+  "paths": [
+    {
+      "pathId": "hub_to_arena",
+      "fromLocationId": "dev_hub",
+      "toLocationId": "combat_test_arena",
+      "style": "Solid",
+      "pathWidth": 3.0,
+      "pathColor": "#FFFFFF",
+      "visibleWhenBothRevealed": true
+    },
+    {
+      "pathId": "hub_to_equipment",
+      "fromLocationId": "dev_hub",
+      "toLocationId": "equipment_test_room",
+      "style": "Solid",
+      "pathWidth": 3.0,
+      "pathColor": "#FFFFFF",
+      "visibleWhenBothRevealed": true
+    },
+    {
+      "pathId": "hub_to_map",
+      "fromLocationId": "dev_hub",
+      "toLocationId": "map_test_room",
+      "style": "Solid",
+      "pathWidth": 3.0,
+      "pathColor": "#FFFFFF",
+      "visibleWhenBothRevealed": true
+    },
+    {
+      "pathId": "hub_to_quest",
+      "fromLocationId": "dev_hub",
+      "toLocationId": "quest_test_start",
+      "style": "Solid",
+      "pathWidth": 3.0,
+      "pathColor": "#FFFFFF",
+      "visibleWhenBothRevealed": true
+    },
+    {
+      "pathId": "map_to_alpha",
+      "fromLocationId": "map_test_room",
+      "toLocationId": "location_alpha",
+      "style": "Dotted",
+      "pathWidth": 2.0,
+      "pathColor": "#888888",
+      "visibleWhenBothRevealed": true
+    },
+    {
+      "pathId": "map_to_beta",
+      "fromLocationId": "map_test_room",
+      "toLocationId": "location_beta",
+      "style": "Dotted",
+      "pathWidth": 2.0,
+      "pathColor": "#888888",
+      "visibleWhenBothRevealed": true
+    }
+  ]
+}

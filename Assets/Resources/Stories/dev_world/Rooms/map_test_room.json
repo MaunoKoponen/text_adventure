@@ -1,0 +1,95 @@
+{
+  "room_id": "map_test_room",
+  "description": "You stand in the Cartographer's Testing Chamber. Maps and charts cover every surface. From here, you can test map visibility mechanics and location reveals.\n\nCurrent map features to test:\n- Location reveal via flags\n- Quest-based location reveals\n- Fast travel functionality",
+  "npcs": ["cartographer"],
+  "items": [],
+  "dialogues": [
+    {
+      "npc_name": "cartographer",
+      "dialogue_image": "map_room",
+      "dialogues": [
+        {
+          "message": "Greetings, traveler! I can help you test the map system. What would you like to do?",
+          "responses": [
+            {
+              "text": "Reveal Location Alpha",
+              "setFlagTrue": "location_alpha",
+              "next_step": 1
+            },
+            {
+              "text": "Reveal Location Beta",
+              "setFlagTrue": "location_beta",
+              "next_step": 2
+            },
+            {
+              "text": "Reveal Location Gamma",
+              "setFlagTrue": "location_gamma",
+              "next_step": 3
+            },
+            {
+              "text": "Reveal All Locations",
+              "setFlagTrue": "debug_reveal_all_map",
+              "next_step": 4
+            }
+          ]
+        },
+        {
+          "message": "Location Alpha has been revealed on your map!",
+          "responses": [
+            {
+              "text": "Continue",
+              "next_step": 0
+            }
+          ]
+        },
+        {
+          "message": "Location Beta has been revealed on your map!",
+          "responses": [
+            {
+              "text": "Continue",
+              "next_step": 0
+            }
+          ]
+        },
+        {
+          "message": "Location Gamma has been revealed on your map!",
+          "responses": [
+            {
+              "text": "Continue",
+              "next_step": 0
+            }
+          ]
+        },
+        {
+          "message": "All locations have been revealed on your map!",
+          "responses": [
+            {
+              "text": "Continue",
+              "next_step": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Return to Hub",
+      "leads_to": "dev_hub",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "Go to Location Alpha",
+      "leads_to": "location_alpha",
+      "conditions": ["location_alpha"],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "Go to Location Beta",
+      "leads_to": "location_beta",
+      "conditions": ["location_beta"],
+      "conditions_not": []
+    }
+  ]
+}

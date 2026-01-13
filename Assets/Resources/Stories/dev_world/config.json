@@ -1,0 +1,28 @@
+{
+  "storyId": "dev_world",
+  "storyName": "Development Test World",
+  "storyDescription": "A test world for developing and testing game systems.",
+  "author": "Developer",
+  "version": "1.0",
+  "startingRoom": "dev_hub",
+  "startingGold": 1000,
+  "startingHealth": 100,
+  "startingItems": ["health_potion", "sword"],
+  "startingFlags": [
+    {"flagName": "debug_mode", "flagValue": "true"}
+  ],
+  "useEnhancedCombat": true,
+  "startingAbilityScores": {
+    "strength": 14,
+    "dexterity": 12,
+    "constitution": 14,
+    "intelligence": 10,
+    "wisdom": 10,
+    "charisma": 10
+  },
+  "defaultMapId": "dev_region",
+  "defaultRegionId": "dev_region",
+  "allowFastTravel": true,
+  "showMinimap": true,
+  "enableDebugCommands": true
+}

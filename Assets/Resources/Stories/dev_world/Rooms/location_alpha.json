@@ -1,0 +1,53 @@
+{
+  "room_id": "location_alpha",
+  "description": "You've reached Location Alpha - a hidden grove revealed through the map system. A glowing Test Item sits on a pedestal.",
+  "npcs": [],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "take_test_item",
+      "flag_false": "has_test_item",
+      "action_description": "Take the Test Item"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "take_test_item",
+      "dialogue_image": "location_alpha",
+      "dialogues": [
+        {
+          "message": "You see a glowing Test Item on the pedestal. This is what the quest giver asked you to collect.",
+          "responses": [
+            {
+              "text": "Take the Test Item",
+              "setFlagTrue": "has_test_item",
+              "getItem": "test_item",
+              "next_step": 1
+            },
+            {
+              "text": "Leave it for now",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "You've collected the Test Item! Return to the Quest Giver to continue the chain.",
+          "responses": [
+            {
+              "text": "Continue",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Return to Map Test Room",
+      "leads_to": "map_test_room",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
+}

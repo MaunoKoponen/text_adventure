@@ -1,0 +1,100 @@
+{
+  "room_id": "dev_hub",
+  "description": "Welcome to the Development Hub! This is the central testing area for all game systems. Portals shimmer around you, each leading to a different test zone.\n\nNorth: Combat Test Arena - Test various enemy types and combat mechanics\nEast: Equipment Test Room - Test weapons, armor, and equipment\nSouth: Map Test Room - Test map reveals and navigation\nWest: Quest Test Start - Test quest chains and objectives",
+  "npcs": ["debug_console"],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "heal_full",
+      "action_description": "[DEBUG] Restore Full Health"
+    },
+    {
+      "action_id": "get_gold",
+      "action_description": "[DEBUG] Get 1000 Gold"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "debug_console",
+      "dialogue_image": "dev_hub",
+      "dialogues": [
+        {
+          "message": "DEBUG CONSOLE ACTIVE\n\nSelect a debug action:",
+          "responses": [
+            {
+              "text": "Heal to full HP",
+              "setFlagTrue": "debug_healed",
+              "next_step": 1
+            },
+            {
+              "text": "Add 500 gold",
+              "next_step": 2
+            },
+            {
+              "text": "Reveal all map locations",
+              "setFlagTrue": "debug_reveal_all_map",
+              "next_step": 3
+            },
+            {
+              "text": "Exit console",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "Health restored to maximum!",
+          "responses": [
+            {
+              "text": "Continue",
+              "next_step": 0
+            }
+          ]
+        },
+        {
+          "message": "Added 500 gold to your inventory!",
+          "responses": [
+            {
+              "text": "Continue",
+              "next_step": 0
+            }
+          ]
+        },
+        {
+          "message": "All map locations are now revealed!",
+          "responses": [
+            {
+              "text": "Continue",
+              "next_step": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Combat Test Arena",
+      "leads_to": "combat_test_arena",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "Equipment Test Room",
+      "leads_to": "equipment_test_room",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "Map Test Room",
+      "leads_to": "map_test_room",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "Quest Test Start",
+      "leads_to": "quest_test_start",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ]
+}

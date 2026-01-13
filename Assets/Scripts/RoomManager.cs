@@ -16,16 +16,16 @@ public class RoomManager : MonoBehaviour
     public TMP_Text flagsText;
     public TMP_Text healthText;
 
-    
+
     public GameObject actionButtonPrefab;
     public GameObject combatInventoryPrefab;
 
-    
+
     public Transform actionButtonContainer;
     public Transform itemButtonContainer;
 
     public Narrator narrator;
-    
+
     private Room currentRoom;
     private string previousRoom;
     private string respawnRoom;
@@ -35,7 +35,7 @@ public class RoomManager : MonoBehaviour
     private int currentDialogueStep = -1;
     private string currentNPC = "";
 
-    
+
     private List<string> combatLog = new List<string>();
 
     public Diary diary;
@@ -43,22 +43,84 @@ public class RoomManager : MonoBehaviour
 
     public ShopView shopView;
     public SettingsUI settingsUI;
+
+    // Enhanced combat system
+    private CombatManager combatManager;
+    private bool useEnhancedCombat = false;
     
     void SetHealth(int value)
     {
-        playerData.health = value;
-        healthText.text = value.ToString();
+        playerData.CurrentHP = value;
+        UpdateHealthDisplay();
+    }
+
+    void UpdateHealthDisplay()
+    {
+        if (playerData.UsesEnhancedStats)
+        {
+            healthText.text = $"{playerData.stats.currentHitPoints}/{playerData.stats.maxHitPoints}";
+        }
+        else
+        {
+            healthText.text = playerData.health.ToString();
+        }
     }
 
     private void Awake()
     {
         Diary = diary;
+
+        // Initialize CombatManager
+        combatManager = FindObjectOfType<CombatManager>();
+        if (combatManager == null)
+        {
+            // Create CombatManager if it doesn't exist
+            var go = new GameObject("CombatManager");
+            combatManager = go.AddComponent<CombatManager>();
+        }
+
+        // Subscribe to combat events
+        combatManager.OnCombatLog += OnCombatLogEntry;
+        combatManager.OnCombatEnded += OnCombatEnded;
+    }
+
+    private void OnDestroy()
+    {
+        if (combatManager != null)
+        {
+            combatManager.OnCombatLog -= OnCombatLogEntry;
+            combatManager.OnCombatEnded -= OnCombatEnded;
+        }
+    }
+
+    private void OnCombatLogEntry(CombatLogEntry entry)
+    {
+        combatLog.Add(entry.message);
+        DisplayRoomInfo("");
+    }
+
+    private void OnCombatEnded(bool victory)
+    {
+        if (victory)
+        {
+            ClearCombatLog();
+            currentRoom.combat = null;
+            DisplayRoomInfo("");
+        }
+        else
+        {
+            // Player defeated
+            ClearCombatLog();
+            currentRoom.combat = null;
+            SetHealth(0);
+            playerData.SetFlag("Dead", "true");
+            LoadRoomFromJson(respawnRoom, "You wake up from an odd dream.\n");
+        }
+        UpdateHealthDisplay();
     }
 
     void Start()
     {
-        
-        
         // Example initialization
         SetHealth(500);
         /*
@@ -103,8 +165,32 @@ public class RoomManager : MonoBehaviour
         SaveGameManager.SaveGame(playerData);
         
         Debug.Log(">>>>> LoadRoomFromJSON: " + roomId);
-        
-        TextAsset roomData = Resources.Load<TextAsset>("Rooms/" + roomId);
+
+        // Try story-specific path first (if StoryManager exists)
+        TextAsset roomData = null;
+        if (StoryManager.Instance != null && StoryManager.Instance.IsStoryLoaded)
+        {
+            Debug.Log($"[RoomManager] StoryManager active, story: {StoryManager.Instance.CurrentStoryId}");
+            roomData = StoryManager.Instance.LoadRoomData(roomId);
+            if (roomData != null)
+            {
+                Debug.Log($"[RoomManager] Loaded room from story path");
+            }
+        }
+        else
+        {
+            Debug.Log("[RoomManager] StoryManager not active, using legacy path");
+        }
+
+        // Fall back to legacy path
+        if (roomData == null)
+        {
+            roomData = Resources.Load<TextAsset>("Rooms/" + roomId);
+            if (roomData != null)
+            {
+                Debug.Log($"[RoomManager] Loaded room from legacy path: Rooms/{roomId}");
+            }
+        }
 
         if (roomData != null)
         {
@@ -159,24 +245,69 @@ public class RoomManager : MonoBehaviour
     
     private void HandleCombatAction(string action)
     {
-        if ( playerData.health <= 0)
+        // Use enhanced combat system if player has enhanced stats
+        if (useEnhancedCombat && combatManager != null && combatManager.IsInCombat)
+        {
+            HandleEnhancedCombatAction(action);
+            return;
+        }
+
+        // Legacy combat system (backward compatible)
+        HandleLegacyCombatAction(action);
+    }
+
+    private void HandleEnhancedCombatAction(string action)
+    {
+        if (action == "Attack")
+        {
+            combatManager.PlayerAttack();
+            UpdateHealthDisplay();
+        }
+        else if (action == "Flee")
+        {
+            if (combatManager.PlayerFlee())
+            {
+                LoadRoomFromJson(previousRoom, "You cowardly flee from the Battle!\n");
+            }
+        }
+        else if (action == "Use Item")
+        {
+            ToggleCombatInventory(true);
+            foreach (var item in playerData.Inventory)
+            {
+                CreateInventoryButton(item.shortDescription, () =>
+                {
+                    ToggleCombatInventory(false);
+                    combatManager.PlayerUseItem(item);
+                    UpdateHealthDisplay();
+                    DisplayRoomInfo("");
+                });
+            }
+
+            CreateInventoryButton("Back", () =>
+            {
+                ToggleCombatInventory(false);
+                combatLog.Add("You stopped rummaging through your bag...");
+                DisplayRoomInfo("");
+            });
+        }
+    }
+
+    private void HandleLegacyCombatAction(string action)
+    {
+        if (playerData.health <= 0)
         {
             Debug.Log(">>>>> HandleCombatAction  Player health  zero!");
         }
 
         int totalDamage = 15; //player.equippedWeapon.damageAmount;
-        
+
         // Assuming 'player' is an instance of PlayerStats
         if (action == "Attack")
         {
-
             combatLog.Add($"You attacked the {currentRoom.combat.enemy_name} for {totalDamage} damage!");
-
             currentRoom.combat.enemy_health -= totalDamage;
-
             combatLog.Add($" Enemy health is now {currentRoom.combat.enemy_health}");
-
-            //Debug.Log("enemy health: " + currentRoom.combat.enemy_health);
         }
 
         if (action == "Flee")
@@ -187,7 +318,7 @@ public class RoomManager : MonoBehaviour
             LoadRoomFromJson(previousRoom, "You cowardly flee from the Battle!\n");
             return;
         }
-        
+
         if (action == "Use Item")
         {
             ToggleCombatInventory(true);
@@ -197,7 +328,7 @@ public class RoomManager : MonoBehaviour
                 CreateInventoryButton(item.shortDescription, () =>
                 {
                     ToggleCombatInventory(false);
-                    
+
                     if (!item.stacking)
                     {
                         playerData.RemoveItem(item);
@@ -207,8 +338,6 @@ public class RoomManager : MonoBehaviour
                         playerData.DecreaseStackSize(item, 1);
                     }
 
-                    // TODO: check if usage possible (for example if target has immunity)
-                    
                     if (item.target == Item.Target.Self)
                     {
                         if (item.effectType == Item.EffectType.Heal)
@@ -216,33 +345,30 @@ public class RoomManager : MonoBehaviour
                             playerData.health += item.effectAmount;
                             combatLog.Add("\n" + item.usageSuccess);
                             combatLog.Add("your health is now " + playerData.health);
-
                         }
-                    }    
-                    
+                    }
+
                     if (item.target == Item.Target.NPC)
                     {
                         if (item.effectType == Item.EffectType.Damage)
                         {
                             currentRoom.combat.enemy_health -= item.effectAmount;
-                    
                             combatLog.Add("\n" + item.usageSuccess);
                             combatLog.Add($" Enemy health is now {currentRoom.combat.enemy_health}");
                         }
                     }
-                    
+
                     DisplayRoomInfo(""); // Refresh the UI
-                    
                 });
             }
-            
+
             CreateInventoryButton("Back", () =>
             {
                 ToggleCombatInventory(false);
                 combatLog.Add("You stopped rummaging through you bag...");
             });
         }
-        
+
         // Check if the enemy is defeated
         if (currentRoom.combat.enemy_health <= 0)
         {
@@ -253,7 +379,7 @@ public class RoomManager : MonoBehaviour
             DisplayRoomInfo("");
             return; // Refresh the UI
         }
-        else if(currentRoom.combat.enemy_health > 0)
+        else if (currentRoom.combat.enemy_health > 0)
         {
             EnemyAttack();
         }

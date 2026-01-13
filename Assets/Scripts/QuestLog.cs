@@ -10,6 +10,7 @@ public class QuestLogEntry
     public bool IsCompleted;
 }
 
+[Serializable]
 public class QuestLog
 {
     public List<QuestLogEntry> Entries = new List<QuestLogEntry>();
