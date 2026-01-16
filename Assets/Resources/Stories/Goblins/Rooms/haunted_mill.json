@@ -1,0 +1,60 @@
+{
+  "room_id": "haunted_mill",
+  "description": "The old windmill on the edge of town stands as a crumbling testament to the town's better days. Its once-proud sails now hang in tatters, and an uneasy silence permeates the area, as if the very air holds its breath in anticipation of some unseen menace. The wooden beams creak ominously, and shadows seem to shift and move in the corners of your vision, giving the impression that the mill itself is alive and watching you. The ground is strewn with debris and overgrown with weeds, and the whole place has an air of abandonment and decay.",
+  "npcs": ["dilapidated_miller"],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "examine_mill",
+      "action_description": "Examine the dilapidated mill more closely"
+    },
+    {
+      "action_id": "climb_stairs",
+      "action_description": "Carefully climb the creaking stairs to the upper level"
+    },
+    {
+      "action_id": "search_debris",
+      "action_description": "Search through the piles of debris and overgrowth for anything of interest"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "Dilapidated Miller",
+      "dialogue_image": "npc_default",
+      "dialogues": [
+        {
+          "message": "Ah, a visitor. What brings you to this forsaken place? The mill has stood silent for years, a hollow shell of its former self. The townsfolk avoid it, claiming it is haunted by the restless spirits of those who once worked here. I, however, know the truth. The real ghosts are the memories of what this place once was.",
+          "responses": [
+            {
+              "text": "What happened here?",
+              "next_step": 1
+            },
+            {
+              "text": "Goodbye",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "This mill was the heart of our town, powering the forges and mills that made us prosperous. But that was before the gnome king's armies came and destroyed everything. They burned the crops, slaughtered the livestock, and left us to starve. The mill was abandoned, and the once-proud sails now hang in tatters, a sad reminder of what we've lost.",
+          "responses": [
+            {
+              "text": "I'm sorry to hear that. Is there anything I can do to help?",
+              "next_step": 2
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "North",
+      "leads_to": "town_square",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ],
+  "combat": null,
+  "events": []
+}

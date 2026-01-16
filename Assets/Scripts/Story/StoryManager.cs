@@ -24,6 +24,7 @@ public class StoryManager : MonoBehaviour
     private Dictionary<string, TextAsset> questCache = new Dictionary<string, TextAsset>();
     private Dictionary<string, TextAsset> mapCache = new Dictionary<string, TextAsset>();
     private Dictionary<string, TextAsset> enemyCache = new Dictionary<string, TextAsset>();
+    private Dictionary<string, Item> itemCache = new Dictionary<string, Item>();
 
     private void Awake()
     {
@@ -214,6 +215,58 @@ public class StoryManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Load item data, checking story folder first then falling back to legacy.
+    /// Returns parsed Item object (cached).
+    /// </summary>
+    public Item LoadItemData(string itemId)
+    {
+        // Check cache first
+        if (itemCache.TryGetValue(itemId, out Item cached))
+        {
+            return cached;
+        }
+
+        TextAsset asset = null;
+
+        // Try story-specific path first
+        if (CurrentStory != null)
+        {
+            string storyPath = GetStoryPath("Items", itemId);
+            asset = Resources.Load<TextAsset>(storyPath);
+        }
+
+        // Fall back to common Items folder
+        if (asset == null)
+        {
+            asset = Resources.Load<TextAsset>($"Items/{itemId}");
+        }
+
+        if (asset == null)
+        {
+            return null;
+        }
+
+        // Parse JSON to Item
+        try
+        {
+            Item item = JsonUtility.FromJson<Item>(asset.text);
+            if (item != null)
+            {
+                // Ensure itemId is set
+                if (string.IsNullOrEmpty(item.itemId))
+                    item.itemId = itemId;
+                itemCache[itemId] = item;
+            }
+            return item;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to parse item {itemId}: {e.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Load a story-specific sprite/image.
     /// </summary>
     public Sprite LoadStorySprite(string spritePath)
@@ -345,6 +398,7 @@ public class StoryManager : MonoBehaviour
         questCache.Clear();
         mapCache.Clear();
         enemyCache.Clear();
+        itemCache.Clear();
     }
 
     /// <summary>

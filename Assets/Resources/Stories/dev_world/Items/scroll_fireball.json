@@ -1,0 +1,17 @@
+{
+  "itemId": "scroll_fireball",
+  "shortDescription": "Scroll of Fireball",
+  "description": "A magical scroll inscribed with the fireball spell. Deals 8d6 fire damage to enemies.",
+  "usageSuccess": "You read the scroll and a massive ball of fire erupts from your hands!",
+  "usageFail": "The magical words fail to form on your lips.",
+  "category": "scroll",
+  "effectType": 0,
+  "effectAmount": 60,
+  "target": 0,
+  "stacking": false,
+  "maxStack": 1,
+  "buyPrice": 500,
+  "sellPrice": 250,
+  "image": "scroll_red",
+  "combatUsable": true
+}

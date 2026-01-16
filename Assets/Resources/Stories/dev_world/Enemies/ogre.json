@@ -1,0 +1,66 @@
+{
+  "enemyId": "ogre",
+  "enemyName": "Ogre",
+  "description": "A massive, dim-witted brute with tremendous strength and a hunger for anything it can catch.",
+  "armorClass": 11,
+  "maxHitPoints": 59,
+  "currentHitPoints": 59,
+  "challengeRating": 2,
+  "initiativeBonus": -1,
+  "behavior": "Aggressive",
+  "fleeThresholdPercent": 10,
+  "imagePath": "enemies/ogre",
+  "abilities": {
+    "Strength": 19,
+    "Dexterity": 8,
+    "Constitution": 16,
+    "Intelligence": 5,
+    "Wisdom": 7,
+    "Charisma": 7
+  },
+  "attacks": [
+    {
+      "attackName": "Greatclub",
+      "attackBonus": 6,
+      "damageDiceNotation": "2d8+4",
+      "damageType": "Bludgeoning",
+      "description": "The ogre swings its massive club with devastating force!"
+    },
+    {
+      "attackName": "Javelin",
+      "attackBonus": 6,
+      "damageDiceNotation": "2d6+4",
+      "damageType": "Piercing",
+      "description": "The ogre hurls a javelin!"
+    }
+  ],
+  "immunities": [],
+  "resistances": [],
+  "vulnerabilities": [],
+  "conditionImmunities": [],
+  "lootTable": {
+    "goldMin": 15,
+    "goldMax": 40,
+    "guaranteedItems": [],
+    "items": [
+      {
+        "itemId": "ogre_tooth",
+        "dropChance": 30,
+        "minQuantity": 1,
+        "maxQuantity": 2
+      },
+      {
+        "itemId": "health_potion",
+        "dropChance": 20,
+        "minQuantity": 1,
+        "maxQuantity": 1
+      },
+      {
+        "itemId": "greatclub",
+        "dropChance": 10,
+        "minQuantity": 1,
+        "maxQuantity": 1
+      }
+    ]
+  }
+}

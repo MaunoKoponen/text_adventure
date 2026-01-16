@@ -21,14 +21,15 @@ public class ShopView : MonoBehaviour
     
     public Transform shopButtonContainer;
 
-    public List<Item> shopInventory  = new List<Item>();
-    
+    public List<Item> shopInventory = new List<Item>();
+
     public RoomManager roomManager;
-    //private PlayerData playerData;
     public Button ExitButton;
     public Button BuyButton;
+    public Button SellButton;  // New: Sell button
 
     private Item selectedItem;
+    private string selectedItemId;  // Track itemId for inventory operations
     private bool selectedIsOwnItem;
 
     private List<GameObject> shopItemGOs = new List<GameObject>();
@@ -36,6 +37,8 @@ public class ShopView : MonoBehaviour
     {
         ExitButton.onClick.AddListener(CloseView);
         BuyButton.onClick.AddListener(BuyItem);
+        if (SellButton != null)
+            SellButton.onClick.AddListener(SellItem);
     }
     
     
@@ -64,21 +67,32 @@ public class ShopView : MonoBehaviour
 
     public void CreateInventory()
     {
-        foreach (var item in RoomManager.playerData.Inventory)
+        foreach (var slot in RoomManager.playerData.Inventory)
         {
-            CreateInventoryButton(item,actionButtonContainer, () =>
+            Item item = slot.GetItem();
+            if (item == null) continue;
+
+            // Capture for closure
+            var currentSlot = slot;
+            var currentItem = item;
+
+            CreateInventoryButton(currentItem, currentSlot.quantity, actionButtonContainer, () =>
             {
-                selectedItem = item;
+                selectedItem = currentItem;
+                selectedItemId = currentSlot.itemId;
                 selectedIsOwnItem = true;
-                description.text = item.description;
-                name.text = item.shortDescription;
-                string path = "InventoryItems/" + item.image;
+
+                description.text = currentItem.description;
+                name.text = currentSlot.quantity > 1
+                    ? $"{currentItem.shortDescription} x{currentSlot.quantity}"
+                    : currentItem.shortDescription;
+                string path = "InventoryItems/" + currentItem.image;
                 image.sprite = Resources.Load<Sprite>(path);
+                price.text = $"Sell: {currentItem.sellPrice}";
 
                 coins.text = RoomManager.playerData.coins.ToString();
-                
-                SetBuyButton();
 
+                SetBuyButton();
             });
         }
 
@@ -89,70 +103,107 @@ public class ShopView : MonoBehaviour
     {
         foreach (var item in shopInventory)
         {
-             GameObject go = CreateInventoryButton(item, shopButtonContainer,() =>
+            if (item == null) continue;
+
+            // Capture for closure
+            var currentItem = item;
+
+            GameObject go = CreateInventoryButton(currentItem, 1, shopButtonContainer, () =>
             {
-                selectedItem = item;
+                selectedItem = currentItem;
+                selectedItemId = currentItem.itemId;
                 selectedIsOwnItem = false;
-                
-                description.text = item.description;
-                name.text = item.shortDescription;
-                string path = "InventoryItems/" + item.image;
+
+                description.text = currentItem.description;
+                name.text = currentItem.shortDescription;
+                string path = "InventoryItems/" + currentItem.image;
                 image.sprite = Resources.Load<Sprite>(path);
-                price.text = "Price: " + item.buyPrice.ToString();
-                
+                price.text = $"Buy: {currentItem.buyPrice}";
+
                 SetBuyButton();
             });
-             
-             shopItemGOs.Add(go);
+
+            shopItemGOs.Add(go);
         }
     }
 
 
     private void SetBuyButton()
     {
-        if (selectedIsOwnItem)
+        if (selectedItem == null)
         {
             BuyButton.gameObject.SetActive(false);
+            if (SellButton != null) SellButton.gameObject.SetActive(false);
+            return;
+        }
+
+        if (selectedIsOwnItem)
+        {
+            // Player's item selected - show Sell, hide Buy
+            BuyButton.gameObject.SetActive(false);
+
+            if (SellButton != null)
+            {
+                SellButton.gameObject.SetActive(true);
+                SellButton.interactable = true;
+            }
         }
         else
         {
+            // Shop item selected - show Buy, hide Sell
+            if (SellButton != null) SellButton.gameObject.SetActive(false);
             BuyButton.gameObject.SetActive(true);
 
             Debug.Log("PlayerData coins " + RoomManager.playerData.coins);
-            
+
             if (selectedItem.buyPrice <= RoomManager.playerData.coins)
             {
-                Debug.Log("Enable");
+                Debug.Log("Enable Buy");
                 BuyButton.interactable = true;
             }
             else
             {
-                
-                Debug.Log("Disable");
+                Debug.Log("Disable Buy - insufficient funds");
                 BuyButton.interactable = false;
             }
-                
         }
     }
-    
+
     void BuyItem()
     {
-        //selectedItem.
-        RoomManager.playerData.AddItem(selectedItem);
+        if (selectedItem == null || string.IsNullOrEmpty(selectedItemId)) return;
+
+        RoomManager.playerData.AddItem(selectedItemId);
         RoomManager.playerData.coins -= selectedItem.buyPrice;
-        //selectedItem = null;
-        //selectedIsOwnItem = false; // ??
-        //image.sprite = null;
-        
+
+        RefreshUI();
+    }
+
+    void SellItem()
+    {
+        if (selectedItem == null || string.IsNullOrEmpty(selectedItemId)) return;
+
+        RoomManager.playerData.coins += selectedItem.sellPrice;
+        RoomManager.playerData.RemoveItem(selectedItemId);
+
+        // Clear selection since item is gone
+        selectedItem = null;
+        selectedItemId = null;
+
+        RefreshUI();
+    }
+
+    void RefreshUI()
+    {
         ResetInventory();
         CreateInventory();
-        SetBuyButton(); // to refresh the "has enough money" status
+        coins.text = RoomManager.playerData.coins.ToString();
+        SetBuyButton();
     }
-    
-    
+
     void UpdateInventory()
     {
-        // todo
+        RefreshUI();
     }
 
     public void ResetInventory()
@@ -164,22 +215,23 @@ public class ShopView : MonoBehaviour
     }
 
 
-    GameObject CreateInventoryButton(Item item, Transform container, UnityAction callback )
+    GameObject CreateInventoryButton(Item item, int quantity, Transform container, UnityAction callback)
     {
-
         GameObject buttonObj = Instantiate(actionButtonPrefab, container);
         Button buttonComponent = buttonObj.GetComponent<Button>();
         buttonComponent.onClick.AddListener(callback);
         TMP_Text buttonText = buttonObj.GetComponentInChildren<TMP_Text>();
         if (buttonText)
         {
-            buttonText.text = item.shortDescription;
+            // Show quantity for stacked items
+            buttonText.text = quantity > 1
+                ? $"{item.shortDescription} x{quantity}"
+                : item.shortDescription;
         }
 
-        Debug.Log(" item " + item + "  " + item.image);        
+        Debug.Log($"Item: {item.shortDescription} x{quantity}, image: {item.image}");
         string path = "InventoryItems/" + item.image;
-        //image.sprite = Resources.Load<Sprite>(path);
-        
+
         buttonComponent.GetComponent<Image>().sprite = Resources.Load<Sprite>(path);
 
         return buttonObj;

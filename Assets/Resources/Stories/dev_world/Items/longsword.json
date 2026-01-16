@@ -1,0 +1,17 @@
+{
+  "itemId": "longsword",
+  "shortDescription": "Longsword",
+  "description": "A reliable one-handed sword with good balance. Deals 1d8 slashing damage.",
+  "usageSuccess": "You strike with the longsword!",
+  "usageFail": "Your swing misses.",
+  "category": "weapon",
+  "effectType": 0,
+  "effectAmount": 8,
+  "target": 0,
+  "stacking": false,
+  "maxStack": 1,
+  "buyPrice": 15,
+  "sellPrice": 7,
+  "image": "sword_iron",
+  "combatUsable": false
+}

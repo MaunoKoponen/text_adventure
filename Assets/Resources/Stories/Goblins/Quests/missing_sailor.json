@@ -1,0 +1,60 @@
+{
+  "questId": "missing_sailor",
+  "questName": "Search for the Missing Sailor",
+  "questDescription": "A distraught sailor approaches you, their eyes wild with fear. 'Please, you must help me!' they cry. 'My crewmate went missing near the Haunted Mill and I fear the worst.' The sailor's trembling hands grasp yours, pleading for your assistance in unraveling this grim mystery.",
+  "questGiver": "worried_sailor",
+  "questGiverLocation": "docks",
+  "questType": "Side",
+  "chapterNumber": 1,
+  "difficulty": 2,
+  "prerequisiteQuests": [],
+  "prerequisiteFlags": [],
+  "objectives": [
+    {
+      "objectiveId": "visit_haunted_mill",
+      "description": "Make your way to the ominous Haunted Mill, where the missing sailor was last seen.",
+      "type": "GoToRoom",
+      "targetId": "haunted_mill",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "search_for_clues",
+      "description": "Scour the Haunted Mill for any sign of the missing sailor or clues to their disappearance.",
+      "type": "CollectItem",
+      "targetId": "crewmate_journal",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "confront_the_culprit",
+      "description": "Descend into the Haunted Mill's dark basement, where a sinister force responsible for the sailor's disappearance lurks.",
+      "type": "DefeatEnemy",
+      "targetId": "mill_ghost",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "return_to_worried_sailor",
+      "description": "Bring the crewmate's journal back to the distraught sailor, offering them closure and the chance to properly mourn their lost friend.",
+      "type": "DeliverItem",
+      "targetId": "worried_sailor",
+      "targetCount": 1,
+      "isOptional": false
+    }
+  ],
+  "revealsOnAccept": ["haunted_mill"],
+  "revealsOnComplete": [],
+  "rewards": {
+    "experiencePoints": 150,
+    "gold": 75,
+    "itemIds": [],
+    "flagsToSet": [
+      {
+        "flagName": "quest_missing_sailor_complete",
+        "flagValue": "true"
+      }
+    ]
+  },
+  "state": "NotStarted"
+}

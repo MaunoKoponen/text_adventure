@@ -1,0 +1,33 @@
+{
+  "enemyId": "haunted_spectre",
+  "enemyName": "Haunted Spectre",
+  "description": "Eerie and malevolent, these ghostly apparitions haunt the Haunted Mill, lashing out at any who dare to trespass on their domain.",
+  "enemyImage": "enemy_default",
+  "maxHitPoints": 80,
+  "currentHitPoints": 80,
+  "armorClass": 12,
+  "experienceValue": 100,
+  "goldDrop": 40,
+  "attacks": [
+    {
+      "attackName": "Ghostly Claw",
+      "attackDescription": "The spectre's clawed hand lashes out, draining the life force of its victim.",
+      "damageMin": 15,
+      "damageMax": 19,
+      "hitBonus": 4
+    },
+    {
+      "attackName": "Icy Grasp",
+      "attackDescription": "The spectre's icy touch freezes the blood in the veins of its target.",
+      "damageMin": 17,
+      "damageMax": 22,
+      "hitBonus": 3
+    }
+  ],
+  "lootTable": [
+    {
+      "itemId": "health_potion",
+      "dropChance": 0.3
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "questId": "secure_the_harbor",
+  "questName": "Secure the Harbor",
+  "questDescription": "The war between the human and gnome kings has disrupted the vital operations of the Blackwater harbor, the region's main port and economic lifeline. Tensions are high as rival factions vie for control, threatening to cripple the flow of trade. As the situation deteriorates, the mayor of Blackwater pleads for the player's help in restoring order and securing the harbor's future.",
+  "questGiver": "mayor_blackwater",
+  "questGiverLocation": "blackwater_town_hall",
+  "questType": "Main",
+  "chapterNumber": 1,
+  "difficulty": 5,
+  "prerequisiteQuests": [],
+  "prerequisiteFlags": [],
+  "objectives": [
+    {
+      "objectiveId": "investigate_harbor_situation",
+      "description": "Speak with the harbor master to assess the current state of the Blackwater harbor and the challenges it faces.",
+      "type": "TalkToNPC",
+      "targetId": "harbor_master",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "negotiate_with_factions",
+      "description": "Meet with the leaders of the human and gnome factions vying for control of the harbor and negotiate a truce.",
+      "type": "TalkToNPC",
+      "targetId": ["human_faction_leader", "gnome_faction_leader"],
+      "targetCount": 2,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "clear_out_bandits",
+      "description": "Eliminate the group of bandits that have been disrupting harbor operations and terrorizing the dockworkers.",
+      "type": "DefeatEnemy",
+      "targetId": "harbor_bandits",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "restore_harbor_operations",
+      "description": "Assist the harbor master in restoring normal operations and ensuring the continued flow of trade through the Blackwater harbor.",
+      "type": "GoToRoom",
+      "targetId": "blackwater_docks",
+      "targetCount": 1,
+      "isOptional": false
+    }
+  ],
+  "revealsOnAccept": ["human_faction_hideout", "gnome_faction_hideout"],
+  "revealsOnComplete": ["blackwater_merchant_quarter"],
+  "rewards": {
+    "experiencePoints": 300,
+    "gold": 150,
+    "itemIds": [],
+    "flagsToSet": [
+      {
+        "flagName": "quest_secure_the_harbor_complete",
+        "flagValue": "true"
+      }
+    ]
+  },
+  "state": "NotStarted"
+}

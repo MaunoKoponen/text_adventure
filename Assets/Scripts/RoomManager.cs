@@ -101,22 +101,54 @@ public class RoomManager : MonoBehaviour
 
     private void OnCombatEnded(bool victory)
     {
+        useEnhancedCombat = false; // Reset for next combat
+        ClearCombatLog();
+        currentRoom.combat = null;
+
+        // Check if we're in dev/debug mode
+        bool isDebugMode = StoryManager.Instance != null &&
+                           StoryManager.Instance.CurrentStory != null &&
+                           StoryManager.Instance.CurrentStory.enableDebugCommands;
+
         if (victory)
         {
-            ClearCombatLog();
-            currentRoom.combat = null;
-            DisplayRoomInfo("");
+            // Victory message
+            DisplayRoomInfo("<color=green><b>VICTORY!</b></color> You defeated your enemy!\n\n");
         }
         else
         {
             // Player defeated
-            ClearCombatLog();
-            currentRoom.combat = null;
-            SetHealth(0);
-            playerData.SetFlag("Dead", "true");
-            LoadRoomFromJson(respawnRoom, "You wake up from an odd dream.\n");
+            if (isDebugMode)
+            {
+                // Debug mode: Reset HP and return to hub with loss message
+                ResetHealthToMax();
+                string hubRoom = StoryManager.Instance.CurrentStory.startingRoom ?? "dev_hub";
+                LoadRoomFromJson(hubRoom, "<color=red><b>DEFEAT!</b></color> You were defeated in combat.\n<i>(Debug mode: HP restored, returned to hub)</i>\n\n");
+            }
+            else
+            {
+                // Normal mode: Death and respawn at temple
+                SetHealth(0);
+                playerData.SetFlag("Dead", "true");
+                LoadRoomFromJson(respawnRoom, "<color=red><b>DEFEAT!</b></color> You wake up from an odd dream...\n\n");
+            }
         }
         UpdateHealthDisplay();
+    }
+
+    /// <summary>
+    /// Reset player health to maximum (used in debug mode).
+    /// </summary>
+    private void ResetHealthToMax()
+    {
+        if (playerData.UsesEnhancedStats && playerData.stats != null)
+        {
+            playerData.stats.currentHitPoints = playerData.stats.maxHitPoints;
+        }
+        else
+        {
+            playerData.health = 100; // Default max health for legacy system
+        }
     }
 
     void Start()
@@ -273,12 +305,26 @@ public class RoomManager : MonoBehaviour
         else if (action == "Use Item")
         {
             ToggleCombatInventory(true);
-            foreach (var item in playerData.Inventory)
+            foreach (var slot in playerData.Inventory)
             {
-                CreateInventoryButton(item.shortDescription, () =>
+                Item item = slot.GetItem();
+                if (item == null) continue;
+
+                // Only show combat-usable items
+                if (!item.combatUsable) continue;
+
+                // Capture for closure
+                var currentSlot = slot;
+                var currentItem = item;
+
+                string buttonText = currentSlot.quantity > 1
+                    ? $"{currentItem.shortDescription} x{currentSlot.quantity}"
+                    : currentItem.shortDescription;
+
+                CreateInventoryButton(buttonText, () =>
                 {
                     ToggleCombatInventory(false);
-                    combatManager.PlayerUseItem(item);
+                    combatManager.PlayerUseItem(currentItem, currentSlot.itemId);
                     UpdateHealthDisplay();
                     DisplayRoomInfo("");
                 });
@@ -322,39 +368,47 @@ public class RoomManager : MonoBehaviour
         if (action == "Use Item")
         {
             ToggleCombatInventory(true);
-            // make inventory buttons
-            foreach (var item in playerData.Inventory)
+            // Make inventory buttons
+            foreach (var slot in playerData.Inventory)
             {
-                CreateInventoryButton(item.shortDescription, () =>
+                Item item = slot.GetItem();
+                if (item == null) continue;
+
+                // Only show combat-usable items
+                if (!item.combatUsable) continue;
+
+                // Capture for closure
+                var currentSlot = slot;
+                var currentItem = item;
+
+                string buttonText = currentSlot.quantity > 1
+                    ? $"{currentItem.shortDescription} x{currentSlot.quantity}"
+                    : currentItem.shortDescription;
+
+                CreateInventoryButton(buttonText, () =>
                 {
                     ToggleCombatInventory(false);
 
-                    if (!item.stacking)
-                    {
-                        playerData.RemoveItem(item);
-                    }
-                    if (item.stacking)
-                    {
-                        playerData.DecreaseStackSize(item, 1);
-                    }
+                    // Consume the item
+                    playerData.RemoveItem(currentSlot.itemId);
 
-                    if (item.target == Item.Target.Self)
+                    if (currentItem.target == Item.Target.Self)
                     {
-                        if (item.effectType == Item.EffectType.Heal)
+                        if (currentItem.effectType == Item.EffectType.Heal)
                         {
-                            playerData.health += item.effectAmount;
-                            combatLog.Add("\n" + item.usageSuccess);
-                            combatLog.Add("your health is now " + playerData.health);
+                            playerData.health += currentItem.effectAmount;
+                            combatLog.Add("\n" + currentItem.usageSuccess);
+                            combatLog.Add("Your health is now " + playerData.health);
                         }
                     }
 
-                    if (item.target == Item.Target.NPC)
+                    if (currentItem.target == Item.Target.NPC)
                     {
-                        if (item.effectType == Item.EffectType.Damage)
+                        if (currentItem.effectType == Item.EffectType.Damage)
                         {
-                            currentRoom.combat.enemy_health -= item.effectAmount;
-                            combatLog.Add("\n" + item.usageSuccess);
-                            combatLog.Add($" Enemy health is now {currentRoom.combat.enemy_health}");
+                            currentRoom.combat.enemy_health -= currentItem.effectAmount;
+                            combatLog.Add("\n" + currentItem.usageSuccess);
+                            combatLog.Add($"Enemy health is now {currentRoom.combat.enemy_health}");
                         }
                     }
 
@@ -365,7 +419,7 @@ public class RoomManager : MonoBehaviour
             CreateInventoryButton("Back", () =>
             {
                 ToggleCombatInventory(false);
-                combatLog.Add("You stopped rummaging through you bag...");
+                combatLog.Add("You stopped rummaging through your bag...");
             });
         }
 
@@ -408,19 +462,34 @@ public class RoomManager : MonoBehaviour
         combatLog.Add($"{currentRoom.combat.enemy_name} attacked you for {enemyDamageDealt} damage!");
         combatLog.Add($" Your health is now {playerData.health} ");
         combatLog.Add("\n");
-        
+
         // Check if the player is defeated:
         if (playerData.health <= 0)
         {
             Debug.Log(">>>>> EnemyAttack -> player health ZERO");
-            
-            playerData.SetFlag("Dead","true");
             Debug.Log($"{currentRoom.combat.enemy_name} has defeated you!");
             ClearCombatLog();
             currentRoom.combat = null;
-            SetHealth(0);
-            
-            LoadRoomFromJson(respawnRoom, "You wake up from odd dream.\n");
+
+            // Check if we're in dev/debug mode
+            bool isDebugMode = StoryManager.Instance != null &&
+                               StoryManager.Instance.CurrentStory != null &&
+                               StoryManager.Instance.CurrentStory.enableDebugCommands;
+
+            if (isDebugMode)
+            {
+                // Debug mode: Reset HP and return to hub
+                ResetHealthToMax();
+                string hubRoom = StoryManager.Instance.CurrentStory.startingRoom ?? "dev_hub";
+                LoadRoomFromJson(hubRoom, "<color=red><b>DEFEAT!</b></color> You were defeated in combat.\n<i>(Debug mode: HP restored, returned to hub)</i>\n\n");
+            }
+            else
+            {
+                // Normal mode: Death and respawn
+                playerData.SetFlag("Dead", "true");
+                SetHealth(0);
+                LoadRoomFromJson(respawnRoom, "<color=red><b>DEFEAT!</b></color> You wake up from an odd dream...\n\n");
+            }
         }
     }
     
@@ -469,7 +538,20 @@ public class RoomManager : MonoBehaviour
         }
 */
 
-        if (currentRoom.combat != null && currentRoom.combat.enemy_health > 0)
+        // Check for enhanced combat (CombatManager-based)
+        if (useEnhancedCombat && combatManager != null && combatManager.IsInCombat)
+        {
+            // Display combat actions for enhanced combat
+            string[] enhancedCombatActions = { "Attack", "Use Item", "Flee" };
+            foreach (string action in enhancedCombatActions)
+            {
+                Debug.Log("Enhanced combat action: " + action);
+                string actionCopy = action; // Avoid closure issue
+                CreateActionButton(action, () => HandleCombatAction(actionCopy));
+            }
+        }
+        // Legacy combat (Room.Combat-based)
+        else if (currentRoom.combat != null && currentRoom.combat.enemy_health > 0)
         {
             // Display combat actions
             foreach (string action in currentRoom.combat.combat_actions)
@@ -519,16 +601,17 @@ public class RoomManager : MonoBehaviour
                 
                 foreach (var condition in exit.conditions)
                 {
-                    foreach (var item in playerData.Inventory)
+                    foreach (var slot in playerData.Inventory)
                     {
-                        if (condition == item.shortDescription)
+                        Item item = slot.GetItem();
+                        if (item != null && condition == item.shortDescription)
                             any = true;
                     }
 
                     foreach (var flag in playerData.Flags)
                     {
                         Debug.Log("checking condition: " + flag.Key + " and its ... " + flag.Value);
-                        
+
                         if (condition == flag.Key && flag.Value == "true")
                         {
                             any = true;
@@ -667,11 +750,11 @@ public class RoomManager : MonoBehaviour
             string setFlagTrue = null;
             string setFlagFalse = null;
             string setFlagConcluded = null;
-
             string getItem = null;
             string giveItem = null;
-            
-            
+            string goToRoom = null;
+            string startCombat = null;
+
             if(response.setFlagTrue !=null)
                 setFlagTrue = response.setFlagTrue;
             if(response.setFlagFalse !=null)
@@ -682,67 +765,141 @@ public class RoomManager : MonoBehaviour
                 getItem = response.getItem;
             if (response.giveItem != null)
                 giveItem = response.giveItem;
-        
+            if (response.go_to_room != null)
+                goToRoom = response.go_to_room;
+            if (response.startCombat != null)
+                startCombat = response.startCombat;
 
-            CreateActionButton(response.text, () => HandleDialogueResponse(nextStep,setFlagTrue,setFlagFalse,setFlagConcluded,getItem,giveItem));
+            CreateActionButton(response.text, () => HandleDialogueResponse(nextStep, setFlagTrue, setFlagFalse, setFlagConcluded, getItem, giveItem, goToRoom, startCombat));
         }
     }
 
 
-    private void HandleDialogueResponse(int nextStep, string FlagToSetTrue = null, string FlagToSetFalse = null, string FlagToSetConcluded = null, string getItem=null, string giveItem = null)
+    private void HandleDialogueResponse(int nextStep, string FlagToSetTrue = null, string FlagToSetFalse = null, string FlagToSetConcluded = null, string getItem = null, string giveItem = null, string goToRoom = null, string startCombatEnemy = null)
     {
         if (FlagToSetTrue != null)
         {
             // Quest?
-            playerData.SetFlag(FlagToSetTrue,"true");
+            playerData.SetFlag(FlagToSetTrue, "true");
             if (FlagToSetTrue.Contains("quest"))
             {
                 SaveGameManager.SaveGame(playerData);
                 Debug.Log("Quest start detected!");
                 diary.OnQuestReceived(FlagToSetTrue);
                 Diary = diary;
-                
             }
         }
-           
-       if(FlagToSetFalse !=null)
-            playerData.SetFlag(FlagToSetFalse,"false");
-       
-       if (FlagToSetConcluded != null)
-       {
-           // Quest?
-           playerData.SetFlag(FlagToSetConcluded,"concluded");
-           if (FlagToSetConcluded.Contains("quest"))
-           {
-               SaveGameManager.SaveGame(playerData);
-               Debug.Log("Quest finished detected!");
-               diary.OnQuestConcluded(FlagToSetConcluded);
-               Diary = diary;
-                
-           }
-       }
 
-       
-       
-       if(getItem !=null)
+        if (FlagToSetFalse != null)
+            playerData.SetFlag(FlagToSetFalse, "false");
+
+        if (FlagToSetConcluded != null)
+        {
+            // Quest?
+            playerData.SetFlag(FlagToSetConcluded, "concluded");
+            if (FlagToSetConcluded.Contains("quest"))
+            {
+                SaveGameManager.SaveGame(playerData);
+                Debug.Log("Quest finished detected!");
+                diary.OnQuestConcluded(FlagToSetConcluded);
+                Diary = diary;
+            }
+        }
+
+        if (getItem != null)
             playerData.AddItem(getItem);
-       if(giveItem !=null)
+        if (giveItem != null)
             playerData.RemoveItem(giveItem);
-        
-        
-       if (nextStep == 1000)
-       {
-           shopView.SetupShop(currentRoom.shop_inventory);
-           EndDialogue();
-       }else if (nextStep == -1)
-       {
+
+        // Handle navigation to another room
+        if (goToRoom != null)
+        {
             EndDialogue();
-       }
-       else
-       {
+            LoadRoomFromJson(goToRoom);
+            return;
+        }
+
+        // Handle starting combat with an enemy
+        if (startCombatEnemy != null)
+        {
+            EndDialogue();
+            StartCombatWithEnemy(startCombatEnemy);
+            return;
+        }
+
+        if (nextStep == 1000)
+        {
+            shopView.SetupShop(currentRoom.shop_inventory);
+            EndDialogue();
+        }
+        else if (nextStep == -1)
+        {
+            EndDialogue();
+        }
+        else
+        {
             currentDialogueStep = nextStep;
             DisplayDialogue();
-       }
+        }
+    }
+
+    /// <summary>
+    /// Start combat with an enemy loaded from Enemies/ folder.
+    /// </summary>
+    private void StartCombatWithEnemy(string enemyId)
+    {
+        Debug.Log($"[RoomManager] Starting combat with enemy: {enemyId}");
+
+        // Try to load enemy data
+        TextAsset enemyAsset = null;
+        if (StoryManager.Instance != null && StoryManager.Instance.IsStoryLoaded)
+        {
+            enemyAsset = StoryManager.Instance.LoadEnemyData(enemyId);
+        }
+
+        // Fallback to legacy path
+        if (enemyAsset == null)
+        {
+            enemyAsset = Resources.Load<TextAsset>($"Enemies/{enemyId}");
+        }
+
+        if (enemyAsset == null)
+        {
+            Debug.LogError($"Enemy not found: {enemyId}");
+            DisplayRoomInfo("The enemy could not be found!\n");
+            return;
+        }
+
+        // Parse enemy data
+        EnemyData enemyData = JsonUtility.FromJson<EnemyData>(enemyAsset.text);
+        if (enemyData == null)
+        {
+            Debug.LogError($"Failed to parse enemy data: {enemyId}");
+            return;
+        }
+
+        // Create a fresh instance (reset HP)
+        enemyData = enemyData.CreateInstance();
+
+        // Start enhanced combat if CombatManager is available
+        if (combatManager != null)
+        {
+            useEnhancedCombat = true;
+            combatManager.StartCombat(enemyData, playerData);
+            DisplayRoomInfo($"A {enemyData.enemyName} attacks!\n");
+        }
+        else
+        {
+            // Fallback: create legacy combat from enemy data
+            currentRoom.combat = new Room.Combat
+            {
+                enemy_name = enemyData.enemyName,
+                enemy_health = enemyData.maxHitPoints,
+                enemyDamage = enemyData.enemyDamage,
+                combat_actions = new string[] { "Attack", "Use Item", "Flee" }
+            };
+            DisplayRoomInfo($"A {enemyData.enemyName} attacks!\n");
+        }
     }
 
     private void EndDialogue()
@@ -839,6 +996,8 @@ public class Room
         public string setFlagConcluded; // finish quest, for example
         public string getItem;  // get item from NPC
         public string giveItem; // give item to NPC
+        public string go_to_room; // navigate to another room
+        public string startCombat; // start combat with enemy ID (loads from Enemies/)
 
         public int next_step;
     }
@@ -864,10 +1023,23 @@ public class Room
     [System.Serializable]
     public class Combat
     {
+        // Legacy fields (backward compatible)
         public string enemy_name;
         public int enemy_health;
         public string[] combat_actions;
         public int enemyDamage = 5;  // How much damage the enemy does
+
+        // Enhanced combat - reference enemy by ID (loaded from Enemies/ folder)
+        public string enemyId;
+
+        // Random encounter from pool
+        public string[] enemies;     // Array of enemy IDs to pick from
+        public bool random = false;  // If true, pick random enemy from array
+
+        /// <summary>
+        /// Check if this uses enhanced enemy data.
+        /// </summary>
+        public bool UsesEnhancedEnemy => !string.IsNullOrEmpty(enemyId) || (enemies != null && enemies.Length > 0);
     }
 }
 

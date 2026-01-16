@@ -1,0 +1,60 @@
+{
+  "room_id": "gnome_embassy",
+  "description": "Nestled in the heart of Blackwater, the ornate gnome embassy stands as a stark reminder of the delicate balance of power in the region. Heavily guarded by stern-faced gnome soldiers, the embassy's ornate facade hides a web of intrigue and political maneuvering. The air is thick with the scent of exotic spices, and the sound of hushed whispers echoes through the elaborately decorated halls.",
+  "npcs": ["gnome_ambassador"],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "examine_embassy",
+      "action_description": "Take a closer look at the embassy"
+    },
+    {
+      "action_id": "speak_with_guard",
+      "action_description": "Approach one of the gnome soldiers and try to engage them in conversation"
+    },
+    {
+      "action_id": "search_for_clues",
+      "action_description": "Carefully search the embassy for any interesting clues or information"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "Gnome Ambassador",
+      "dialogue_image": "npc_default",
+      "dialogues": [
+        {
+          "message": "Greetings, stranger. What business do you have at the gnome embassy? We do not take kindly to outsiders snooping around.",
+          "responses": [
+            {
+              "text": "I come in peace, ambassador. I merely wish to learn more about your people and your role in the region.",
+              "next_step": 1
+            },
+            {
+              "text": "I will be on my way then. Good day to you.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "Very well. The gnomes have a long and storied history in this land, though our presence is often met with suspicion and hostility. We seek only to protect our interests and maintain the delicate balance of power. If you have any specific questions, I shall do my best to answer them.",
+          "responses": [
+            {
+              "text": "I'd be most interested to hear more about your people's role in the region.",
+              "next_step": 2
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "North",
+      "leads_to": "blackwater_square",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ],
+  "combat": null,
+  "events": []
+}

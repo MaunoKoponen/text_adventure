@@ -354,13 +354,22 @@ public enum EnemyBehavior
 
 /// <summary>
 /// Loot dropped by enemies.
+/// Supports inline loot entries or reference to a shared loot table.
 /// </summary>
 [Serializable]
 public class LootTable
 {
+    // Option 1: Reference a shared loot table by ID (for future use)
+    // If set, this takes priority over inline items
+    public string lootTableId;
+
+    // Option 2: Inline loot definition
     public int goldMin;
     public int goldMax;
     public List<LootEntry> items = new List<LootEntry>();
+
+    // Guaranteed drops (always given, not rolled)
+    public List<string> guaranteedItems = new List<string>();
 
     public int RollGold()
     {
@@ -371,17 +380,33 @@ public class LootTable
     {
         List<string> droppedItems = new List<string>();
 
+        // Add guaranteed drops first
+        if (guaranteedItems != null)
+        {
+            droppedItems.AddRange(guaranteedItems);
+        }
+
+        // Roll for random drops
         foreach (var entry in items)
         {
             float roll = UnityEngine.Random.Range(0f, 100f);
             if (roll <= entry.dropChance)
             {
-                droppedItems.Add(entry.itemId);
+                int quantity = UnityEngine.Random.Range(entry.minQuantity, entry.maxQuantity + 1);
+                for (int i = 0; i < quantity; i++)
+                {
+                    droppedItems.Add(entry.itemId);
+                }
             }
         }
 
         return droppedItems;
     }
+
+    /// <summary>
+    /// Check if this should use a shared loot table instead of inline items.
+    /// </summary>
+    public bool UsesSharedTable => !string.IsNullOrEmpty(lootTableId);
 }
 
 [Serializable]

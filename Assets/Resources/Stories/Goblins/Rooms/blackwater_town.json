@@ -1,0 +1,94 @@
+{
+  "room_id": "blackwater_town",
+  "description": "The once-thriving heart of Blackwater now feels like a powder keg, with unease palpable in the air. Dilapidated buildings line the winding streets, their weathered facades casting long shadows over the uneasy residents who scurry about their business. A sense of dread hangs over the town, as if the calm before a storm is about to break.",
+  "npcs": ["blackwater_innkeeper", "blackwater_guard_captain"],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "visit_inn",
+      "action_description": "Visit the run-down inn at the edge of town"
+    },
+    {
+      "action_id": "speak_with_guard",
+      "action_description": "Approach the stern-looking guard captain patrolling the streets"
+    },
+    {
+      "action_id": "browse_market",
+      "action_description": "Peruse the meager offerings at the town market"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "Blackwater Innkeeper",
+      "dialogue_image": "npc_default",
+      "dialogues": [
+        {
+          "message": "Welcome, stranger. Times are tough in Blackwater these days. What can I get you? A hot meal and a cold drink, perhaps?",
+          "responses": [
+            {
+              "text": "Tell me more about the situation in Blackwater.",
+              "next_step": 1
+            },
+            {
+              "text": "I'll just take a room for the night.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "Ah, yes, the troubles of Blackwater. Ever since the war between the human and gnome kings began, this place has been caught in the crossfire. The port is the prize they both seek to control, and the people here are caught in the middle. If you're looking to avoid the conflict, I'd suggest staying off the streets at night.",
+          "responses": [
+            {
+              "text": "I see. Thank you for the warning.",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "npc_name": "Blackwater Guard Captain",
+      "dialogue_image": "npc_default",
+      "dialogues": [
+        {
+          "message": "State your business, stranger. This town has seen enough trouble without more outsiders stirring up the pot.",
+          "responses": [
+            {
+              "text": "I mean no harm. I'm just passing through.",
+              "next_step": 1
+            },
+            {
+              "text": "I'll be on my way, then.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "Hmph. Well, keep your head down and your business to yourself. The human and gnome kings are both vying for control of this port, and the people of Blackwater are caught in the middle. If you value your life, I'd suggest avoiding the streets after dark.",
+          "responses": [
+            {
+              "text": "I understand. Thank you for the warning.",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "North",
+      "leads_to": "blackwater_port",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "South",
+      "leads_to": "blackwater_outskirts",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ],
+  "combat": null,
+  "events": []
+}

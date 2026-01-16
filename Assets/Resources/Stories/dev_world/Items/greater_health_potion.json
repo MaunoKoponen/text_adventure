@@ -1,0 +1,17 @@
+{
+  "itemId": "greater_health_potion",
+  "shortDescription": "Greater Health Potion",
+  "description": "A larger vial of red liquid that restores more health. Heals 4d4+4 hit points.",
+  "usageSuccess": "You drink the greater potion and feel your wounds rapidly healing!",
+  "usageFail": "You drink the potion, but nothing happens.",
+  "category": "consumable",
+  "effectType": 1,
+  "effectAmount": 40,
+  "target": 1,
+  "stacking": true,
+  "maxStack": 5,
+  "buyPrice": 150,
+  "sellPrice": 75,
+  "image": "potion_fire",
+  "combatUsable": true
+}

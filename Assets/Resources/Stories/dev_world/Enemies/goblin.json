@@ -1,0 +1,60 @@
+{
+  "enemyId": "goblin",
+  "enemyName": "Goblin",
+  "description": "A small, cunning humanoid with green skin and sharp teeth.",
+  "armorClass": 15,
+  "maxHitPoints": 7,
+  "currentHitPoints": 7,
+  "challengeRating": 1,
+  "initiativeBonus": 2,
+  "behavior": "Cowardly",
+  "fleeThresholdPercent": 30,
+  "imagePath": "enemies/goblin",
+  "abilities": {
+    "Strength": 8,
+    "Dexterity": 14,
+    "Constitution": 10,
+    "Intelligence": 10,
+    "Wisdom": 8,
+    "Charisma": 8
+  },
+  "attacks": [
+    {
+      "attackName": "Scimitar",
+      "attackBonus": 4,
+      "damageDiceNotation": "1d6+2",
+      "damageType": "Slashing",
+      "description": "The goblin slashes with its scimitar!"
+    },
+    {
+      "attackName": "Shortbow",
+      "attackBonus": 4,
+      "damageDiceNotation": "1d6+2",
+      "damageType": "Piercing",
+      "description": "The goblin fires an arrow!"
+    }
+  ],
+  "immunities": [],
+  "resistances": [],
+  "vulnerabilities": [],
+  "conditionImmunities": [],
+  "lootTable": {
+    "goldMin": 2,
+    "goldMax": 10,
+    "guaranteedItems": [],
+    "items": [
+      {
+        "itemId": "rusty_dagger",
+        "dropChance": 25,
+        "minQuantity": 1,
+        "maxQuantity": 1
+      },
+      {
+        "itemId": "health_potion",
+        "dropChance": 10,
+        "minQuantity": 1,
+        "maxQuantity": 1
+      }
+    ]
+  }
+}

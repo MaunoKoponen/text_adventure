@@ -1,0 +1,33 @@
+{
+  "enemyId": "ratfolk_thief",
+  "enemyName": "Ratfolk Thief",
+  "description": "Scavenging in the shadows, these nimble ratfolk prey on the unsuspecting denizens of Blackwater, stealing what they can and disappearing into the night.",
+  "enemyImage": "enemy_default",
+  "maxHitPoints": 35,
+  "currentHitPoints": 35,
+  "armorClass": 9,
+  "experienceValue": 25,
+  "goldDrop": 10,
+  "attacks": [
+    {
+      "attackName": "Scimitar Strike",
+      "attackDescription": "The ratfolk thief darts forward, slashing with its curved blade.",
+      "damageMin": 6,
+      "damageMax": 10,
+      "hitBonus": 1
+    },
+    {
+      "attackName": "Dagger Throw",
+      "attackDescription": "Reaching into its tattered cloak, the thief hurls a dagger with surprising accuracy.",
+      "damageMin": 8,
+      "damageMax": 13,
+      "hitBonus": 0
+    }
+  ],
+  "lootTable": [
+    {
+      "itemId": "health_potion",
+      "dropChance": 0.3
+    }
+  ]
+}

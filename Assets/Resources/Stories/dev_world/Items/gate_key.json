@@ -1,0 +1,17 @@
+{
+  "itemId": "gate_key",
+  "shortDescription": "Gate Key",
+  "description": "A large rusty key.",
+  "usageSuccess": "You unlock the gate",
+  "usageFail": "Key does not fit the lock",
+  "category": "key",
+  "effectType": 4,
+  "effectAmount": 1,
+  "target": 2,
+  "stacking": false,
+  "maxStack": 1,
+  "buyPrice": 100,
+  "sellPrice": 90,
+  "image": "key_copper",
+  "combatUsable": false
+}

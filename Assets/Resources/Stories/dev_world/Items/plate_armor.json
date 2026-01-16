@@ -1,0 +1,17 @@
+{
+  "itemId": "plate_armor",
+  "shortDescription": "Plate Armor",
+  "description": "Heavy armor made of interlocking metal plates. Provides AC 18 but is very restrictive.",
+  "usageSuccess": "You strap on the plate armor.",
+  "usageFail": "The armor is far too heavy.",
+  "category": "armor",
+  "effectType": 3,
+  "effectAmount": 18,
+  "target": 1,
+  "stacking": false,
+  "maxStack": 1,
+  "buyPrice": 1500,
+  "sellPrice": 750,
+  "image": "armor_plate",
+  "combatUsable": false
+}

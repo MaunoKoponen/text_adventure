@@ -14,6 +14,15 @@ public class QuestData
     public string questGiver;               // NPC who gives this quest
     public string questGiverLocation;       // Location where quest giver is found
 
+    // Quest Classification (for world generation)
+    public QuestType questType = QuestType.Side;  // Main or Side
+    public int chapterNumber = 1;                  // Chapter this quest belongs to
+    public int difficulty = 1;                     // 1-10 difficulty scale
+
+    // Generation metadata
+    public bool isGenerated = false;              // True if AI-generated
+    public string generationId;                   // Batch ID for generated content
+
     // Quest chain/prerequisites
     public List<string> prerequisiteQuests = new List<string>();   // Must be completed first
     public List<string> prerequisiteFlags = new List<string>();    // Flags that must be true
@@ -155,6 +164,16 @@ public enum QuestState
     ReadyToTurnIn,
     Completed,
     Failed
+}
+
+/// <summary>
+/// Quest type for chapter progression.
+/// </summary>
+public enum QuestType
+{
+    Main,       // Required for chapter progression
+    Side,       // Optional content
+    Repeatable  // Can be done multiple times
 }
 
 /// <summary>

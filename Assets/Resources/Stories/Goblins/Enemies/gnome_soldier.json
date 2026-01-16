@@ -1,0 +1,33 @@
+{
+  "enemyId": "gnome_soldier",
+  "enemyName": "Gnome Soldier",
+  "description": "Disciplined and technologically advanced, the gnome soldiers stationed at the embassy are well-equipped to defend their interests in the region.",
+  "enemyImage": "enemy_default",
+  "maxHitPoints": 65,
+  "currentHitPoints": 65,
+  "armorClass": 11,
+  "experienceValue": 75,
+  "goldDrop": 30,
+  "attacks": [
+    {
+      "attackName": "Plasma Crossbow",
+      "attackDescription": "The gnome soldier expertly wields his advanced plasma crossbow, unleashing a barrage of sizzling bolts.",
+      "damageMin": 12,
+      "damageMax": 16,
+      "hitBonus": 3
+    },
+    {
+      "attackName": "Electrified Blade",
+      "attackDescription": "With a flick of a switch, the gnome soldier's sword crackles with arcane energy, ready to deliver a debilitating strike.",
+      "damageMin": 14,
+      "damageMax": 19,
+      "hitBonus": 2
+    }
+  ],
+  "lootTable": [
+    {
+      "itemId": "health_potion",
+      "dropChance": 0.3
+    }
+  ]
+}

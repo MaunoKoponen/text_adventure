@@ -1,0 +1,72 @@
+{
+  "enemyId": "knight",
+  "enemyName": "Veteran Knight",
+  "description": "A heavily armored warrior skilled in combat, with years of battlefield experience.",
+  "armorClass": 18,
+  "maxHitPoints": 52,
+  "currentHitPoints": 52,
+  "challengeRating": 3,
+  "initiativeBonus": 0,
+  "behavior": "Tactical",
+  "fleeThresholdPercent": 15,
+  "imagePath": "enemies/knight",
+  "abilities": {
+    "Strength": 16,
+    "Dexterity": 11,
+    "Constitution": 14,
+    "Intelligence": 11,
+    "Wisdom": 11,
+    "Charisma": 15
+  },
+  "attacks": [
+    {
+      "attackName": "Greatsword",
+      "attackBonus": 5,
+      "damageDiceNotation": "2d6+3",
+      "damageType": "Slashing",
+      "description": "The knight swings their greatsword with deadly precision!"
+    },
+    {
+      "attackName": "Heavy Crossbow",
+      "attackBonus": 2,
+      "damageDiceNotation": "1d10",
+      "damageType": "Piercing",
+      "description": "The knight fires a crossbow bolt!"
+    }
+  ],
+  "immunities": [],
+  "resistances": [],
+  "vulnerabilities": [],
+  "conditionImmunities": ["frightened"],
+  "lootTable": {
+    "goldMin": 25,
+    "goldMax": 75,
+    "guaranteedItems": [],
+    "items": [
+      {
+        "itemId": "knight_insignia",
+        "dropChance": 100,
+        "minQuantity": 1,
+        "maxQuantity": 1
+      },
+      {
+        "itemId": "chain_mail",
+        "dropChance": 15,
+        "minQuantity": 1,
+        "maxQuantity": 1
+      },
+      {
+        "itemId": "longsword",
+        "dropChance": 20,
+        "minQuantity": 1,
+        "maxQuantity": 1
+      },
+      {
+        "itemId": "greater_health_potion",
+        "dropChance": 25,
+        "minQuantity": 1,
+        "maxQuantity": 1
+      }
+    ]
+  }
+}

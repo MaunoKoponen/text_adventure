@@ -5,12 +5,8 @@
   "items": [],
   "actions": [
     {
-      "action_id": "heal_full",
-      "action_description": "[DEBUG] Restore Full Health"
-    },
-    {
-      "action_id": "get_gold",
-      "action_description": "[DEBUG] Get 1000 Gold"
+      "action_id": "debug_console",
+      "action_description": "[DEBUG] Open Debug Console"
     }
   ],
   "dialogues": [

@@ -75,6 +75,16 @@ public class LocationData
     public string locationName;
     public string description;
 
+    // Chapter association (for world generation)
+    public int chapterNumber = 1;              // Chapter this location belongs to
+    public LocationType locationType = LocationType.Exploration;  // Type of location
+    public bool isChapterHub;                  // Main hub for its chapter
+    public int difficulty = 1;                 // For combat encounters (1-10)
+
+    // Generation metadata
+    public bool isGenerated = false;           // True if AI-generated
+    public string generationId;                // Batch ID for generated content
+
     // Map display properties
     public Vector2 mapPosition;         // Position on regional map (pixel coordinates)
     public string pinIconPath;          // Custom pin icon (optional, uses default if null)
@@ -145,4 +155,16 @@ public class LocationData
 
         return true;
     }
+}
+
+/// <summary>
+/// Type of location for gameplay purposes.
+/// </summary>
+public enum LocationType
+{
+    Hub,            // Safe area, shops, quest givers (always accessible)
+    Exploration,    // Adventure area with encounters
+    Dungeon,        // Multi-room challenge area
+    Boss,           // Major encounter location
+    Transition      // Connection between chapters
 }

@@ -1,0 +1,33 @@
+{
+  "enemyId": "mutant_crab",
+  "enemyName": "Mutant Crab",
+  "description": "Twisted by dark energies, these monstrous crustaceans lurk in the shadowy waters near the docks, snapping at any who draw too close.",
+  "enemyImage": "enemy_default",
+  "maxHitPoints": 65,
+  "currentHitPoints": 65,
+  "armorClass": 11,
+  "experienceValue": 75,
+  "goldDrop": 30,
+  "attacks": [
+    {
+      "attackName": "Claw Snap",
+      "attackDescription": "The mutant crab's gnarled claws lash out, aiming to crush its prey.",
+      "damageMin": 12,
+      "damageMax": 16,
+      "hitBonus": 3
+    },
+    {
+      "attackName": "Toxic Spray",
+      "attackDescription": "The crab spews a noxious, acidic spray from its gaping maw.",
+      "damageMin": 14,
+      "damageMax": 19,
+      "hitBonus": 2
+    }
+  ],
+  "lootTable": [
+    {
+      "itemId": "health_potion",
+      "dropChance": 0.3
+    }
+  ]
+}

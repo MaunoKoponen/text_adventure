@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using WorldGen;
 
 /// <summary>
 /// Main map system controller.
@@ -52,6 +53,32 @@ public class MapSystem : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        // Subscribe to chapter unlock events
+        if (ChapterManager.Instance != null)
+        {
+            ChapterManager.Instance.OnChapterUnlocked += HandleChapterUnlocked;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (ChapterManager.Instance != null)
+        {
+            ChapterManager.Instance.OnChapterUnlocked -= HandleChapterUnlocked;
+        }
+    }
+
+    /// <summary>
+    /// Handle chapter unlock - refresh map visibility.
+    /// </summary>
+    private void HandleChapterUnlocked(ChapterData chapter)
+    {
+        Debug.Log($"[MapSystem] Chapter unlocked: {chapter.chapterName}, refreshing visibility");
+        RefreshVisibility();
     }
 
     /// <summary>
@@ -298,7 +325,7 @@ public class MapSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Refresh pin visibility based on current player state.
+    /// Refresh pin visibility based on current player state and chapter unlocks.
     /// </summary>
     public void RefreshVisibility()
     {
@@ -309,7 +336,15 @@ public class MapSystem : MonoBehaviour
             MapPinUI pinUI = kvp.Value;
             if (pinUI == null) continue;
 
+            // Check base visibility from pin data
             bool isVisible = pinUI.PinData.ShouldBeVisible(playerFlags);
+
+            // Also check chapter-based visibility if ChapterManager exists
+            if (isVisible && ChapterManager.Instance != null)
+            {
+                isVisible = IsLocationVisibleByChapter(kvp.Key);
+            }
+
             pinUI.SetRevealed(isVisible);
 
             // Highlight current location
@@ -319,6 +354,17 @@ public class MapSystem : MonoBehaviour
 
         // Update path visibility
         RefreshPathVisibility(playerFlags);
+    }
+
+    /// <summary>
+    /// Check if a location should be visible based on chapter unlock status.
+    /// </summary>
+    private bool IsLocationVisibleByChapter(string locationId)
+    {
+        if (ChapterManager.Instance == null) return true;
+
+        // Check if location is in any unlocked chapter
+        return ChapterManager.Instance.IsLocationInUnlockedChapter(locationId);
     }
 
     /// <summary>

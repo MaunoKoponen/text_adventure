@@ -25,22 +25,35 @@ public class InventoryView : MonoBehaviour
     }
     public void CreateInventory()
     {
-        foreach (var item in RoomManager.playerData.Inventory)
+        foreach (var slot in RoomManager.playerData.Inventory)
         {
-            CreateInventoryButton(item, () =>
+            Item item = slot.GetItem();
+            if (item == null) continue;
+
+            // Capture slot for closure
+            var currentSlot = slot;
+            var currentItem = item;
+
+            CreateInventoryButton(currentItem, currentSlot.quantity, () =>
             {
-                Debug.Log("Button Clicked");
-                description.text = item.description;
-                name.text = item.shortDescription;
-                string path = "InventoryItems/" + item.image;
+                Debug.Log($"Button Clicked: {currentItem.shortDescription} x{currentSlot.quantity}");
+                description.text = currentItem.description;
+                name.text = currentSlot.quantity > 1
+                    ? $"{currentItem.shortDescription} x{currentSlot.quantity}"
+                    : currentItem.shortDescription;
+                string path = "InventoryItems/" + currentItem.image;
                 image.sprite = Resources.Load<Sprite>(path);
-                
             });
         }
     }
-    void UpdateInventory()
+
+    /// <summary>
+    /// Refresh the inventory display.
+    /// </summary>
+    public void UpdateInventory()
     {
-        // todo
+        ResetInventory();
+        CreateInventory();
     }
 
     public void ResetInventory()
@@ -51,22 +64,21 @@ public class InventoryView : MonoBehaviour
         }
     }
 
-
-    void CreateInventoryButton(Item item, UnityAction callback)
+    void CreateInventoryButton(Item item, int quantity, UnityAction callback)
     {
-
         GameObject buttonObj = Instantiate(actionButtonPrefab, actionButtonContainer);
         Button buttonComponent = buttonObj.GetComponent<Button>();
         buttonComponent.onClick.AddListener(callback);
         TMP_Text buttonText = buttonObj.GetComponentInChildren<TMP_Text>();
         if (buttonText)
         {
-            buttonText.text = item.shortDescription;
+            // Show quantity for stacked items
+            buttonText.text = quantity > 1
+                ? $"{item.shortDescription} x{quantity}"
+                : item.shortDescription;
         }
 
         string path = "InventoryItems/" + item.image;
-        image.sprite = Resources.Load<Sprite>(path);
-        
         buttonComponent.GetComponent<Image>().sprite = Resources.Load<Sprite>(path);
     }
     

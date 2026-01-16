@@ -1,0 +1,108 @@
+{
+  "room_id": "blackwater_docks",
+  "description": "The bustling Blackwater Docks teem with activity, from the loading and unloading of cargo to the constant stream of sailors and travelers. The air is thick with the scent of brine and the occasional whiff of smoke from the nearby warehouses. Gulls wheel overhead, their cries echoing across the crowded quays as dockhands shout orders and merchant vessels bob gently in the swell.",
+  "npcs": ["dock_master", "dockside_trader"],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "observe_activity",
+      "action_description": "Watch the frantic bustle of the docks"
+    },
+    {
+      "action_id": "speak_with_dock_workers",
+      "action_description": "Talk to the hard-bitten dockhands"
+    },
+    {
+      "action_id": "explore_warehouses",
+      "action_description": "Investigate the shadowy warehouses lining the quay"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "Dock Master Tholin",
+      "dialogue_image": "npc_default",
+      "dialogues": [
+        {
+          "message": "Eh, what's yer business here, stranger? These docks don't take kindly to loiterers. Ye best have a good reason for bein' here.",
+          "responses": [
+            {
+              "text": "I'm just passing through. Thought I'd take in the sights.",
+              "next_step": 1
+            },
+            {
+              "text": "I'm looking for work. Any jobs going around here?",
+              "next_step": 2
+            },
+            {
+              "text": "Goodbye.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "Hmph, well don't go causin' no trouble. These docks are a hub of activity - ye best keep yer wits about ye. Now, if ye're lookin' for work, I could use an extra pair of hands down at the warehouses. Pays a copper a day, but it's honest work.",
+          "responses": [
+            {
+              "text": "I'll take the job.",
+              "next_step": -1
+            },
+            {
+              "text": "I'll think about it.",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "npc_name": "Dockside Trader Varys",
+      "dialogue_image": "npc_default",
+      "dialogues": [
+        {
+          "message": "Ahh, a new face! Welcome to the Blackwater Docks, friend. I'm Varys, purveyor of all manner of curious goods. Perhaps you'd be interested in taking a look at me wares? Or maybe ye have some trinkets ye'd be willin' to part with?",
+          "responses": [
+            {
+              "text": "Let's see what you have.",
+              "next_step": 1
+            },
+            {
+              "text": "I'm just browsing, thanks.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "Excellent! Now, what catches yer eye? I've got all manner of interesting curios, from exotic spices to rare alchemical components. Ye never know what ye might find amongst me stock.",
+          "responses": [
+            {
+              "text": "Show me your wares.",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "North",
+      "leads_to": "merchant_square",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "East",
+      "leads_to": "blackwater_bay",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "West",
+      "leads_to": "warehouse_district",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ],
+  "combat": null,
+  "events": []
+}

@@ -1,0 +1,17 @@
+{
+  "itemId": "stone_of_evasion",
+  "shortDescription": "Stone of Evasion",
+  "description": "A smooth stone imbued with the essence of wind, granting increased evasion.",
+  "usageSuccess": "You activate the stone and feel light on your feet, evading incoming attacks.",
+  "usageFail": "You try to activate the stone, but its magic remains dormant.",
+  "category": "Magical Stone",
+  "effectType": 2,
+  "effectAmount": 1,
+  "target": 1,
+  "stacking": false,
+  "maxStack": 1,
+  "buyPrice": 120,
+  "sellPrice": 100,
+  "image": "scroll_red",
+  "combatUsable": true
+}

@@ -1,0 +1,66 @@
+{
+  "room_id": "blackwater_square",
+  "description": "In the center of town, the large open square is usually a hub of activity, but now it stands eerily quiet. Tattered banners flutter in the breeze, and the occasional group of guards can be seen patrolling the area with grim expressions. The cobblestones are stained with dried blood, and the air carries the faint stench of decay, a somber reminder of the violence that has swept through this once-thriving marketplace.",
+  "npcs": ["guard_captain"],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "inspect_banners",
+      "action_description": "Examine the tattered banners hanging lifelessly from the buildings."
+    },
+    {
+      "action_id": "talk_to_guard",
+      "action_description": "Approach the patrolling guards and attempt to gather information."
+    },
+    {
+      "action_id": "search_the_square",
+      "action_description": "Scour the square for any clues or items that may have been left behind."
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "Guard Captain",
+      "dialogue_image": "npc_default",
+      "dialogues": [
+        {
+          "message": "You there! State your business in Blackwater Square. This area is under strict military control until further notice.",
+          "responses": [
+            {
+              "text": "I'm just passing through. What's going on here?",
+              "next_step": 1
+            },
+            {
+              "text": "I'll be on my way then.",
+              "next_step": -1
+            }
+          ]
+        },
+        {
+          "message": "Can't you see the signs of the conflict? The gnomes have been raiding our supply lines, cutting off our access to the port. We're barely holding on as it is. If you know what's good for you, you'll keep your head down and stay out of our way.",
+          "responses": [
+            {
+              "text": "I understand. I'll be on my way.",
+              "next_step": -1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "North",
+      "leads_to": "main_street",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "South",
+      "leads_to": "docks",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ],
+  "combat": null,
+  "events": []
+}

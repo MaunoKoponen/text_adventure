@@ -20,6 +20,7 @@ public class QuestManager : MonoBehaviour
     // Events
     public event Action<QuestData> OnQuestStarted;
     public event Action<QuestData> OnQuestCompleted;
+    public event Action<QuestData> OnMainQuestCompleted;  // Fired specifically for main quests
     public event Action<QuestData, QuestObjective> OnObjectiveUpdated;
     public event Action<List<string>> OnLocationsRevealed;
 
@@ -299,7 +300,17 @@ public class QuestManager : MonoBehaviour
         }
 
         OnQuestCompleted?.Invoke(quest);
-        Debug.Log($"Quest completed: {quest.questName}");
+
+        // Fire main quest event if applicable
+        if (quest.questType == QuestType.Main)
+        {
+            OnMainQuestCompleted?.Invoke(quest);
+            Debug.Log($"Main quest completed: {quest.questName} (Chapter {quest.chapterNumber})");
+        }
+        else
+        {
+            Debug.Log($"Quest completed: {quest.questName}");
+        }
 
         SaveQuestProgress();
         return true;
@@ -337,6 +348,40 @@ public class QuestManager : MonoBehaviour
     public List<QuestData> GetCompletedQuests()
     {
         return new List<QuestData>(completedQuests);
+    }
+
+    /// <summary>
+    /// Get active main quests.
+    /// </summary>
+    public List<QuestData> GetActiveMainQuests()
+    {
+        return activeQuests.FindAll(q => q.questType == QuestType.Main);
+    }
+
+    /// <summary>
+    /// Get active side quests.
+    /// </summary>
+    public List<QuestData> GetActiveSideQuests()
+    {
+        return activeQuests.FindAll(q => q.questType == QuestType.Side);
+    }
+
+    /// <summary>
+    /// Get active quests for a specific chapter.
+    /// </summary>
+    public List<QuestData> GetActiveQuestsForChapter(int chapterNumber)
+    {
+        return activeQuests.FindAll(q => q.chapterNumber == chapterNumber);
+    }
+
+    /// <summary>
+    /// Check if the current main quest for a chapter is complete.
+    /// </summary>
+    public bool IsChapterMainQuestComplete(int chapterNumber)
+    {
+        // Check if any main quest from this chapter is in completed list
+        return completedQuests.Exists(q =>
+            q.questType == QuestType.Main && q.chapterNumber == chapterNumber);
     }
 
     /// <summary>

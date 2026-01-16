@@ -3,6 +3,12 @@
   "description": "You enter the Quest Testing Chamber. A wise-looking NPC stands ready to give you test quests.\n\nThis room tests:\n- Quest acceptance and tracking\n- Objective types (talk, collect, defeat)\n- Quest chains and prerequisites\n- Reward distribution",
   "npcs": ["quest_giver"],
   "items": [],
+  "actions": [
+    {
+      "action_id": "quest_giver",
+      "action_description": "Talk to Quest Giver"
+    }
+  ],
   "dialogues": [
     {
       "npc_name": "quest_giver",

@@ -1,0 +1,17 @@
+{
+  "itemId": "chain_mail",
+  "shortDescription": "Chain Mail",
+  "description": "Medium armor made of interlocking metal rings. Provides AC 16 but limits DEX bonus.",
+  "usageSuccess": "You put on the chain mail.",
+  "usageFail": "The armor is too heavy.",
+  "category": "armor",
+  "effectType": 3,
+  "effectAmount": 16,
+  "target": 1,
+  "stacking": false,
+  "maxStack": 1,
+  "buyPrice": 75,
+  "sellPrice": 37,
+  "image": "armor_chain",
+  "combatUsable": false
+}

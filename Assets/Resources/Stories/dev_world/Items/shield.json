@@ -1,0 +1,17 @@
+{
+  "itemId": "shield",
+  "shortDescription": "Shield",
+  "description": "A sturdy wooden shield reinforced with metal. Provides +2 AC when equipped.",
+  "usageSuccess": "You raise your shield.",
+  "usageFail": "You fumble with the shield.",
+  "category": "armor",
+  "effectType": 3,
+  "effectAmount": 2,
+  "target": 1,
+  "stacking": false,
+  "maxStack": 1,
+  "buyPrice": 10,
+  "sellPrice": 5,
+  "image": "shield_wood",
+  "combatUsable": false
+}

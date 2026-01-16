@@ -1,0 +1,17 @@
+{
+  "itemId": "antidote",
+  "shortDescription": "Antidote",
+  "description": "A vial containing a remedy for most common poisons.",
+  "usageSuccess": "You drink the antidote and feel the poison leaving your system.",
+  "usageFail": "You drink the antidote, but it doesn't seem necessary.",
+  "category": "Potion",
+  "effectType": 3,
+  "effectAmount": 1,
+  "target": 1,
+  "stacking": true,
+  "maxStack": 10,
+  "buyPrice": 50,
+  "sellPrice": 40,
+  "image": "potion_green_red",
+  "combatUsable": true
+}

@@ -1,0 +1,17 @@
+{
+  "itemId": "health_potion",
+  "shortDescription": "Health Potion",
+  "description": "A red potion that restores health when consumed. Heals 2d4+2 hit points.",
+  "usageSuccess": "You drink the potion and feel your wounds healing.",
+  "usageFail": "You drink the potion, but nothing happens.",
+  "category": "consumable",
+  "effectType": 1,
+  "effectAmount": 20,
+  "target": 1,
+  "stacking": true,
+  "maxStack": 10,
+  "buyPrice": 50,
+  "sellPrice": 25,
+  "image": "potion_fire",
+  "combatUsable": true
+}

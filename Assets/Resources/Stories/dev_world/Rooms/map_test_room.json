@@ -3,6 +3,12 @@
   "description": "You stand in the Cartographer's Testing Chamber. Maps and charts cover every surface. From here, you can test map visibility mechanics and location reveals.\n\nCurrent map features to test:\n- Location reveal via flags\n- Quest-based location reveals\n- Fast travel functionality",
   "npcs": ["cartographer"],
   "items": [],
+  "actions": [
+    {
+      "action_id": "cartographer",
+      "action_description": "Talk to Cartographer"
+    }
+  ],
   "dialogues": [
     {
       "npc_name": "cartographer",

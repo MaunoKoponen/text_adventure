@@ -1,0 +1,17 @@
+{
+  "itemId": "scroll_of_fire",
+  "shortDescription": "Scroll of Fire",
+  "description": "An ancient scroll inscribed with fiery runes.",
+  "usageSuccess": "You read the scroll and flames erupt from your fingertips!",
+  "usageFail": "You read the scroll, but the incantation fizzles out.",
+  "category": "Scroll",
+  "effectType": 0,
+  "effectAmount": 50,
+  "target": 0,
+  "stacking": false,
+  "maxStack": 1,
+  "buyPrice": 100,
+  "sellPrice": 80,
+  "image": "scroll_red",
+  "combatUsable": true
+}

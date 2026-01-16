@@ -1,8 +1,14 @@
 {
   "room_id": "combat_test_arena",
-  "description": "You stand in a large circular arena. Stone pillars line the edges, and magical runes glow on the floor. This is the Combat Test Arena - choose your opponent wisely.\n\nAvailable challenges:\n- Goblin (Easy, AC 12, HP 15)\n- Skeleton (Medium, AC 13, HP 26)\n- Ogre (Hard, AC 11, HP 59)\n- Knight (Elite, AC 18, HP 52)",
+  "description": "You stand in a large circular arena. Stone pillars line the edges, and magical runes glow on the floor. This is the Combat Test Arena - choose your opponent wisely.\n\nAvailable challenges:\n- Goblin (Easy, AC 15, HP 7)\n- Skeleton (Medium, AC 13, HP 13)\n- Ogre (Hard, AC 11, HP 59)\n- Knight (Elite, AC 18, HP 52)",
   "npcs": ["arena_master"],
   "items": [],
+  "actions": [
+    {
+      "action_id": "arena_master",
+      "action_description": "Talk to Arena Master"
+    }
+  ],
   "dialogues": [
     {
       "npc_name": "arena_master",
@@ -26,6 +32,10 @@
             {
               "text": "Fight a Knight (Elite)",
               "next_step": 4
+            },
+            {
+              "text": "Maybe later...",
+              "next_step": -1
             }
           ]
         },
@@ -34,8 +44,12 @@
           "responses": [
             {
               "text": "Begin combat!",
-              "go_to_room": "combat_goblin",
+              "startCombat": "goblin",
               "next_step": -1
+            },
+            {
+              "text": "Wait, I changed my mind",
+              "next_step": 0
             }
           ]
         },
@@ -44,8 +58,12 @@
           "responses": [
             {
               "text": "Begin combat!",
-              "go_to_room": "combat_skeleton",
+              "startCombat": "skeleton",
               "next_step": -1
+            },
+            {
+              "text": "Wait, I changed my mind",
+              "next_step": 0
             }
           ]
         },
@@ -54,8 +72,12 @@
           "responses": [
             {
               "text": "Begin combat!",
-              "go_to_room": "combat_ogre",
+              "startCombat": "ogre",
               "next_step": -1
+            },
+            {
+              "text": "Wait, I changed my mind",
+              "next_step": 0
             }
           ]
         },
@@ -64,8 +86,12 @@
           "responses": [
             {
               "text": "Begin combat!",
-              "go_to_room": "combat_knight",
+              "startCombat": "knight",
               "next_step": -1
+            },
+            {
+              "text": "Wait, I changed my mind",
+              "next_step": 0
             }
           ]
         }

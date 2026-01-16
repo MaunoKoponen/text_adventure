@@ -6,8 +6,7 @@
   "actions": [
     {
       "action_id": "take_test_item",
-      "flag_false": "has_test_item",
-      "action_description": "Take the Test Item"
+      "action_description": "Examine the Pedestal"
     }
   ],
   "dialogues": [

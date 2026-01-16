@@ -1,0 +1,26 @@
+{
+    "storyId": "Goblins",
+    "storyName": "",
+    "storyDescription": "A peninsula of ongoing conflicts between human and  gnome  kings",
+    "author": "",
+    "version": "",
+    "startingRoom": "blackwater_docks",
+    "startingGold": 50,
+    "startingHealth": 100,
+    "startingItems": [],
+    "startingFlags": [],
+    "useEnhancedCombat": false,
+    "startingAbilityScores": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "wisdom": 10,
+        "charisma": 10
+    },
+    "defaultMapId": "",
+    "defaultRegionId": "",
+    "allowFastTravel": true,
+    "showMinimap": true,
+    "enableDebugCommands": false
+}

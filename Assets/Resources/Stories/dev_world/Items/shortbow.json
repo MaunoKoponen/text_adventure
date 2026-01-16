@@ -1,0 +1,17 @@
+{
+  "itemId": "shortbow",
+  "shortDescription": "Shortbow",
+  "description": "A compact bow suitable for hunting or combat. Deals 1d6 piercing damage at range.",
+  "usageSuccess": "You loose an arrow!",
+  "usageFail": "Your arrow flies wide.",
+  "category": "weapon",
+  "effectType": 0,
+  "effectAmount": 6,
+  "target": 0,
+  "stacking": false,
+  "maxStack": 1,
+  "buyPrice": 25,
+  "sellPrice": 12,
+  "image": "bow_wood",
+  "combatUsable": false
+}

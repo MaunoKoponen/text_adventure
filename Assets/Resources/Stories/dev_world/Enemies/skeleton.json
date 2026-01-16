@@ -1,0 +1,60 @@
+{
+  "enemyId": "skeleton",
+  "enemyName": "Skeleton Warrior",
+  "description": "An animated pile of bones held together by dark magic, wielding ancient weapons.",
+  "armorClass": 13,
+  "maxHitPoints": 13,
+  "currentHitPoints": 13,
+  "challengeRating": 1,
+  "initiativeBonus": 2,
+  "behavior": "Aggressive",
+  "fleeThresholdPercent": 0,
+  "imagePath": "enemies/skeleton",
+  "abilities": {
+    "Strength": 10,
+    "Dexterity": 14,
+    "Constitution": 15,
+    "Intelligence": 6,
+    "Wisdom": 8,
+    "Charisma": 5
+  },
+  "attacks": [
+    {
+      "attackName": "Shortsword",
+      "attackBonus": 4,
+      "damageDiceNotation": "1d6+2",
+      "damageType": "Piercing",
+      "description": "The skeleton thrusts with its rusty blade!"
+    },
+    {
+      "attackName": "Shortbow",
+      "attackBonus": 4,
+      "damageDiceNotation": "1d6+2",
+      "damageType": "Piercing",
+      "description": "The skeleton fires a bone-tipped arrow!"
+    }
+  ],
+  "immunities": ["Poison"],
+  "resistances": [],
+  "vulnerabilities": ["Bludgeoning"],
+  "conditionImmunities": ["poisoned", "exhaustion"],
+  "lootTable": {
+    "goldMin": 0,
+    "goldMax": 5,
+    "guaranteedItems": [],
+    "items": [
+      {
+        "itemId": "bone_fragment",
+        "dropChance": 50,
+        "minQuantity": 1,
+        "maxQuantity": 3
+      },
+      {
+        "itemId": "ancient_coin",
+        "dropChance": 15,
+        "minQuantity": 1,
+        "maxQuantity": 1
+      }
+    ]
+  }
+}

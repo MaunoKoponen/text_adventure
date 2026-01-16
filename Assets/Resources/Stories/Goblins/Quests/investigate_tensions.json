@@ -1,0 +1,60 @@
+{
+  "questId": "investigate_tensions",
+  "questName": "Investigate the Tensions",
+  "questDescription": "Tensions between the human and gnome factions in the port town of Blackwater are reaching a boiling point. The Guard Captain has tasked you with delving into the root causes of this conflict, in the hope that you may uncover a way to defuse the situation before it erupts into open warfare.",
+  "questGiver": "guard_captain",
+  "questGiverLocation": "blackwater_town",
+  "questType": "Main",
+  "chapterNumber": 1,
+  "difficulty": 3,
+  "prerequisiteQuests": [],
+  "prerequisiteFlags": [],
+  "objectives": [
+    {
+      "objectiveId": "speak_with_human_ambassador",
+      "description": "Speak with the Human Ambassador in the Town Hall to get their perspective on the tensions.",
+      "type": "TalkToNPC",
+      "targetId": "human_ambassador",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "investigate_gnome_district",
+      "description": "Explore the Gnome District of Blackwater to gather intelligence on the gnome faction's grievances.",
+      "type": "GoToRoom",
+      "targetId": "gnome_district",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "defeat_rioters",
+      "description": "Confront and defeat the rioters causing unrest in the streets to restore order.",
+      "type": "DefeatEnemy",
+      "targetId": "rioter",
+      "targetCount": 5,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "report_to_guard_captain",
+      "description": "Return to the Guard Captain with your findings to discuss a potential resolution to the conflict.",
+      "type": "TalkToNPC",
+      "targetId": "guard_captain",
+      "targetCount": 1,
+      "isOptional": false
+    }
+  ],
+  "revealsOnAccept": ["gnome_district"],
+  "revealsOnComplete": ["human_embassy", "gnome_citadel"],
+  "rewards": {
+    "experiencePoints": 300,
+    "gold": 150,
+    "itemIds": [],
+    "flagsToSet": [
+      {
+        "flagName": "quest_investigate_tensions_complete",
+        "flagValue": "true"
+      }
+    ]
+  },
+  "state": "NotStarted"
+}

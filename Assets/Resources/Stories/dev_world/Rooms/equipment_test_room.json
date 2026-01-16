@@ -3,6 +3,12 @@
   "description": "You enter the Equipment Testing Chamber. Weapon racks line the walls, and armor stands display various protective gear. A magical chest in the center contains test items.\n\nThis room is for testing weapon damage dice, armor AC bonuses, and equipment properties.",
   "npcs": ["equipment_vendor"],
   "items": [],
+  "actions": [
+    {
+      "action_id": "equipment_vendor",
+      "action_description": "Browse Equipment"
+    }
+  ],
   "dialogues": [
     {
       "npc_name": "equipment_vendor",

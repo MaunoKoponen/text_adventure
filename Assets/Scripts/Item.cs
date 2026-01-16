@@ -4,6 +4,7 @@ using UnityEngine.Serialization;
 [System.Serializable]
 public class Item
 {
+    public string itemId;           // Unique identifier for the item (used for stacking and JSON loading)
     public string usageSuccess;
     public string usageFail;
     public string description;
@@ -11,12 +12,14 @@ public class Item
     public int buyPrice;
     public int sellPrice;
     public EffectType effectType;
-    public int effectAmount; // This is to denote the strength/quantity of the effect
+    public int effectAmount;        // This is to denote the strength/quantity of the effect
     public string category;
     public Target target;
     public bool stacking;
-    public int count = 0;
+    public int maxStack = 99;       // Maximum stack size (for stacking items)
+    public int count = 0;           // Deprecated: use InventorySlot.quantity instead
     public string image;
+    public bool combatUsable = true; // Whether this item can be used in combat
     public enum EffectType
     {
         Damage,
@@ -35,163 +38,70 @@ public class Item
         None
     }
 
-    // Example items:
-
-    public static Item SoulStone = new Item
-    {
-        usageSuccess = "You focus your energy on the stone. Divine aura surround you.",
-        usageFail = "You focus your energy on the stone, but nothing seems to happen. You feel cold",
-        description = "A ordinary looking stone with a faint rune on it",
-        shortDescription = "Soul Stone",
-        buyPrice = 0,
-        sellPrice = 0,
-        effectType = EffectType.Bless,
-        effectAmount = 1,
-        category = "Stone",
-        target = Target.Self,
-        stacking = false,
-        image = "scroll_red"
-    };
-    
-    public static Item PotionOfHealing = new Item
-    {
-        usageSuccess = "You drink the potion and feel your condition improves.",
-        usageFail = "You drink the potion, but nothing seems to happen.",
-        description = "A red potion that heals the drinker.",
-        shortDescription = "Healing Potion",
-        buyPrice = 75,
-        sellPrice = 60,
-        effectType = EffectType.Heal,
-        effectAmount = 20,
-        category = "Potion",
-        target = Target.Self,
-        stacking = false,
-        image = "potion_fire"
-    };
-
-    public static Item ScrollOfFire = new Item
-    {
-        usageSuccess = "You read the scroll and flames erupt from your fingertips!",
-        usageFail = "You read the scroll, but the incantation fizzles out.",
-        description = "An ancient scroll inscribed with fiery runes.",
-        shortDescription = "Scroll of Fire",
-        buyPrice = 100,
-        sellPrice = 80,
-        effectType = EffectType.Damage,
-        effectAmount = 50, // For example, 50 points of fire damage.
-        category = "Scroll",
-        target = Target.NPC,
-        stacking = false,
-        image = "scroll_red"
-    };
-
-    public static Item Antidote = new Item
-    {
-        usageSuccess = "You drink the antidote and feel the poison leaving your system.",
-        usageFail = "You drink the antidote, but it doesn't seem necessary.",
-        description = "A vial containing a remedy for most common poisons.",
-        shortDescription = "Antidote",
-        buyPrice = 50,
-        sellPrice = 40,
-        effectType = EffectType.CurePoison,
-        effectAmount = 1,
-        category = "Potion",
-        target = Target.Self,
-        stacking = true,
-        image = "potion_green_red"
-    };
-
-    // Some invented items:
-
-    public static Item StoneOfEvasion = new Item
-    {
-        usageSuccess = "You activate the stone and feel light on your feet, evading incoming attacks.",
-        usageFail = "You try to activate the stone, but its magic remains dormant.",
-        description = "A smooth stone imbued with the essence of wind, granting increased evasion.",
-        shortDescription = "Stone of Evasion",
-        buyPrice = 120,
-        sellPrice = 100,
-        effectType = EffectType.Bless,
-        effectAmount = 1,
-        category = "Magical Stone",
-        target = Target.Self,
-        stacking = false,
-        image = "scroll_red"
-    };
-
-    public static Item ElixirOfStrength = new Item
-    {
-        usageSuccess = "You drink the elixir and feel a surge of power coursing through your muscles.",
-        usageFail = "You drink the elixir, but feel no different.",
-        description = "A rare concoction said to temporarily bestow great strength upon the drinker.",
-        shortDescription = "Elixir of Strength",
-        buyPrice = 150,
-        sellPrice = 125,
-        effectType = EffectType.Bless,
-        effectAmount = 1,
-        category = "Potion",
-        target = Target.Self,
-        stacking = false,
-        image = "potion_green_red"
-    };
-
-    public static Item GateKey = new Item
-    {
-        usageSuccess = "You unlock the gate",
-        usageFail = "Key does not fit the lock",
-        description = "A large rusty key.",
-        shortDescription = "Gate key",
-        buyPrice = 100,
-        sellPrice = 90,
-        effectType = EffectType.Open,
-        effectAmount = 1,
-        category = "key",
-        target = Target.Lock,
-        stacking = false,
-        image = "key_copper"
-    };
-
-    public static Item ScrollOfFireball = new Item
-    {
-
-        usageSuccess = "You unroll the scroll and a fiery ball of destruction erupts from your hand!",
-        usageFail = "You attempt to use the scroll but nothing happens.",
-        description = "A magical scroll containing instructions for casting the powerful fireball spell.",
-        shortDescription = "Scroll of Fireball",
-        buyPrice = 500,
-        sellPrice = 400,
-        effectType = EffectType.Damage,
-        effectAmount = 1,
-        category = "Scroll",
-        target = Target.NPC,
-        stacking = false,
-        image = "scroll_red"
-
-    };
-
-    
 }
 
 
+/// <summary>
+/// Registry for loading and caching items from JSON.
+/// All items are now data-driven - loaded from Stories/{storyId}/Items/ or Items/ folders.
+/// </summary>
 public static class ItemRegistry
 {
-    public static Dictionary<string, Item> items = new Dictionary<string, Item>
-    {
-        {"Antidote", Item.Antidote},
-        {"Healing Potion", Item.PotionOfHealing},
-        {"Scroll of Fire", Item.ScrollOfFire},
-        {"Soul Stone", Item.SoulStone},
-        {"Gate key", Item.GateKey},
+    // Items indexed by itemId (primary) and shortDescription (legacy compatibility)
+    private static Dictionary<string, Item> itemsById = new Dictionary<string, Item>();
+    private static Dictionary<string, Item> itemsByName = new Dictionary<string, Item>();
 
-        // ... add other items here.
-    };
-
-    public static Item GetItem(string itemName)
+    /// <summary>
+    /// Register an item in both dictionaries (for caching loaded items).
+    /// </summary>
+    public static void RegisterItem(Item item)
     {
-        if (items.TryGetValue(itemName, out Item item))
+        if (item == null) return;
+
+        if (!string.IsNullOrEmpty(item.itemId))
+            itemsById[item.itemId] = item;
+
+        if (!string.IsNullOrEmpty(item.shortDescription))
+            itemsByName[item.shortDescription] = item;
+    }
+
+    /// <summary>
+    /// Get an item by itemId or shortDescription.
+    /// Priority: 1) Cache, 2) JSON from StoryManager
+    /// </summary>
+    public static Item GetItem(string itemKey)
+    {
+        if (string.IsNullOrEmpty(itemKey)) return null;
+
+        // Try cache first (by itemId)
+        if (itemsById.TryGetValue(itemKey, out Item itemById))
+            return itemById;
+
+        // Try cache by shortDescription (legacy)
+        if (itemsByName.TryGetValue(itemKey, out Item itemByName))
+            return itemByName;
+
+        // Load from JSON via StoryManager
+        if (StoryManager.Instance != null)
         {
-            return item;
+            Item jsonItem = StoryManager.Instance.LoadItemData(itemKey);
+            if (jsonItem != null)
+            {
+                RegisterItem(jsonItem); // Cache for future lookups
+                return jsonItem;
+            }
         }
-        return null; // or handle this in some other way if the item doesn't exist.
+
+        UnityEngine.Debug.LogWarning($"Item not found in registry: {itemKey}");
+        return null;
+    }
+
+    /// <summary>
+    /// Clear the registry (useful when switching stories).
+    /// </summary>
+    public static void Clear()
+    {
+        itemsById.Clear();
+        itemsByName.Clear();
     }
 }

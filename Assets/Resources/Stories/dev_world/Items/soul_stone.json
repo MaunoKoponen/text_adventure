@@ -1,0 +1,17 @@
+{
+  "itemId": "soul_stone",
+  "shortDescription": "Soul Stone",
+  "description": "A ordinary looking stone with a faint rune on it",
+  "usageSuccess": "You focus your energy on the stone. Divine aura surround you.",
+  "usageFail": "You focus your energy on the stone, but nothing seems to happen. You feel cold",
+  "category": "Stone",
+  "effectType": 2,
+  "effectAmount": 1,
+  "target": 1,
+  "stacking": false,
+  "maxStack": 1,
+  "buyPrice": 0,
+  "sellPrice": 0,
+  "image": "scroll_red",
+  "combatUsable": true
+}

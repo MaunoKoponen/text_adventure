@@ -228,7 +228,9 @@ public class CombatManager : MonoBehaviour
     /// <summary>
     /// Player uses an item during combat.
     /// </summary>
-    public void PlayerUseItem(Item item)
+    /// <param name="item">The item to use</param>
+    /// <param name="itemId">Optional itemId for inventory removal (new system)</param>
+    public void PlayerUseItem(Item item, string itemId = null)
     {
         if (!IsInCombat || !currentCombat.isPlayerTurn)
         {
@@ -274,15 +276,9 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        // Consume item
-        if (!item.stacking)
-        {
-            playerData.RemoveItem(item);
-        }
-        else
-        {
-            playerData.DecreaseStackSize(item, 1);
-        }
+        // Consume item - use itemId if provided (new system), otherwise fall back to Item reference
+        string removeId = itemId ?? item.itemId ?? item.shortDescription;
+        playerData.RemoveItem(removeId);
 
         // Enemy turn
         currentCombat.isPlayerTurn = false;

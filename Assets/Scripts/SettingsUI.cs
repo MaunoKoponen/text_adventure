@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using WorldGen;
 
 public class SettingsUI : MonoBehaviour
 {
@@ -106,6 +107,14 @@ public class SettingsUI : MonoBehaviour
             return;
         }
 
+        // Load chapters if ChapterManager exists
+        if (ChapterManager.Instance != null)
+        {
+            ChapterManager.Instance.ResetProgress();
+            ChapterManager.Instance.LoadChapters(story.storyId);
+            Debug.Log($"[SettingsUI] Chapters loaded for story: {story.storyId}");
+        }
+
         // Create new player data
         PlayerData tempData = new PlayerData();
 
@@ -155,7 +164,7 @@ public class SettingsUI : MonoBehaviour
         // Add inventory items from JSON
         foreach (var itemName in parameters.inventory)
         {
-            tempData.Inventory.Add(ItemRegistry.GetItem(itemName));
+            tempData.AddItem(itemName);
         }
 
         SaveGameManager.SaveGame(tempData);
@@ -194,11 +203,46 @@ public class SettingsUI : MonoBehaviour
             isLegacy = true
         });
 
-        // Scan for story folders
-        string[] knownStories = { "dev_world" };
+        // Dynamically discover all story folders by loading all config files
+        var allConfigs = Resources.LoadAll<TextAsset>("Stories");
+        var discoveredStories = new HashSet<string>();
 
+        foreach (var asset in allConfigs)
+        {
+            // Config files are named "config" and are in story subfolders
+            // The asset name will just be "config", so we need to find the folder
+            if (asset.name == "config")
+            {
+                try
+                {
+                    var config = JsonUtility.FromJson<StoryConfig>(asset.text);
+                    if (config != null && !string.IsNullOrEmpty(config.storyId) && !discoveredStories.Contains(config.storyId))
+                    {
+                        discoveredStories.Add(config.storyId);
+                        availableStories.Add(new StoryInfo
+                        {
+                            storyId = config.storyId,
+                            storyName = config.storyName ?? config.storyId,
+                            description = config.storyDescription ?? "A generated adventure.",
+                            isLegacy = false,
+                            config = config
+                        });
+                        Debug.Log($"[SettingsUI] Discovered story: {config.storyId} - {config.storyName}");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"Failed to parse story config: {e.Message}");
+                }
+            }
+        }
+
+        // Also try known story folders in case Resources.LoadAll missed them
+        string[] knownStories = { "dev_world" };
         foreach (var storyId in knownStories)
         {
+            if (discoveredStories.Contains(storyId)) continue;
+
             TextAsset configAsset = Resources.Load<TextAsset>($"Stories/{storyId}/config");
             if (configAsset != null)
             {
@@ -208,8 +252,8 @@ public class SettingsUI : MonoBehaviour
                     availableStories.Add(new StoryInfo
                     {
                         storyId = storyId,
-                        storyName = config.storyName,
-                        description = config.storyDescription,
+                        storyName = config.storyName ?? storyId,
+                        description = config.storyDescription ?? "",
                         isLegacy = false,
                         config = config
                     });
@@ -235,6 +279,8 @@ public class SettingsUI : MonoBehaviour
 
         // Update description
         OnStorySelected(0);
+
+        Debug.Log($"[SettingsUI] Found {availableStories.Count} stories");
     }
 
     /// <summary>

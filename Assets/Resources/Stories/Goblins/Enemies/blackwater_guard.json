@@ -1,0 +1,33 @@
+{
+  "enemyId": "blackwater_guard",
+  "enemyName": "Blackwater Guard",
+  "description": "Clad in weathered armor and gripping their spears with calloused hands, the Blackwater Guards stand as silent sentinels, their eyes scanning the horizon for any sign of trouble. Their expressions are grim, betraying the hardships they have endured in defense of this gritty port town.",
+  "enemyImage": "enemy_default",
+  "maxHitPoints": 50,
+  "currentHitPoints": 50,
+  "armorClass": 10,
+  "experienceValue": 50,
+  "goldDrop": 20,
+  "attacks": [
+    {
+      "attackName": "Spear Thrust",
+      "attackDescription": "The guard lunges forward, thrusting their spear with practiced precision.",
+      "damageMin": 9,
+      "damageMax": 13,
+      "hitBonus": 2
+    },
+    {
+      "attackName": "Sweeping Strike",
+      "attackDescription": "With a swift, arcing motion, the guard swings their spear in a wide arc, attempting to catch their foe off-guard.",
+      "damageMin": 11,
+      "damageMax": 16,
+      "hitBonus": 1
+    }
+  ],
+  "lootTable": [
+    {
+      "itemId": "health_potion",
+      "dropChance": 0.3
+    }
+  ]
+}
