@@ -1,0 +1,33 @@
+{
+  "enemyId": "haunted_mill_ghoul",
+  "enemyName": "Haunted Mill Ghoul",
+  "description": "Twisted, malformed creatures that lurk in the shadows of the Haunted Mill, their clawed hands and gnashing teeth a testament to the evil that dwells within.",
+  "enemyImage": "enemy_default",
+  "maxHitPoints": 95,
+  "currentHitPoints": 95,
+  "armorClass": 13,
+  "experienceValue": 125,
+  "goldDrop": 50,
+  "attacks": [
+    {
+      "attackName": "Clawed Strike",
+      "attackDescription": "The ghoul's twisted claws lash out, rending flesh and bone.",
+      "damageMin": 18,
+      "damageMax": 22,
+      "hitBonus": 5
+    },
+    {
+      "attackName": "Ghastly Scream",
+      "attackDescription": "The ghoul unleashes a piercing scream, paralyzing its foe with terror.",
+      "damageMin": 20,
+      "damageMax": 25,
+      "hitBonus": 4
+    }
+  ],
+  "lootTable": [
+    {
+      "itemId": "health_potion",
+      "dropChance": 0.3
+    }
+  ]
+}

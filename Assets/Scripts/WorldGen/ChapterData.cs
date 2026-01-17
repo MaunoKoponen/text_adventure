@@ -139,4 +139,87 @@ namespace WorldGen
         public int challengeRating;
         public string description;
     }
+
+    /// <summary>
+    /// Room connectivity graph - generated before individual room content.
+    /// Ensures all exits reference valid rooms and room types are appropriate.
+    /// </summary>
+    [Serializable]
+    public class RoomGraph
+    {
+        public string chapterId;
+        public List<RoomNode> rooms = new List<RoomNode>();
+        public string hubRoomId;      // Main safe area for chapter
+        public string entryRoomId;    // Entry point from previous chapter
+        public string exitRoomId;     // Exit to next chapter
+
+        /// <summary>
+        /// Get all room IDs in this graph.
+        /// </summary>
+        public List<string> GetAllRoomIds()
+        {
+            var ids = new List<string>();
+            foreach (var room in rooms)
+            {
+                ids.Add(room.roomId);
+            }
+            return ids;
+        }
+
+        /// <summary>
+        /// Get a room by ID.
+        /// </summary>
+        public RoomNode GetRoom(string roomId)
+        {
+            return rooms.Find(r => r.roomId == roomId);
+        }
+
+        /// <summary>
+        /// Validate all connections reference existing rooms.
+        /// </summary>
+        public List<string> ValidateConnections()
+        {
+            var errors = new List<string>();
+            var allIds = GetAllRoomIds();
+
+            foreach (var room in rooms)
+            {
+                foreach (var connection in room.connectsTo)
+                {
+                    if (!allIds.Contains(connection))
+                    {
+                        errors.Add($"Room '{room.roomId}' connects to non-existent room '{connection}'");
+                    }
+                }
+            }
+
+            return errors;
+        }
+    }
+
+    /// <summary>
+    /// A node in the room graph representing a room and its connections.
+    /// </summary>
+    [Serializable]
+    public class RoomNode
+    {
+        public string roomId;
+        public string roomName;
+        public string roomType;       // "crossroad", "interaction", "combat"
+        public string description;    // Brief description for context
+        public List<string> connectsTo = new List<string>();  // Room IDs this room connects to
+        public List<string> npcs = new List<string>();        // NPC IDs in this room (for interaction rooms)
+        public string enemyId;        // Enemy ID for combat rooms
+        public bool isHub;            // Is this a safe hub area?
+    }
+
+    /// <summary>
+    /// Room type constants for clarity.
+    /// </summary>
+    public static class RoomTypes
+    {
+        public const string Crossroad = "crossroad";     // Navigation hub, multiple exits, no dialogues
+        public const string Interaction = "interaction"; // NPC dialogues, limited exits
+        public const string Combat = "combat";           // Combat encounter, limited exits
+    }
 }

@@ -28,6 +28,14 @@ namespace WorldGen
         /// </summary>
         public static ValidationResult ValidateRoom(string json)
         {
+            return ValidateRoom(json, null);
+        }
+
+        /// <summary>
+        /// Validate room/location JSON with optional known room IDs for exit validation.
+        /// </summary>
+        public static ValidationResult ValidateRoom(string json, HashSet<string> knownRoomIds)
+        {
             var result = new ValidationResult();
 
             if (string.IsNullOrEmpty(json))
@@ -48,6 +56,16 @@ namespace WorldGen
                 if (string.IsNullOrEmpty(room.description))
                     result.AddError("description is required");
 
+                // Validate room type
+                if (!string.IsNullOrEmpty(room.room_type))
+                {
+                    var validTypes = new HashSet<string> { RoomTypes.Crossroad, RoomTypes.Interaction, RoomTypes.Combat };
+                    if (!validTypes.Contains(room.room_type))
+                    {
+                        result.AddWarning($"Unknown room_type: '{room.room_type}' (expected: crossroad, interaction, combat)");
+                    }
+                }
+
                 // Validate exits
                 if (room.exits != null)
                 {
@@ -55,6 +73,8 @@ namespace WorldGen
                     {
                         if (string.IsNullOrEmpty(exit.leads_to))
                             result.AddError($"Exit '{exit.exit_name}' missing leads_to");
+                        else if (knownRoomIds != null && !knownRoomIds.Contains(exit.leads_to))
+                            result.AddError($"Exit '{exit.exit_name}' leads to unknown room: '{exit.leads_to}'");
                     }
                 }
                 else
@@ -62,12 +82,75 @@ namespace WorldGen
                     result.AddWarning("Room has no exits defined");
                 }
 
-                // Validate dialogues if present
+                // Build sets for action_id / npc_name matching
+                var actionIds = new HashSet<string>();
+                var dialogueNpcNames = new HashSet<string>();
+
+                // Collect action IDs
+                if (room.actions != null)
+                {
+                    foreach (var action in room.actions)
+                    {
+                        if (!string.IsNullOrEmpty(action.action_id))
+                        {
+                            actionIds.Add(action.action_id);
+                        }
+                        else
+                        {
+                            result.AddWarning("Action missing action_id");
+                        }
+                    }
+                }
+
+                // Collect dialogue npc_names
                 if (room.dialogues != null)
                 {
                     foreach (var dialogue in room.dialogues)
                     {
+                        if (!string.IsNullOrEmpty(dialogue.npc_name))
+                        {
+                            dialogueNpcNames.Add(dialogue.npc_name);
+                        }
                         ValidateDialogue(dialogue, result);
+                    }
+                }
+
+                // CRITICAL: Validate action_id / npc_name matching
+                // For interaction rooms, every action_id should have a matching dialogue npc_name
+                if (room.room_type == RoomTypes.Interaction ||
+                    (string.IsNullOrEmpty(room.room_type) && actionIds.Count > 0 && dialogueNpcNames.Count > 0))
+                {
+                    // Check each action_id has a matching dialogue
+                    foreach (var actionId in actionIds)
+                    {
+                        if (!dialogueNpcNames.Contains(actionId))
+                        {
+                            result.AddError($"action_id '{actionId}' has no matching dialogue npc_name. " +
+                                "CRITICAL: action_id MUST exactly match a dialogue npc_name for the dialogue to trigger!");
+                        }
+                    }
+
+                    // Check each dialogue has a matching action (optional but recommended)
+                    foreach (var npcName in dialogueNpcNames)
+                    {
+                        if (!actionIds.Contains(npcName))
+                        {
+                            result.AddWarning($"dialogue npc_name '{npcName}' has no matching action_id. " +
+                                "Player cannot trigger this dialogue!");
+                        }
+                    }
+                }
+
+                // Validate crossroad rooms should not have dialogues
+                if (room.room_type == RoomTypes.Crossroad)
+                {
+                    if (room.dialogues != null && room.dialogues.Length > 0)
+                    {
+                        result.AddWarning("Crossroad room should not have dialogues");
+                    }
+                    if (room.actions != null && room.actions.Length > 0)
+                    {
+                        result.AddWarning("Crossroad room should not have actions");
                     }
                 }
 
@@ -340,6 +423,111 @@ namespace WorldGen
         }
 
         /// <summary>
+        /// Validate a room graph structure.
+        /// </summary>
+        public static ValidationResult ValidateRoomGraph(RoomGraph graph)
+        {
+            var result = new ValidationResult();
+
+            if (graph == null)
+            {
+                result.AddError("Room graph is null");
+                return result;
+            }
+
+            if (string.IsNullOrEmpty(graph.chapterId))
+                result.AddError("chapterId is required");
+
+            if (graph.rooms == null || graph.rooms.Count == 0)
+            {
+                result.AddError("Room graph has no rooms");
+                return result;
+            }
+
+            // Validate hub, entry, exit room IDs exist
+            var allRoomIds = new HashSet<string>(graph.GetAllRoomIds());
+
+            if (!string.IsNullOrEmpty(graph.hubRoomId) && !allRoomIds.Contains(graph.hubRoomId))
+                result.AddError($"hubRoomId '{graph.hubRoomId}' not found in room list");
+
+            if (!string.IsNullOrEmpty(graph.entryRoomId) && !allRoomIds.Contains(graph.entryRoomId))
+                result.AddError($"entryRoomId '{graph.entryRoomId}' not found in room list");
+
+            if (!string.IsNullOrEmpty(graph.exitRoomId) && !allRoomIds.Contains(graph.exitRoomId))
+                result.AddError($"exitRoomId '{graph.exitRoomId}' not found in room list");
+
+            // Validate each room
+            var roomIds = new HashSet<string>();
+            foreach (var room in graph.rooms)
+            {
+                if (string.IsNullOrEmpty(room.roomId))
+                {
+                    result.AddError("Room has empty roomId");
+                    continue;
+                }
+
+                if (!roomIds.Add(room.roomId))
+                {
+                    result.AddError($"Duplicate room ID: {room.roomId}");
+                }
+
+                if (string.IsNullOrEmpty(room.roomName))
+                    result.AddWarning($"Room '{room.roomId}' missing roomName");
+
+                // Validate room type
+                var validTypes = new HashSet<string> { RoomTypes.Crossroad, RoomTypes.Interaction, RoomTypes.Combat };
+                if (!string.IsNullOrEmpty(room.roomType) && !validTypes.Contains(room.roomType))
+                {
+                    result.AddWarning($"Room '{room.roomId}' has unknown type: '{room.roomType}'");
+                }
+
+                // Validate connections
+                if (room.connectsTo == null || room.connectsTo.Count == 0)
+                {
+                    result.AddWarning($"Room '{room.roomId}' has no connections (isolated room)");
+                }
+                else
+                {
+                    foreach (var targetId in room.connectsTo)
+                    {
+                        if (!allRoomIds.Contains(targetId))
+                        {
+                            result.AddError($"Room '{room.roomId}' connects to non-existent room '{targetId}'");
+                        }
+                    }
+                }
+
+                // Validate interaction rooms have NPCs
+                if (room.roomType == RoomTypes.Interaction)
+                {
+                    if (room.npcs == null || room.npcs.Count == 0)
+                    {
+                        result.AddWarning($"Interaction room '{room.roomId}' has no NPCs defined");
+                    }
+                }
+
+                // Validate combat rooms have enemy
+                if (room.roomType == RoomTypes.Combat)
+                {
+                    if (string.IsNullOrEmpty(room.enemyId))
+                    {
+                        result.AddWarning($"Combat room '{room.roomId}' has no enemyId defined");
+                    }
+                }
+            }
+
+            // Check bidirectionality
+            var connectionErrors = graph.ValidateConnections();
+            foreach (var error in connectionErrors)
+            {
+                result.AddError(error);
+            }
+
+            result.parsedObject = graph;
+            return result;
+        }
+
+        /// <summary>
         /// Extract clean JSON from LLM response (removes markdown if present).
         /// </summary>
         public static string CleanJson(string input)
@@ -368,10 +556,19 @@ namespace WorldGen
     internal class RoomValidation
     {
         public string room_id;
+        public string room_type;  // crossroad, interaction, combat
         public string description;
         public string[] npcs;
+        public ActionValidation[] actions;
         public ExitValidation[] exits;
         public DialogueValidation[] dialogues;
+    }
+
+    [Serializable]
+    internal class ActionValidation
+    {
+        public string action_id;
+        public string action_description;
     }
 
     [Serializable]

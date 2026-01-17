@@ -1,0 +1,61 @@
+{
+  "room_id": "ashford_blacksmith",
+  "room_type": "interaction",
+  "description": "The modest blacksmith's forge is a bastion of resilience in the grim forest. The rhythmic clanging of hammer on steel echoes through the dimly lit workshop, casting flickering shadows across the soot-stained walls. An anvil stands as the centerpiece, its surface scarred by countless strikes, a testament to the labor of generations of smiths. The air is thick with the acrid scent of burning coal, mingling with the sharp tang of freshly forged metal. This is a place where the tenacity of the human spirit is forged, tempered by the unrelenting demands of a hostile world.",
+  "npcs": [
+    "blacksmith"
+  ],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "blacksmith",
+      "action_description": "Talk to Gunter"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "blacksmith",
+      "dialogue_image": "npc_default",
+      "dialogues": [
+        {
+          "message": "Hmph. What d'ya want? Ain't got much time for idle chatter. These woods ain't safe, an' I got work to do.",
+          "responses": [
+            { "text": "I'm in need of some supplies. Do you have anything to sell?", "next_step": 1 },
+            { "text": "I've heard the woods are dangerous. What can you tell me about the threats here?", "next_step": 2 },
+            { "text": "Farewell.", "next_step": -1 }
+          ]
+        },
+        {
+          "message": "Aye, I can help with that. Got some decent weapons an' armor, if you've got the coin. Nothin' fancy, but it'll keep you alive in these woods.",
+          "responses": [
+            { "text": "I'd like to take a look at what you have.", "next_step": 3 },
+            { "text": "Farewell.", "next_step": -1 }
+          ]
+        },
+        {
+          "message": "Heh, the woods ain't no place for the faint of heart, that's for sure. Evil lurks in every shadow, ready to swallow the unwary. Bandits, wild beasts, an' worse. You'd best be prepared if you plan to venture out there.",
+          "responses": [
+            { "text": "I'll keep that in mind. Thanks for the warning.", "next_step": 3 },
+            { "text": "Farewell.", "next_step": -1 }
+          ]
+        },
+        {
+          "message": "Aye, I've got just the thing. Take a look an' see what suits you best. An' be careful out there, the forest's no place for the weak.",
+          "responses": [
+            { "text": "Understood. I appreciate the help.", "next_step": -1 }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Leave the forge",
+      "leads_to": "ashford_village",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ],
+  "combat": null,
+  "events": []
+}

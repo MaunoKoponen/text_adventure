@@ -1,0 +1,33 @@
+{
+  "enemyId": "haunted_mill_warden",
+  "enemyName": "Bartholomew, Warden of the Haunted Mill",
+  "description": "Bartholomew, the twisted and sinister caretaker of the Haunted Mill, stands before you, his eyes gleaming with malice. His weathered face is twisted into a cruel sneer, and his bony fingers grip a rusted axe that seems to radiate an aura of darkness.",
+  "enemyImage": "enemy_default",
+  "maxHitPoints": 125,
+  "currentHitPoints": 125,
+  "armorClass": 15,
+  "experienceValue": 175,
+  "goldDrop": 70,
+  "attacks": [
+    {
+      "attackName": "Rusted Axe Swing",
+      "attackDescription": "Bartholomew swings his heavy axe with surprising speed, the ancient blade cutting through the air with a sickening thud.",
+      "damageMin": 24,
+      "damageMax": 28,
+      "hitBonus": 7
+    },
+    {
+      "attackName": "Dark Curse",
+      "attackDescription": "Bartholomew unleashes a torrent of dark energy, the air crackling with a malevolent power that seems to sap the very life from your veins.",
+      "damageMin": 26,
+      "damageMax": 31,
+      "hitBonus": 6
+    }
+  ],
+  "lootTable": [
+    {
+      "itemId": "health_potion",
+      "dropChance": 0.3
+    }
+  ]
+}

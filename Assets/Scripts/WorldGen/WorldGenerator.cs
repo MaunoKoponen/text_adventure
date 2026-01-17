@@ -30,10 +30,14 @@ namespace WorldGen
 
         // Generated content (held in memory until saved)
         private List<ChapterData> generatedChapters = new List<ChapterData>();
+        private Dictionary<string, RoomGraph> generatedRoomGraphs = new Dictionary<string, RoomGraph>();  // chapterId -> RoomGraph
         private Dictionary<string, string> generatedRooms = new Dictionary<string, string>();      // roomId -> JSON
         private Dictionary<string, string> generatedQuests = new Dictionary<string, string>();    // questId -> JSON
         private Dictionary<string, string> generatedEnemies = new Dictionary<string, string>();   // enemyId -> JSON
         private Dictionary<string, string> generatedItems = new Dictionary<string, string>();     // itemId -> JSON
+
+        // Cached outline data for cross-referencing during room generation
+        private Dictionary<string, ChapterOutline> chapterOutlines = new Dictionary<string, ChapterOutline>();
 
         // Events
         public event Action<string> OnStatusUpdate;
@@ -195,7 +199,8 @@ namespace WorldGen
             ChapterOutline outline = null;
             try
             {
-                outline = JsonUtility.FromJson<ChapterOutline>(outlineResponse.content);
+                string cleanedOutline = JsonValidator.CleanJson(outlineResponse.content);
+                outline = JsonUtility.FromJson<ChapterOutline>(cleanedOutline);
             }
             catch (Exception e)
             {
@@ -205,6 +210,9 @@ namespace WorldGen
             }
 
             OnChapterOutlineGenerated?.Invoke(outline);
+
+            // Cache outline for room generation
+            chapterOutlines[outline.chapterId] = outline;
 
             // Create ChapterData from outline
             var chapter = new ChapterData
@@ -218,28 +226,57 @@ namespace WorldGen
             };
             chapter.CalculateDifficulty();
 
-            // Step 2: Generate locations/rooms
-            UpdateStatus($"Chapter {chapterNumber}: Generating {outline.locations.Count} locations...");
+            // Step 2: Generate room connectivity graph FIRST
+            UpdateStatus($"Chapter {chapterNumber}: Generating room graph...");
 
-            int locationIndex = 0;
-            foreach (var locationSummary in outline.locations)
+            RoomGraph roomGraph = null;
+            yield return StartCoroutine(GenerateRoomGraphCoroutine(outline, chapter, systemPrompt, g => roomGraph = g));
+
+            if (roomGraph == null)
             {
-                locationIndex++;
-                UpdateStatus($"Chapter {chapterNumber}: Location {locationIndex}/{outline.locations.Count} - {locationSummary.locationName}");
+                OnError?.Invoke($"Failed to generate room graph for chapter {chapterNumber}");
+                isGenerating = false;
+                yield break;
+            }
 
-                string roomPrompt = PromptTemplates.GetRoomPrompt(locationSummary, chapter, currentConfig.worldPrompt);
+            // Validate room graph connectivity
+            var graphErrors = roomGraph.ValidateConnections();
+            if (graphErrors.Count > 0)
+            {
+                Debug.LogWarning($"[WorldGen] Room graph has {graphErrors.Count} connection errors:");
+                foreach (var error in graphErrors)
+                {
+                    Debug.LogWarning($"  - {error}");
+                }
+            }
+
+            generatedRoomGraphs[chapter.chapterId] = roomGraph;
+            chapter.hubLocationId = roomGraph.hubRoomId;
+            chapter.entryLocationId = roomGraph.entryRoomId;
+            chapter.exitLocationId = roomGraph.exitRoomId;
+
+            // Step 3: Generate individual rooms from the graph
+            UpdateStatus($"Chapter {chapterNumber}: Generating {roomGraph.rooms.Count} rooms from graph...");
+
+            int roomIndex = 0;
+            foreach (var roomNode in roomGraph.rooms)
+            {
+                roomIndex++;
+                UpdateStatus($"Chapter {chapterNumber}: Room {roomIndex}/{roomGraph.rooms.Count} - {roomNode.roomName} ({roomNode.roomType})");
+
+                string roomPrompt = GetRoomPromptByType(roomNode, roomGraph, chapter, outline);
 
                 LLMResponse roomResponse = null;
                 yield return StartCoroutine(SendRequestAndWait(roomPrompt, systemPrompt, r => roomResponse = r));
 
                 if (roomResponse.success)
                 {
-                    generatedRooms[locationSummary.locationId] = roomResponse.content;
-                    chapter.locationIds.Add(locationSummary.locationId);
+                    generatedRooms[roomNode.roomId] = roomResponse.content;
+                    chapter.locationIds.Add(roomNode.roomId);
                 }
                 else
                 {
-                    Debug.LogWarning($"Failed to generate room {locationSummary.locationId}: {roomResponse.error}");
+                    Debug.LogWarning($"Failed to generate room {roomNode.roomId}: {roomResponse.error}");
                 }
 
                 yield return null; // Yield frame to prevent freezing
@@ -347,6 +384,108 @@ namespace WorldGen
         }
 
         /// <summary>
+        /// Generate the room connectivity graph for a chapter.
+        /// This defines all rooms and their connections before content is generated.
+        /// </summary>
+        private IEnumerator GenerateRoomGraphCoroutine(ChapterOutline outline, ChapterData chapter,
+            string systemPrompt, Action<RoomGraph> callback)
+        {
+            string graphPrompt = PromptTemplates.GetRoomGraphPrompt(outline, currentConfig.worldPrompt, currentConfig.settings);
+
+            LLMResponse graphResponse = null;
+            yield return StartCoroutine(SendRequestAndWait(graphPrompt, systemPrompt, r => graphResponse = r));
+
+            if (!graphResponse.success)
+            {
+                Debug.LogError($"Failed to generate room graph: {graphResponse.error}");
+                callback(null);
+                yield break;
+            }
+
+            RoomGraph graph = null;
+            try
+            {
+                string cleanedGraph = JsonValidator.CleanJson(graphResponse.content);
+                graph = JsonUtility.FromJson<RoomGraph>(cleanedGraph);
+
+                // Ensure bidirectional connections
+                EnsureBidirectionalConnections(graph);
+
+                Debug.Log($"[WorldGen] Room graph generated with {graph.rooms.Count} rooms");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to parse room graph: {e.Message}\nResponse: {graphResponse.content}");
+                callback(null);
+                yield break;
+            }
+
+            callback(graph);
+        }
+
+        /// <summary>
+        /// Ensure all room connections are bidirectional.
+        /// If room A connects to B, B must connect to A.
+        /// </summary>
+        private void EnsureBidirectionalConnections(RoomGraph graph)
+        {
+            foreach (var room in graph.rooms)
+            {
+                foreach (var targetId in room.connectsTo)
+                {
+                    var targetRoom = graph.GetRoom(targetId);
+                    if (targetRoom != null && !targetRoom.connectsTo.Contains(room.roomId))
+                    {
+                        targetRoom.connectsTo.Add(room.roomId);
+                        Debug.Log($"[WorldGen] Added bidirectional connection: {targetId} -> {room.roomId}");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the appropriate room prompt based on room type.
+        /// </summary>
+        private string GetRoomPromptByType(RoomNode roomNode, RoomGraph graph, ChapterData chapter, ChapterOutline outline)
+        {
+            switch (roomNode.roomType)
+            {
+                case RoomTypes.Crossroad:
+                    return PromptTemplates.GetCrossroadRoomPrompt(roomNode, graph, chapter, currentConfig.worldPrompt);
+
+                case RoomTypes.Interaction:
+                    // Get NPCs for this room from the outline
+                    var npcsInRoom = new List<NPCSummary>();
+                    if (outline != null)
+                    {
+                        foreach (var npcId in roomNode.npcs)
+                        {
+                            var npc = outline.keyNPCs.Find(n => n.npcId == npcId);
+                            if (npc != null)
+                            {
+                                npcsInRoom.Add(npc);
+                            }
+                        }
+                    }
+                    return PromptTemplates.GetInteractionRoomPrompt(roomNode, graph, chapter, currentConfig.worldPrompt, npcsInRoom);
+
+                case RoomTypes.Combat:
+                    // Get enemy for this room from the outline
+                    EnemySummary enemy = null;
+                    if (outline != null && !string.IsNullOrEmpty(roomNode.enemyId))
+                    {
+                        enemy = outline.enemies.Find(e => e.enemyId == roomNode.enemyId);
+                    }
+                    return PromptTemplates.GetCombatRoomPrompt(roomNode, graph, chapter, currentConfig.worldPrompt, enemy);
+
+                default:
+                    // Fall back to crossroad for unknown types
+                    Debug.LogWarning($"Unknown room type '{roomNode.roomType}' for {roomNode.roomId}, defaulting to crossroad");
+                    return PromptTemplates.GetCrossroadRoomPrompt(roomNode, graph, chapter, currentConfig.worldPrompt);
+            }
+        }
+
+        /// <summary>
         /// Validate all generated content.
         /// </summary>
         private IEnumerator ValidateAllContent()
@@ -354,16 +493,56 @@ namespace WorldGen
             Debug.Log("[WorldGen] Starting validation...");
             var errors = new List<string>();
 
-            // Validate rooms
+            // Build set of all known room IDs from room graphs
+            var knownRoomIds = new HashSet<string>();
+            foreach (var graph in generatedRoomGraphs.Values)
+            {
+                foreach (var roomId in graph.GetAllRoomIds())
+                {
+                    knownRoomIds.Add(roomId);
+                }
+            }
+            Debug.Log($"[WorldGen] Known room IDs from graphs: {knownRoomIds.Count}");
+
+            // Validate room graphs first
+            Debug.Log($"[WorldGen] Validating {generatedRoomGraphs.Count} room graphs...");
+            foreach (var kvp in generatedRoomGraphs)
+            {
+                try
+                {
+                    var result = JsonValidator.ValidateRoomGraph(kvp.Value);
+                    if (!result.isValid)
+                    {
+                        errors.AddRange(result.errors.ConvertAll(e => $"RoomGraph {kvp.Key}: {e}"));
+                    }
+                    foreach (var warning in result.warnings)
+                    {
+                        Debug.LogWarning($"[WorldGen] RoomGraph {kvp.Key}: {warning}");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"[WorldGen] Room graph validation error for {kvp.Key}: {e.Message}");
+                    errors.Add($"RoomGraph {kvp.Key}: validation exception - {e.Message}");
+                }
+            }
+
+            yield return null;
+
+            // Validate rooms with known room IDs for exit validation
             Debug.Log($"[WorldGen] Validating {generatedRooms.Count} rooms...");
             foreach (var kvp in generatedRooms)
             {
                 try
                 {
-                    var result = JsonValidator.ValidateRoom(kvp.Value);
+                    var result = JsonValidator.ValidateRoom(kvp.Value, knownRoomIds);
                     if (!result.isValid)
                     {
                         errors.AddRange(result.errors.ConvertAll(e => $"Room {kvp.Key}: {e}"));
+                    }
+                    foreach (var warning in result.warnings)
+                    {
+                        Debug.LogWarning($"[WorldGen] Room {kvp.Key}: {warning}");
                     }
                 }
                 catch (Exception e)
@@ -532,6 +711,25 @@ namespace WorldGen
 
             yield return null;
 
+            // Save room graphs
+            Debug.Log($"[WorldGen] Saving {generatedRoomGraphs.Count} room graphs...");
+            foreach (var kvp in generatedRoomGraphs)
+            {
+                try
+                {
+                    string graphJson = JsonUtility.ToJson(kvp.Value, true);
+                    string graphPath = Path.Combine(basePath, "Chapters", $"{kvp.Key}_room_graph.json");
+                    File.WriteAllText(graphPath, graphJson);
+                    Debug.Log($"[WorldGen] Saved room graph: {kvp.Key}");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"[WorldGen] Failed to save room graph {kvp.Key}: {e}");
+                }
+            }
+
+            yield return null;
+
             // Save rooms
             Debug.Log($"[WorldGen] Saving {generatedRooms.Count} rooms...");
             foreach (var kvp in generatedRooms)
@@ -662,6 +860,8 @@ namespace WorldGen
         private void ClearGeneratedContent()
         {
             generatedChapters.Clear();
+            generatedRoomGraphs.Clear();
+            chapterOutlines.Clear();
             generatedRooms.Clear();
             generatedQuests.Clear();
             generatedEnemies.Clear();

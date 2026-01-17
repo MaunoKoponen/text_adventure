@@ -1,10 +1,10 @@
 {
     "storyId": "Goblins",
-    "storyName": "",
-    "storyDescription": "A peninsula of ongoing conflicts between human and  gnome  kings",
+    "storyName": "Oakland",
+    "storyDescription": "Tales of forbidden forest - there is a vast forest with tiny hamlets scattered around it. In center of the forest, evil forces gather",
     "author": "",
     "version": "",
-    "startingRoom": "blackwater_docks",
+    "startingRoom": "ashford_village",
     "startingGold": 50,
     "startingHealth": 100,
     "startingItems": [],

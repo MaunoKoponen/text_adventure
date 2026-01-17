@@ -1,0 +1,60 @@
+{
+  "questId": "find_missing_child",
+  "questName": "Find the Missing Child",
+  "questDescription": "A distraught mother in the small hamlet of Ashford pleads with you to search for her young son, who wandered into the ominous Darkening Woods and has not returned. The shadows of the ancient trees conceal many dangers, and time is of the essence to bring the child home safely.",
+  "questGiver": "distraught_mother",
+  "questGiverLocation": "ashford",
+  "questType": "Side",
+  "chapterNumber": 1,
+  "difficulty": 2,
+  "prerequisiteQuests": [],
+  "prerequisiteFlags": [],
+  "objectives": [
+    {
+      "objectiveId": "go_to_darkening_woods",
+      "description": "Travel to the Darkening Woods to begin your search for the missing child.",
+      "type": "GoToRoom",
+      "targetId": "darkening_woods_path",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "talk_to_woods_hermit",
+      "description": "Speak with the Hermit of the Woods, who may have information about the missing child's whereabouts.",
+      "type": "TalkToNPC",
+      "targetId": "woods_hermit",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "collect_child_belongings",
+      "description": "Search the Darkening Woods for any belongings or clues left behind by the missing child.",
+      "type": "CollectItem",
+      "targetId": "child_belongings",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "defeat_corrupted_creature",
+      "description": "Defeat the corrupted creature guarding the child's location in the Darkening Woods.",
+      "type": "DefeatEnemy",
+      "targetId": "corrupted_creature",
+      "targetCount": 1,
+      "isOptional": false
+    }
+  ],
+  "revealsOnAccept": ["darkening_woods_path"],
+  "revealsOnComplete": ["woods_hermit_hut"],
+  "rewards": {
+    "experiencePoints": 300,
+    "gold": 100,
+    "itemIds": [],
+    "flagsToSet": [
+      {
+        "flagName": "quest_find_missing_child_complete",
+        "flagValue": "true"
+      }
+    ]
+  },
+  "state": "NotStarted"
+}

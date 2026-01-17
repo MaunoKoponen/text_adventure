@@ -1,0 +1,52 @@
+{
+  "questId": "clear_haunted_mill",
+  "questName": "Clear the Haunted Mill",
+  "questDescription": "The once-prosperous Darkening Woods has become a place of dread and sorrow, with whispers of a haunted mill deep within the forest. Strange creatures are said to lurk in the shadows, terrorizing the nearby villagers. You must brave the dangers of the woods and confront the evil that plagues this forsaken place.",
+  "questGiver": "village_elder",
+  "questGiverLocation": "village_square",
+  "questType": "Main",
+  "chapterNumber": 1,
+  "difficulty": 5,
+  "prerequisiteQuests": [],
+  "prerequisiteFlags": [],
+  "objectives": [
+    {
+      "objectiveId": "travel_to_haunted_mill",
+      "description": "Travel to the Haunted Mill deep within the Darkening Woods.",
+      "type": "GoToRoom",
+      "targetId": "haunted_mill",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "investigate_haunted_mill",
+      "description": "Investigate the Haunted Mill and search for clues about the source of the evil.",
+      "type": "CollectItem",
+      "targetId": "haunted_mill_clue",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "confront_mill_guardian",
+      "description": "Defeat the sinister guardian that haunts the mill and put an end to the terror.",
+      "type": "DefeatEnemy",
+      "targetId": "mill_guardian",
+      "targetCount": 1,
+      "isOptional": false
+    }
+  ],
+  "revealsOnAccept": ["darkening_woods"],
+  "revealsOnComplete": ["abandoned_village"],
+  "rewards": {
+    "experiencePoints": 300,
+    "gold": 150,
+    "itemIds": [],
+    "flagsToSet": [
+      {
+        "flagName": "quest_clear_haunted_mill_complete",
+        "flagValue": "true"
+      }
+    ]
+  },
+  "state": "NotStarted"
+}

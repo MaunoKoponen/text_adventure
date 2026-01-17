@@ -1,0 +1,67 @@
+{
+  "room_id": "darkening_woods_edge",
+  "room_type": "interaction",
+  "description": "The treeline of the Darkening Woods looms before you, an uneasy silence settling over the area. The oppressive darkness of the forest casts long shadows, and the air carries a chill that seeps into your bones. The sound of a twig snapping underfoot startles you, and you turn to see a young boy, his eyes wide with fear, emerging from the gloom.",
+  "npcs": [
+    "missing_child"
+  ],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "missing_child",
+      "action_description": "Talk to Erich"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "missing_child",
+      "dialogue_image": "npc_default",
+      "dialogues": [
+        {
+          "message": "\"P-please, you have to help me!\" the boy cries, his voice trembling. \"I-I got lost in the woods, and I can't find my way back home. It's so dark, and there are strange sounds all around.\"",
+          "responses": [
+            { "text": "\"Calm down, child. I'll help you find your way back to safety.\"", "next_step": 1 },
+            { "text": "\"What were you doing so deep in the Darkening Woods in the first place?\"", "next_step": 2 },
+            { "text": "\"Farewell.\"", "next_step": -1 }
+          ]
+        },
+        {
+          "message": "\"T-thank you, sir,\" the boy says, his relief palpable. \"I... I was just exploring, but I wandered too far and now I can't find my way back. Please, you have to help me!\"",
+          "responses": [
+            { "text": "\"Alright, let's get you out of here. Which way did you come from?\"", "next_step": 3 },
+            { "text": "\"Farewell.\"", "next_step": -1 }
+          ]
+        },
+        {
+          "message": "\"I... I'm sorry,\" the boy says, his head bowed. \"I just wanted to see what was in the woods. I didn't mean to get lost. Please, you have to help me!\"",
+          "responses": [
+            { "text": "\"Alright, let's get you out of here. Which way did you come from?\"", "next_step": 3 },
+            { "text": "\"Farewell.\"", "next_step": -1 }
+          ]
+        },
+        {
+          "message": "\"Alright, young one, I'll do my best to guide you back to safety. Just stay close to me, and we'll make our way out of these dark woods.\"",
+          "responses": [
+            { "text": "\"Farewell.\"", "next_step": -1 }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "To the north",
+      "leads_to": "ashford_village_entrance",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "Deeper into the woods",
+      "leads_to": "darkening_woods_path",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ],
+  "combat": null,
+  "events": []
+}

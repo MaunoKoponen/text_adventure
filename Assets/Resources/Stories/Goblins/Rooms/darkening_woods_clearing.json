@@ -1,0 +1,67 @@
+{
+  "room_id": "darkening_woods_clearing",
+  "room_type": "interaction",
+  "description": "The air in the Darkening Woods Clearing is thick with an eerie silence, broken only by the soft, whispering caress of the ancient trees. The ground is blanketed in a thick carpet of moss, and the shadows seem to shift and dance, as if the very forest itself is alive. An unsettling sense of foreboding hangs in the air, and you can't shake the feeling that you are being watched by unseen eyes.",
+  "npcs": [
+    "forest_spirit"
+  ],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "forest_spirit",
+      "action_description": "Talk to The Whispering Willow"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "forest_spirit",
+      "dialogue_image": "npc_default",
+      "dialogues": [
+        {
+          "message": "Greetings, weary traveler. I am the Whispering Willow, an ancient spirit of this cursed forest. What brings you to this dark and foreboding place?",
+          "responses": [
+            { "text": "I seek guidance and wisdom.", "next_step": 1 },
+            { "text": "I must find a way through the woods.", "next_step": 2 },
+            { "text": "Farewell.", "next_step": -1 }
+          ]
+        },
+        {
+          "message": "Ah, you seek guidance, do you? Then listen closely, for the forest has many secrets to reveal, if you have the courage to uncover them.",
+          "responses": [
+            { "text": "I am ready to learn.", "next_step": 3 },
+            { "text": "Farewell.", "next_step": -1 }
+          ]
+        },
+        {
+          "message": "The path through the Darkening Woods is fraught with peril. Beware the shadows that lurk in the depths, for they seek to consume the unwary. If you must venture forth, do so with caution and vigilance.",
+          "responses": [
+            { "text": "I understand.", "next_step": 3 },
+            { "text": "Farewell.", "next_step": -1 }
+          ]
+        },
+        {
+          "message": "The forest is an ancient and powerful place, and those who seek to control it often find themselves consumed by its dark magic. Tread carefully, and heed the warnings of those who have come before you. Only the brave and the wise may find their way through the Darkening Woods unscathed.",
+          "responses": [
+            { "text": "I will remember your words.", "next_step": -1 }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "To the Darkening Woods Path",
+      "leads_to": "darkening_woods_path",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "To the Haunted Mill",
+      "leads_to": "haunted_mill",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ],
+  "combat": null,
+  "events": []
+}

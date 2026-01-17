@@ -1,0 +1,60 @@
+{
+  "questId": "investigate_darkening_woods",
+  "questName": "Investigate the Darkening Woods",
+  "questDescription": "The villagers of Ashford have become increasingly fearful of the Darkening Woods, where dark forces seem to be gathering. The player must venture into the forest to uncover the source of this evil.",
+  "questGiver": "guard_captain",
+  "questGiverLocation": "ashford_village_square",
+  "questType": "Main",
+  "chapterNumber": 1,
+  "difficulty": 3,
+  "prerequisiteQuests": [],
+  "prerequisiteFlags": [],
+  "objectives": [
+    {
+      "objectiveId": "go_to_darkening_woods_edge",
+      "description": "Travel to the edge of the Darkening Woods",
+      "type": "GoToRoom",
+      "targetId": "darkening_woods_edge",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "talk_to_hermit",
+      "description": "Speak with the hermit in the woods about the dark forces",
+      "type": "TalkToNPC",
+      "targetId": "hermit",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "collect_ancient_tome",
+      "description": "Find the ancient tome in the abandoned cabin and bring it to the hermit",
+      "type": "CollectItem",
+      "targetId": "ancient_tome",
+      "targetCount": 1,
+      "isOptional": false
+    },
+    {
+      "objectiveId": "defeat_corrupted_treant",
+      "description": "Defeat the corrupted treant guarding the center of the woods",
+      "type": "DefeatEnemy",
+      "targetId": "corrupted_treant",
+      "targetCount": 1,
+      "isOptional": false
+    }
+  ],
+  "revealsOnAccept": ["darkening_woods_edge"],
+  "revealsOnComplete": ["abandoned_cabin", "center_of_darkening_woods"],
+  "rewards": {
+    "experiencePoints": 200,
+    "gold": 100,
+    "itemIds": [],
+    "flagsToSet": [
+      {
+        "flagName": "quest_investigate_darkening_woods_complete",
+        "flagValue": "true"
+      }
+    ]
+  },
+  "state": "NotStarted"
+}

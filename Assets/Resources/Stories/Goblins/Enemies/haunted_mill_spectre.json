@@ -1,0 +1,33 @@
+{
+  "enemyId": "haunted_mill_spectre",
+  "enemyName": "Haunted Mill Spectre",
+  "description": "Ghostly apparitions that haunt the Haunted Mill, their forms flickering and shifting, their moans and wails echoing through the dilapidated structure.",
+  "enemyImage": "enemy_default",
+  "maxHitPoints": 80,
+  "currentHitPoints": 80,
+  "armorClass": 12,
+  "experienceValue": 100,
+  "goldDrop": 40,
+  "attacks": [
+    {
+      "attackName": "Icy Touch",
+      "attackDescription": "The spectre reaches out with its chilling, incorporeal hand, draining the very life force of its victim.",
+      "damageMin": 15,
+      "damageMax": 19,
+      "hitBonus": 4
+    },
+    {
+      "attackName": "Wail of the Damned",
+      "attackDescription": "The spectre unleashes a bone-chilling wail, causing the target to feel the unrelenting anguish of the lost souls trapped within.",
+      "damageMin": 17,
+      "damageMax": 22,
+      "hitBonus": 3
+    }
+  ],
+  "lootTable": [
+    {
+      "itemId": "health_potion",
+      "dropChance": 0.3
+    }
+  ]
+}

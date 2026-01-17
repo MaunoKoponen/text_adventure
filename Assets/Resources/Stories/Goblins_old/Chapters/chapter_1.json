@@ -1,0 +1,47 @@
+{
+    "chapterId": "chapter_1",
+    "chapterName": "The Darkening Horizon",
+    "chapterNumber": 1,
+    "chapterDescription": "The player arrives in the tumultuous port town of Blackwater, caught in the midst of a brewing conflict between the human and gnome kings over control of the strategic harbor.",
+    "unlockQuestId": "secure_the_harbor",
+    "unlockFlags": [],
+    "baseDifficulty": 2,
+    "minEnemyCR": 1,
+    "maxEnemyCR": 3,
+    "locationIds": [
+        "blackwater_docks",
+        "blackwater_town",
+        "blackwater_square",
+        "haunted_mill",
+        "gnome_embassy"
+    ],
+    "questIds": [
+        "investigate_tensions",
+        "secure_the_harbor",
+        "missing_sailor"
+    ],
+    "mainQuestIds": [
+        "investigate_tensions",
+        "secure_the_harbor"
+    ],
+    "enemyIds": [
+        "blackwater_guard",
+        "gnome_soldier",
+        "ratfolk_thief",
+        "haunted_spectre",
+        "mutant_crab"
+    ],
+    "itemIds": [],
+    "npcIds": [],
+    "chapterIntro": "",
+    "chapterOutro": "",
+    "mainQuestSummary": "",
+    "mapId": "",
+    "hubLocationId": "",
+    "entryLocationId": "",
+    "exitLocationId": "",
+    "generatedAt": "2026-01-16T19:33:14.1927981+02:00",
+    "isGenerated": true,
+    "isValidated": false,
+    "validationErrors": []
+}

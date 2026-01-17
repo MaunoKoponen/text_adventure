@@ -1,0 +1,31 @@
+{
+  "room_id": "ashford_village",
+  "room_type": "crossroad",
+  "description": "The central square of Ashford Village is a bustling hub of activity, despite the ominous shadows that loom at the edge of the surrounding forest. Villagers hurry about their daily tasks, their faces etched with a mixture of determination and unease. The air is thick with the scent of freshly baked bread from the local bakery, mingled with the acrid smoke of the blacksmith's forge. In the distance, the faint sound of laughter and clinking mugs drifts from the nearby tavern, offering a brief respite from the pervasive sense of unease that permeates the village.",
+  "npcs": [],
+  "items": [],
+  "actions": [],
+  "dialogues": [],
+  "exits": [
+    {
+      "exit_name": "northwest",
+      "leads_to": "ashford_village_entrance",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "southwest",
+      "leads_to": "ashford_blacksmith",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "southeast",
+      "leads_to": "ashford_tavern",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ],
+  "combat": null,
+  "events": []
+}

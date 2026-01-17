@@ -1,0 +1,25 @@
+{
+  "room_id": "ashford_village_entrance",
+  "room_type": "crossroad",
+  "description": "The gated entrance to the village of Ashford stands before you, its weathered wooden walls casting long shadows across the packed earth. A sense of unease hangs in the stagnant air, as if the forest itself is watching, waiting. The faint sounds of distant wildlife and the creaking of the gate's hinges are the only breaks in the unsettling silence.",
+  "npcs": [],
+  "items": [],
+  "actions": [],
+  "dialogues": [],
+  "exits": [
+    {
+      "exit_name": "into the village",
+      "leads_to": "ashford_village",
+      "conditions": [],
+      "conditions_not": []
+    },
+    {
+      "exit_name": "back towards the edge of the Darkening Woods",
+      "leads_to": "darkening_woods_edge",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ],
+  "combat": null,
+  "events": []
+}

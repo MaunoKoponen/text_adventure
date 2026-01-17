@@ -1,0 +1,33 @@
+{
+  "enemyId": "darkening_woods_spider",
+  "enemyName": "Darkening Woods Spider",
+  "description": "Monstrous spiders, their bodies the size of a man's torso, with legs that skitter and click as they descend from the shadows.",
+  "enemyImage": "enemy_default",
+  "maxHitPoints": 65,
+  "currentHitPoints": 65,
+  "armorClass": 11,
+  "experienceValue": 75,
+  "goldDrop": 30,
+  "attacks": [
+    {
+      "attackName": "Venomous Fangs",
+      "attackDescription": "The spider's mandibles open wide, revealing dripping fangs that plunge towards its prey.",
+      "damageMin": 12,
+      "damageMax": 16,
+      "hitBonus": 3
+    },
+    {
+      "attackName": "Web Spit",
+      "attackDescription": "With a quick motion, the spider launches a sticky web, entangling the target.",
+      "damageMin": 14,
+      "damageMax": 19,
+      "hitBonus": 2
+    }
+  ],
+  "lootTable": [
+    {
+      "itemId": "health_potion",
+      "dropChance": 0.3
+    }
+  ]
+}

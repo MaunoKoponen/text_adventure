@@ -1,0 +1,61 @@
+{
+  "room_id": "ashford_tavern",
+  "room_type": "interaction",
+  "description": "The Ashford Tavern is a dimly lit establishment, its smoky interior casting an oppressive atmosphere over the weary villagers who have gathered to drown their sorrows and share tales of the horrors that lurk within the nearby Darkening Woods. The air is thick with the scent of ale and the murmur of hushed conversations, punctuated by the occasional clatter of a tankard against the worn wooden tables.",
+  "npcs": [
+    "tavern_keeper"
+  ],
+  "items": [],
+  "actions": [
+    {
+      "action_id": "tavern_keeper",
+      "action_description": "Talk to Rolf"
+    }
+  ],
+  "dialogues": [
+    {
+      "npc_name": "tavern_keeper",
+      "dialogue_image": "npc_default",
+      "dialogues": [
+        {
+          "message": "Greetings, traveler. I'm Rolf, the keeper of this establishment. What brings you to the Ashford Tavern on this dark and foreboding night?",
+          "responses": [
+            { "text": "I'm just looking for a place to rest and gather information.", "next_step": 1 },
+            { "text": "I've heard whispers of strange occurrences in the Darkening Woods. What can you tell me?", "next_step": 2 },
+            { "text": "Farewell.", "next_step": -1 }
+          ]
+        },
+        {
+          "message": "Ah, a wise decision. This tavern may be a haven from the horrors that lurk beyond its walls, but the information that can be found here is often worth the price of a tankard or two.",
+          "responses": [
+            { "text": "What can you tell me about the Darkening Woods?", "next_step": 3 },
+            { "text": "Farewell.", "next_step": -1 }
+          ]
+        },
+        {
+          "message": "The Darkening Woods... A cursed and foreboding place, where the very air seems to whisper of dark sorcery and unspeakable evil. Many have ventured into those woods, only to never return. Rumors speak of twisted creatures that lurk in the shadows, and of a powerful necromancer who seeks to expand his unholy domain.",
+          "responses": [
+            { "text": "Do you know of any way to venture into the woods safely?", "next_step": 3 },
+            { "text": "Farewell.", "next_step": -1 }
+          ]
+        },
+        {
+          "message": "Safely? That's a bold request, my friend. The only way to navigate the Darkening Woods with any chance of returning is to seek out the guidance of those who have braved its depths before. Speak with the elders in Ashford Village, they may have some wisdom to impart. But beware, for the darkness that pervades that cursed forest is not easily conquered.",
+          "responses": [
+            { "text": "I understand. Thank you for the information.", "next_step": -1 }
+          ]
+        }
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "exit_name": "Leave the Tavern",
+      "leads_to": "ashford_village",
+      "conditions": [],
+      "conditions_not": []
+    }
+  ],
+  "combat": null,
+  "events": []
+}
